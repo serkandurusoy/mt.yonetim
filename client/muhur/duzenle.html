@@ -1,0 +1,29 @@
+<template name="muhurDuzenle">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless muhur}}
+        {{>notFound}}
+      {{else}}
+        {{#with muhur}}
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                {{#autoForm collection="M.C.Muhurler" id="muhurDuzenleForm" type="update" doc=this template="materialize"}}
+                  {{> muhurFormFields}}
+                {{/autoForm}}
+              </div>
+            </div>
+          </div>
+        {{/with}}
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+

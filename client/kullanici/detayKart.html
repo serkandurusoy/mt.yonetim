@@ -1,0 +1,84 @@
+<template name="kullaniciDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s2">
+            {{#with FS.GetFile "M.FS.Avatar" avatar}}
+              <img src="{{url}}" alt="" class="circle responsive-img {{#unless ../ref}}{{#if ../status.online}}online{{else}}offline{{/if}}{{/unless}}">
+            {{else}}
+              {{#if $eq role 'ogrenci'}}
+                <img src="/avatar.svg" alt="" class="{{#if $eq cinsiyet 'erkek'}}blue lighten-1{{else}}pink lighten-2{{/if}} circle responsive-img {{#unless ref}}{{#if status.online}}online{{else}}offline{{/if}}{{/unless}}">
+              {{else}}
+                {{> initials options=initialsOptions online=status.online tarihceKart=ref}}
+              {{/if}}
+            {{/with}}
+          </div>
+          <div class="col s10">
+            <h5>
+              {{#unless emails.[0].verified}}<i class="material-icons cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i>{{/unless}} {{name}} {{lastName}}
+              {{#if $eq role 'ogrenci'}}
+                ({{enumLabel sinif}} {{sube}})
+              {{/if}}
+            </h5>
+            <p>{{#if userHasRole "mitolojix"}}{{#with foreignField 'Kurumlar' kurum 'isim'}}{{this}}{{else}}Mitolojix{{/with}} - {{/if}}{{enumLabel role}}</p>
+            {{#if $eq role 'ogretmen'}}
+              <p>
+                Yetkili olduğu dersler:
+                {{#each dersleri}}
+                  {{#unless $eq @index 0}}, {{/unless}}{{foreignField 'Dersler' this 'isim'}}
+                {{/each}}
+              </p>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12 m6">
+            {{tcKimlik}}
+          </div>
+          <div class="col s12 m6">
+            {{moFormat dogumTarihi 'DD.MM.YYYY'}}
+          </div>
+          <div class="col s12 m6">
+            {{emails.[0].address}}
+          </div>
+          <div class="col s12 m6">
+            {{enumLabel cinsiyet}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{#unless userHasRole "ogretmen"}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              {{#if $or (userHasRole "mitolojix") (userHasRole "teknik")}}
+                <a data-trigger="revert" title="Bu versiyona geri dön" class="right"><i class="red-text material-icons">history</i></a>
+              {{/if}}
+              {{#if $eq _version 1}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+              {{/if}}
+            {{else}}
+              {{#if $gt _version 1}}
+                <a title="Tarihçeyi gör" href="{{pathWithParam 'kullaniciTarihce' '_id'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+            {{/if}}
+            {{#if $gt _version 1}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat modifiedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{#if crudBy}}{{userFullName crudBy}}{{else}}{{userFullName '0'}}{{/if}} tarafından güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/unless}}
+</template>

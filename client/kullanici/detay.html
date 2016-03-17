@@ -1,0 +1,15 @@
+<template name="kullaniciDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless kullanici}}
+      {{>notFound}}
+    {{else}}
+      {{#with kullanici}}
+        {{>kullaniciDetayKart}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>

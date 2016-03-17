@@ -1,0 +1,55 @@
+<template name="muhurListe">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#if showFilters}}
+        <div class="row">
+          <div class="col s12">
+            <div class="card-panel">
+              {{> filterMuhur}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+      {{#unless muhurler}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection">
+              {{#each muhurler}}
+                {{>muhurKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="muhurKart">
+  <li class="collection-item avatar {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Muhurler' _id}} lime lighten-3{{/if}}">
+    {{#with FS.GetFile "M.FS.Muhur" gorsel}}
+      <img src="{{url}}" alt="" class="circle">
+    {{/with}}
+    <span class="title">{{isim}}</span>
+    <p>{{foreignField 'Dersler' ders 'isim'}} / {{#with (foreignField 'Dersler' ders 'muhurGrubu')}}{{isim}}{{/with}}</p>
+    <a title="Detay gör" class="secondary-content" href="{{pathFor 'muhurDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+  </li>
+</template>
+
+<template name="filterMuhur">
+  {{#autoForm schema=filterMuhurForm id="filterMuhurForm" template="materialize"}}
+    <div class="row">
+      <div class="col s12">
+        {{>afQuickField name="ders"}}
+      </div>
+    </div>
+  {{/autoForm}}
+</template>

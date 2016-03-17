@@ -1,0 +1,15 @@
+<template name="karakterDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless karakter}}
+      {{>notFound}}
+    {{else}}
+      {{#with karakter}}
+        {{>karakterDetayKart}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>

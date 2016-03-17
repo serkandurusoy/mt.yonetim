@@ -1,0 +1,300 @@
+<template name="soruDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#unless userHasRole "mudur"}}
+              {{#unless ref}}
+                {{#if aktif}}
+                  <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
+                  <a data-trigger="cart" title="{{#if inCart}}Soru sepetimden çıkar{{else}}Soru sepetime ekle{{/if}}" class="right margin-right-6px"><i class="material-icons">{{#if inCart}}shopping_cart{{else}}add_shopping_cart{{/if}}</i></a>
+                  <a data-trigger="favorite" title="{{#if inFavori}}Favori sorularımdan çıkar{{else}}Favori sorularıma ekle{{/if}}" class="right margin-right-6px"><i class="material-icons">{{#if inFavori}}favorite{{else}}favorite_border{{/if}}</i></a>
+                {{/if}}
+              {{/unless}}
+              {{#unless ref}}
+                {{#if aktif}}
+                  <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
+                  <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
+                {{/if}}
+              {{/unless}}
+            {{/unless}}
+            <h5>
+              {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
+              {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
+              {{kod}} {{foreignField 'Dersler' alan.ders 'isim'}} / {{enumLabel alan.sinif}}
+            </h5>
+            <p>
+              {{alan.egitimYili}} / {{alan.konu}}<br>
+              {{zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
+              Müfredat Versiyon No: {{alan.mufredatVersion}}<br>
+              {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}}{{/if}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            <p>Kazanımlar</p>
+            {{#each alan.kazanimlar}}
+              {{this}}<br>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{soru.yonerge}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if $or soru.metin soru.gorsel}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          {{#if soru.metin}}
+            <div class="row">
+              <div class="col s12">
+                {{#each splitOnNewlines soru.metin}}<p>{{this}}</p>{{/each}}
+              </div>
+            </div>
+          {{/if}}
+          {{#if soru.gorsel}}
+            <div class="row">
+              <div class="col s12">
+                {{#with FS.GetFile "M.FS.SoruGorsel" soru.gorsel}}
+                  <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                {{/with}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if $eq tip 'dogruYanlis'}}
+    {{#with yanit.dogruYanlis}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel {{#if cevap}}light-green lighten-2{{else}}deep-orange lighten-3{{/if}}">
+            <div class="row">
+              <div class="col s12">
+                Verilen ifade {{#if cevap}}Doğru{{else}}Yanlış{{/if}}.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#if $eq tip 'coktanTekSecmeli'}}
+    {{#with yanit.coktanTekSecmeli}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                {{#each this}}
+                  <div class="card-panel{{#if dogru}} light-green lighten-2{{/if}}">
+                    {{#if secenekMetin}}<p>{{secenekMetin}}</p>{{/if}}
+                    {{#with FS.GetFile "M.FS.SoruGorsel" secenekGorsel}}
+                      <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                    {{/with}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#if $eq tip 'coktanCokSecmeli'}}
+    {{#with yanit.coktanCokSecmeli}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                {{#each this}}
+                  <div class="card-panel{{#if dogru}} light-green lighten-2{{/if}}">
+                    {{#if secenekMetin}}<p>{{secenekMetin}}</p>{{/if}}
+                    {{#with FS.GetFile "M.FS.SoruGorsel" secenekGorsel}}
+                      <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                    {{/with}}
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#if $eq tip 'siralama'}}
+    {{#with yanit.siralama}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                {{#each this}}
+                  <p class="card-panel{{#if isOdd @index}} grey lighten-3{{/if}}">
+                    {{#if metin}}{{metin}}<br>{{/if}}
+                    {{#with FS.GetFile "M.FS.SoruGorsel" gorsel}}
+                      <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                    {{/with}}
+                  </p>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#if $eq tip 'eslestirme'}}
+    {{#with yanit.eslestirme}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            {{#each this}}
+              <div class="row">
+                <div class="col s12 m6">
+                  <p class="card-panel{{#if isOdd @index}} grey lighten-3{{/if}}">
+                    {{#if solMetin}}{{solMetin}}<br>{{/if}}
+                    {{#with FS.GetFile "M.FS.SoruGorsel" solGorsel}}
+                      <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                    {{/with}}
+                  </p>
+                </div>
+                <div class="col s12 m6">
+                  <p class="card-panel{{#if isOdd @index}} grey lighten-3{{/if}}">
+                    {{#if sagMetin}}{{sagMetin}}<br>{{/if}}
+                    {{#with FS.GetFile "M.FS.SoruGorsel" sagGorsel}}
+                      <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                    {{/with}}
+                  </p>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#if $eq tip 'boslukDoldurma'}}
+    {{#with yanit.boslukDoldurma}}
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel grey lighten-3">
+            <div class="row">
+              <div class="col s12">
+                {{#each boslukSpan}}
+                  <p>{{#autolink}}{{{this}}}{{/autolink}}</p>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                Büyük küçük harf toleransı {{#if toleransBuyukKucukHarf}}var{{else}} yok{{/if}}. Türkçe karakter toleransı {{#if toleransTurkce}}var{{else}} yok{{/if}}. Farklı karakter sayısı toleransı {{#with toleransKarakter}}{{this}} karakter{{else}} yok{{/with}}.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/with}}
+  {{/if}}
+
+  {{#unless ref}}
+    {{#if sinavBilgileri}}
+      <div class="row {{#unless aktif}}pasif{{/unless}}">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                Bu sorunun kullanıldığı sınavlar:
+                <ul class="collection">
+                  {{#each sinavBilgileri}}
+                    <li class="collection-item {{#unless aktif}}pasif{{/unless}}">
+                      <div>
+                        <a title="Detay gör" class="secondary-content" href="{{pathFor 'sinavDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+                        {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Sınav başlamayı bekliyor">hourglass_empty</i> {{/if}}
+                        {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Sınav yayında">timer</i> {{/if}}
+                        {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
+                        {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
+                        {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
+                        {{kod}} {{foreignField 'Dersler' ders 'isim'}}<br>
+                        {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}} / {{enumLabel tip}}
+                      </div>
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/if}}
+  {{/unless}}
+
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              {{#unless guncelHaliNotEditable}}
+                {{#unless userHasRole "mudur"}}
+                  <a data-trigger="revert" title="Bu versiyona geri dön" class="right"><i class="red-text material-icons">history</i></a>
+                {{/unless}}
+              {{/unless}}
+              {{#unless updatedAt}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}}
+                tarihinde {{userFullName createdBy}}
+                tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'soruDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}
+                oluşturuldu.<br>
+              {{/unless}}
+            {{else}}
+              {{#if updatedAt}}
+                <a title="Tarihçeyi gör" href="{{pathWithParam 'soruTarihce' '_id'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}}
+                tarihinde {{userFullName createdBy}}
+                tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'soruDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}
+                oluşturuldu.<br>
+            {{/if}}
+            {{#if updatedAt}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}
+                versiyonuna {{moFormat updatedAt 'DD.MM.YYYY HH:mm'}}
+                tarihinde {{userFullName updatedBy}} tarafından
+                güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

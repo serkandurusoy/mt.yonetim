@@ -1,0 +1,84 @@
+<template name="sinavListe">
+  {{#unless Template.subscriptionsReady}}
+    <div class="loading padTopBlock center">
+      {{> loading}}
+    </div>
+  {{else}}
+    {{#if showFilters}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{> filterSinav}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+    {{#unless sinavlar}}
+      {{>notFound}}
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <ul class="collection">
+            {{#each sinavlar}}
+              {{>sinavKart}}
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="sinavKart">
+  <li class="collection-item {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Sinavlar' _id}} lime lighten-3{{/if}}">
+    <div>
+      <a title="Detay gör" class="secondary-content" href="{{pathFor 'sinavDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+      {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Sınav başlamayı bekliyor">hourglass_empty</i> {{/if}}
+      {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Sınav yayında">timer</i> {{/if}}
+      {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
+      {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
+      {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
+      {{kod}} / {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}} / {{/if}}{{foreignField 'Dersler' ders 'isim'}}<br>
+      {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}} / {{enumLabel tip}} ({{#if getLength sorular}}{{getLength sorular}} soru{{else}}soru eklenmemiş{{/if}})
+      {{#if aciklama}}<br>{{aciklama}}{{/if}}
+    </div>
+  </li>
+</template>
+
+<template name="filterSinav">
+  {{#autoForm schema=filterSinavForm id="filterSinavForm" template="materialize"}}
+    <div class="row">
+      {{#if userHasRole "mitolojix"}}
+        <div class="col s12 m3">
+          {{>afQuickField name="kurum"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="kurum"}}
+      {{/if}}
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="sinif"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="ders"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="egitimYili"}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 {{#if userHasRole "mudur"}}m6{{else}}m4{{/if}}">
+        {{>afQuickField name="tip"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mudur"}}m6{{else}}m4{{/if}}">
+        {{>afQuickField name="sinavDurumu"}}
+      </div>
+      {{#unless userHasRole "mudur"}}
+        <div class="col s12 m4">
+          {{>afQuickField name="sinavSahibi"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="sinavSahibi"}}
+      {{/unless}}
+    </div>
+  {{/autoForm}}
+</template>

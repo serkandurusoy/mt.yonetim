@@ -1,0 +1,56 @@
+<template name="topnav">
+  {{#if searching}}
+    {{> searchbox}}
+  {{else}}
+    {{> topmenu}}
+  {{/if}}
+</template>
+
+<template name="topmenu">
+  <ul class="left">
+    <li><a data-activates="sidenav" class="button-collapse"><i class="material-icons">menu</i></a></li>
+    <li><span class="navKurumIsim">{{currentUser.name}} {{currentUser.lastName}} - <em style="font-size: 90%; margin-right: 4px;">{{kurumIsmi}}</em></span></li>
+  </ul>
+  <ul class="right">
+    {{#if searchableRoute}}
+      <li><a data-activates="searchbox"><i class="material-icons">search</i></a></li>
+    {{/if}}
+    {{#if notifications}}
+      <li><a data-activates="notifications-active-menu"><i class="material-icons shake shake-rotate shake-constant hover-stop orange-text text-darken-1">notifications_active</i></a></li>
+    {{else}}
+      <li><a data-activates="notifications-menu"><i class="material-icons">notifications</i></a></li>
+    {{/if}}
+    <li><a data-activates="user-menu"><i class="material-icons">person</i></a></li>
+  </ul>
+  <ul id="notifications-active-menu" class="dropdown-content">
+    {{#each notifications}}
+      {{>notification}}
+    {{/each}}
+  </ul>
+  <ul id="notifications-menu" class="dropdown-content">
+    <li><a>Bekleyen uyarı yok</a></li>
+  </ul>
+  <ul id="user-menu" class="dropdown-content">
+    <li><a href="{{pathFor 'bilgilerimDetay'}}">Bilgilerim</a></li>
+    <li><a data-logout>Çıkış</a></li>
+  </ul>
+</template>
+
+<template name="notification">
+  {{#if $eq collection 'Sinavlar'}}
+    <li><a data-trigger="notification-sil" href="{{pathFor 'sinavDetay' _id=doc}}">{{kod}} sınavında {{count}} yeni yorum</a></li>
+  {{/if}}
+  {{#if $eq collection 'Sorular'}}
+    <li><a data-trigger="notification-sil" href="{{pathFor 'soruDetay' _id=doc}}">{{kod}} sorusunda {{count}} yeni yorum</a></li>
+  {{/if}}
+</template>
+
+<template name="searchbox">
+  <form>
+    <div class="input-field">
+      <input id="search" type="search" placeholder="Anahtar kelimeler girebilirsiniz">
+      <label for="search" data-trigger="submit" title="Liste içinde ara"><i class="material-icons topMenuSearchIcon">search</i></label>
+      <i data-activates="topmenu" class="material-icons">close</i>
+    </div>
+  </form>
+</template>

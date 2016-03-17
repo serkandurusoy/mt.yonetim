@@ -1,0 +1,83 @@
+<template name="soruListe">
+  {{#unless Template.subscriptionsReady}}
+    <div class="loading padTopBlock center">
+      {{> loading}}
+    </div>
+  {{else}}
+    {{#if showFilters}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{> filterSoru}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+    {{#unless sorular}}
+      {{>notFound}}
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <ul class="collection">
+            {{#each sorular}}
+              {{>soruKart}}
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="soruKart">
+  <li class="collection-item {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Sorular' _id}} lime lighten-3{{/if}}">
+    <div>
+      <a title="Detay gör" class="secondary-content" href="{{pathFor 'soruDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+      {{#if aktif}}
+        <a data-trigger="cart" title="{{#if inCart}}Soru sepetimden çıkar{{else}}Soru sepetime ekle{{/if}}" class="secondary-content"><i class="material-icons">{{#if inCart}}shopping_cart{{else}}add_shopping_cart{{/if}}</i></a>
+        <a data-trigger="favorite" title="{{#if inFavori}}Favori sorularımdan çıkar{{else}}Favori sorularıma ekle{{/if}}" class="secondary-content margin-right-6px"><i class="material-icons">{{#if inFavori}}favorite{{else}}favorite_border{{/if}}</i></a>
+      {{/if}}
+      {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
+      {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
+      {{kod}} {{foreignField 'Dersler' alan.ders 'isim'}} / {{enumLabel alan.sinif}}<br>
+      {{alan.egitimYili}} / {{alan.konu}}<br>
+      {{zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
+      {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}}{{/if}}
+    </div>
+  </li>
+</template>
+
+<template name="filterSoru">
+  {{#autoForm schema=filterSoruForm id="filterSoruForm" template="materialize"}}
+    <div class="row">
+      {{#if userHasRole "mitolojix"}}
+        <div class="col s12 m4">
+          {{>afQuickField name="kurum"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="kurum"}}
+      {{/if}}
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m4{{else}}m6{{/if}}">
+        {{>afQuickField name="sinif"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m4{{else}}m6{{/if}}">
+        {{>afQuickField name="ders"}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 {{#if userHasRole "mudur"}}m6{{else}}m4{{/if}}">
+        {{>afQuickField name="egitimYili"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mudur"}}m6{{else}}m4{{/if}}">
+        {{>afQuickField name="tip"}}
+      </div>
+      {{#unless userHasRole "mudur"}}
+        <div class="col s12 m4">
+          {{>afQuickField name="soruSahibi"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="soruSahibi"}}
+      {{/unless}}
+    </div>
+  {{/autoForm}}
+</template>

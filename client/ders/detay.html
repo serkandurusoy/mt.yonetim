@@ -1,0 +1,15 @@
+<template name="dersDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless ders}}
+      {{>notFound}}
+    {{else}}
+      {{#with ders}}
+        {{>dersDetayKart}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>

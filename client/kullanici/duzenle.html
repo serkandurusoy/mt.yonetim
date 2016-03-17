@@ -1,0 +1,29 @@
+<template name="kullaniciDuzenle">
+  {{#unless $or (userHasRole "mitolojix") (userHasRole "teknik")}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless kullanici}}
+        {{>notFound}}
+      {{else}}
+        {{#with kullanici}}
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                {{#autoForm collection="M.C.Users" id="kullaniciDuzenleForm" type="update" doc=this template="materialize"}}
+                  {{> kullaniciFormFields}}
+                {{/autoForm}}
+              </div>
+            </div>
+          </div>
+        {{/with}}
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+

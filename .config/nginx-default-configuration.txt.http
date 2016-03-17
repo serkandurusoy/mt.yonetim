@@ -1,0 +1,52 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    server_name localhost;
+    return 301 http://www.mitolojix.com$request_uri;
+}
+
+server {
+    server_name www.mitolojix.com;
+    root /home/mitolojix/meteor-apps/mitolojix-website;
+    index index.html;
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+}
+
+server {
+    server_name yonetim.mitolojix.com;
+    root /home/mitolojix/meteor-apps/backend-build/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL http://yonetim.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "BACKEND", "URL": { "OYUN": "http://oyun.mitolojix.com", "YONETIM": "http://yonetim.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+}
+
+server {
+    server_name oyun.mitolojix.com;
+    root /home/mitolojix/meteor-apps/frontend-build/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL http://oyun.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "FRONTEND", "URL": { "OYUN": "http://oyun.mitolojix.com", "YONETIM": "http://yonetim.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+}
+
+

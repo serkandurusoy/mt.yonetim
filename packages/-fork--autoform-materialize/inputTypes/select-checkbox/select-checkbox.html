@@ -1,0 +1,16 @@
+<template name="afCheckboxGroup_materialize">
+  <div class="af-checkbox-group collection" {{dsk}} style="padding: 8px">
+    <p style="margin-bottom: -1em; font-size: 80%">
+      Tümünü
+      <a data-trigger="sec" title="Tümünü Seç">Seç</a>
+      /
+      <a data-trigger="kaldir" title="Seçimleri Temizle">Kaldır</a>
+    </p>
+    {{#each items}}
+      <p style="padding-right: 15px;">
+        <input type="checkbox" value="{{value}}" {{itemAtts}}/>
+        <label for="{{itemAtts.id}}">{{label}}</label>
+      </p>
+    {{/each}}
+  </div>
+</template>

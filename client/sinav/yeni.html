@@ -1,0 +1,110 @@
+<template name="sinavYeni">
+  {{#if userHasRole "mudur"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{#autoForm collection="M.C.Sinavlar" id="sinavYeniForm" doc=sinavClone type="insert" template="materialize"}}
+              {{> sinavFormFields}}
+            {{/autoForm}}
+          </div>
+        </div>
+      </div>
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="sinavFormFields">
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="kurum"}}
+      {{>afQuickField name="kod"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="aciklama"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="ders"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="sinif"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="subeler"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s8 m10">
+      {{>afQuickField name="tip"}}
+    </div>
+    <div class="col s4 m2">
+      {{>afQuickField name="sure"}}
+    </div>
+  </div>
+
+  {{#if (afFieldValueIs name="tip" value="canli")}}
+    <div class="row">
+      <div class="col s12 teal-text text-accent-4" style="font-size: 80%; padding-bottom: 16px;">
+        <em>Vereceğiniz sınav süresi yalnızca bilgi amaçlıdır ve geri sayımda kullanılmaz. Sınavı açılış ve kapanış zamanları arasında istediğiniz zaman başlatıp, beklemeye alabilir ve tekrar başlatabilir veya bitirebilirsiniz. <strong>Kapanış zamanı geldiğinde, siz bitirmemiş olsanız da sınav kendiliğinden kapanır.</strong></em>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="row">
+    <div class="col s8 m4">
+      {{>afQuickField name="acilisTarihi"}}
+    </div>
+    <div class="col s4 m2">
+      {{>afQuickField name="acilisSaati"}}
+    </div>
+    <div class="col s8 m4">
+      {{>afQuickField name="kapanisTarihi"}}
+    </div>
+    <div class="col s4 m2">
+      {{>afQuickField name="kapanisSaati"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s8 m4 push-m6">
+      {{>afQuickField name="yanitlarAcilmaTarihi"}}
+    </div>
+    <div class="col s4 m2 push-m6">
+      {{>afQuickField name="yanitlarAcilmaSaati"}}
+    </div>
+    <div class="col s12 m6 {{#if $or (afFieldValueIs name="tip" value="deneme") (afFieldValueIs name="tip" value="canli")}}pull-m6{{/if}}">
+      {{>afQuickField name="sorularKarissin"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="_clonedFrom"}}
+      {{>afQuickField name="sorular"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 right-align" style="padding-top: 3em">
+      <button type="submit" class="btn btn-large waves-effect waves-light" {{submitButtonAtts}}>
+        Kaydet <i class="material-icons left">save</i>
+      </button>
+    </div>
+  </div>
+</template>

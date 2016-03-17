@@ -1,0 +1,174 @@
+<template name="sinavDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#unless ref}}
+              {{#unless userHasRole "mudur"}}
+                {{#if aktif}}
+                  <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
+                {{/if}}
+              {{/unless}}
+            {{/unless}}
+            {{#unless ref}}
+              {{#if aktif}}
+                <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
+                <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
+              {{/if}}
+            {{/unless}}
+            {{#if sinavRaporlamayaUygun _id}}
+              <span class="right margin-right-6px"><a data-activates="report-menu" title="Sınav raporları" style="white-space: nowrap"><i class="grey-text material-icons">assessment</i></a></span>
+              <ul id="report-menu" class="dropdown-content">
+                <li><a data-analizRaporu>Analiz Raporu</a></li>
+                <li><a data-testMaddeAnalizi>Madde Analizleri</a></li>
+                <li><a data-testCeldiriciAnalizi>Çeldirici Analizleri</a></li>
+                <li><a data-subeBazindaPuanlar>Şube Bazında Puanlar</a></li>
+                <li><a data-sinifBazindaPuanlar>Sınıf Bazında Puanlar</a></li>
+              </ul>
+            {{/if}}
+            <h5>
+              {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Sınav başlamayı bekliyor">hourglass_empty</i> {{/if}}
+              {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Sınav yayında">timer</i> {{/if}}
+              {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
+              {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
+              {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
+              {{kod}} {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}}{{else}}{{foreignField 'Dersler' ders 'isim'}}{{/if}}
+            </h5>
+            <p>
+              {{#if userHasRole "mitolojix"}}{{foreignField 'Dersler' ders 'isim'}}<br>{{/if}}
+              {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{enumLabel tip}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if aciklama}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12">
+              {{aciklama}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            Sınav uygulama zamanı {{moFormat acilisTarihi 'DD.MM.YYYY'}} {{acilisSaati}} ile {{moFormat kapanisTarihi 'DD.MM.YYYY'}} {{kapanisSaati}} arasında {{#if $eq tip 'canli'}}öğretmen insiyatifinde {{/if}}{{sure}} dakika.{{#if $in tip 'deneme' 'canli'}} Yanıt anahtarı öğrencilere {{moFormat yanitlarAcilmaTarihi 'DD.MM.YYYY'}} tarihinde {{yanitlarAcilmaSaati}} itibariyle açılacak.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            Soru sırası {{#if sorularKarissin}}karıştırılarak{{else}}verildiği gibi{{/if}} uygulanacak.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#unless sorular}}
+              Sınava eklenmiş soru bulunamadı
+            {{else}}
+              <ul class="collection with-header">
+                <li class="collection-header">Soru sayısı: {{getLength sorular}}{{#unless $or ref ($or iptal ($or muhur ($or kilitli (userHasRole "mudur"))))}}<a data-trigger="tumunuCikar" title="Tümünü Çıkar" class="right">Tümünü Çıkar</a>{{/unless}}</li>
+                {{#each sorular}}
+                  {{#with soru soruId}}
+                    <li class="collection-item {{#unless aktif}}pasif{{/unless}}">
+                      <div>
+                        <a title="Detay gör" class="secondary-content" href="{{pathFor 'soruDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+                        {{#unless $or ($or ($or ($or (../../ref) (../../iptal)) (../../muhur)) (../../kilitli)) (userHasRole "mudur")}}
+                          <a data-trigger="cikar" title="Soruyu sınavdan çıkar" class="secondary-content margin-right-6px"><i class="material-icons">delete</i></a>
+                          {{#unless $eq @index 0}}<a data-trigger="yukari" title="Soruyu yukarı taşı" class="secondary-content margin-right-6px"><i class="material-icons">arrow_upward</i></a>{{/unless}}
+                          {{#unless $eq (plusOne @index) (getLength ../../sorular)}}<a data-trigger="asagi" title="Soruyu aşağı taşı" class="secondary-content margin-right-6px"><i class="material-icons">arrow_downward</i></a>{{/unless}}
+                        {{/unless}}
+                        Puan: {{../puan}}<br>
+                        Soru: {{kod}} / {{../zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
+                        Konu: {{alan.egitimYili}} / {{alan.konu}}<br>
+                        Kazanımlar:<br>
+                        {{#each alan.kazanimlar}}{{this}}<br>{{/each}}
+                        Yönerge: {{this.soru.yonerge}}
+                      </div>
+                    </li>
+                  {{/with}}
+                {{/each}}
+              </ul>
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if muhur}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12">
+              <p>Sınav mühürü: {{#with foreignField 'Dersler' ders 'muhurGrubu'}}{{isim}}{{/with}} mühür grubundan {{foreignField 'Muhurler' muhur 'isim'}}</p>
+              {{#with foreignField 'Muhurler' muhur 'gorsel'}}
+                {{#with FS.GetFile "M.FS.Muhur" this}}
+                  <img src="{{url}}" alt="" class="responsive-img maxHeight200px">
+                {{/with}}
+              {{/with}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              {{#unless guncelHaliNotEditable}}
+                {{#unless userHasRole "mudur"}}
+                  <a data-trigger="revert" title="Bu versiyona geri dön" class="right"><i class="red-text material-icons">history</i></a>
+                {{/unless}}
+              {{/unless}}
+              {{#unless updatedAt}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'sinavDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}oluşturuldu.<br>
+              {{/unless}}
+            {{else}}
+              {{#if updatedAt}}
+                <a title="Tarihçeyi gör" href="{{pathWithParam 'sinavTarihce' '_id'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'sinavDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}oluşturuldu.<br>
+            {{/if}}
+            {{#if updatedAt}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat updatedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName updatedBy}} tarafından güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

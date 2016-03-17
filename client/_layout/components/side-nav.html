@@ -1,0 +1,25 @@
+<template name="sidenav">
+  <li class="{{isActiveRoute 'giris'}}"><a href="{{pathFor 'giris'}}"><i class="material-icons left">home</i>Giriş</a></li>
+  {{#if userHasRole "mitolojix"}}
+    <li class="{{isActiveRoute regex='kurumListe|kurumDetay|kurumDuzenle|kurumYeni|kurumTarihce'}}"><a href="{{pathFor 'kurumListe'}}"><i class="material-icons left">account_balance</i>Kurumlar</a></li>
+  {{/if}}
+  {{#unless userHasRole "ogretmen"}}
+    <li class="{{isActiveRoute regex='kullaniciListe|kullaniciDetay|kullaniciDuzenle|kullaniciYeni|kullaniciTarihce'}}"><a href="{{pathFor 'kullaniciListe'}}"><i class="material-icons left">people</i>Kullanıcılar</a></li>
+  {{/unless}}
+  {{#if userHasRole "mitolojix"}}
+    <li class="{{isActiveRoute regex='ogrenciYukleme'}}"><a href="{{pathFor 'ogrenciYukleme'}}"><i class="material-icons left">folder_shared</i>Öğrenci Yükleme</a></li>
+    <li class="{{isActiveRoute regex='aktifEgitimYili'}}"><a href="{{pathFor 'aktifEgitimYili'}}"><i class="material-icons left">cake</i>Aktif Eğitim Yılı</a></li>
+    <li class="{{isActiveRoute regex='dersListe|dersDetay|dersDuzenle|dersYeni|dersTarihce'}}"><a href="{{pathFor 'dersListe'}}"><i class="material-icons left">style</i>Dersler</a></li>
+  {{/if}}
+  <li class="{{isActiveRoute regex='mufredatListe|mufredatDetay|mufredatDuzenle|mufredatYeni|mufredatTarihce'}}"><a href="{{pathFor 'mufredatListe'}}"><i class="material-icons left">school</i>Müfredat</a></li>
+  <li class="{{isActiveRoute regex='soruListe|soruDetay|soruDuzenle|soruYeni|soruTarihce'}}"><a href="{{pathFor 'soruListe'}}"><i class="material-icons left">local_library</i>Sorular</a></li>
+  {{#unless userHasRole "mudur"}}
+    <li class="{{isActiveRoute regex='soruFavori'}}"><a href="{{pathFor 'soruFavori'}}"><i class="material-icons left">favorite</i>Favori Sorularım</a></li>
+    <li class="{{isActiveRoute regex='soruSepeti'}}"><a href="{{pathFor 'soruSepeti'}}"><i class="material-icons left">shopping_cart</i>Soru Sepetim</a></li>
+  {{/unless}}
+  <li class="{{isActiveRoute regex='sinavListe|sinavDetay|sinavDuzenle|sinavYeni|sinavTarihce'}}"><a href="{{pathFor 'sinavListe'}}"><i class="material-icons left">assignment</i>Sınavlar</a></li>
+  {{#if userHasRole "mitolojix"}}
+    <li class="{{isActiveRoute regex='muhurListe|muhurDetay|muhurDuzenle|muhurYeni|muhurTarihce'}}"><a href="{{pathFor 'muhurListe'}}"><i class="material-icons left">new_releases</i>Mühürler</a></li>
+    <li class="{{isActiveRoute regex='karakterListe|karakterDetay|karakterDuzenle|karakterYeni|karakterTarihce'}}"><a href="{{pathFor 'karakterListe'}}"><i class="material-icons left">face</i>Karakterler</a></li>
+  {{/if}}
+</template>

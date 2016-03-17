@@ -1,0 +1,83 @@
+<template name="soruDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless soru}}
+      {{>notFound}}
+    {{else}}
+      {{#with soru}}
+        {{>soruDetayKart}}
+        {{#if aktif}}
+          {{>comments}}
+        {{/if}}
+        {{#unless userHasRole "mudur"}}
+          {{#if ogretmenCanEdit}}
+            {{#if $or (kilitlenebilir) (taslakDegisebilir)}}
+              <div class="fixed-action-btn click-to-toggle" style="bottom: 24px; right: 86px;">
+                <a title="Soru işlemleri" class="btn-floating btn-large grey">
+                  <i class="large material-icons">more_vert</i>
+                </a>
+                <ul>
+                  {{#if kilitlenebilir}}
+                    <li><a class="btn-floating red" title="Soruyu kilitle" data-trigger="soruKilitleModal"><i class="material-icons">lock</i></a></li>
+                  {{/if}}
+                  {{#if taslakDegisebilir}}
+                    <li><a class="btn-floating blue" title="{{#if taslak}}Sorunun taslak işaretini kaldır{{else}}Soruyu taslak olarak işaretle{{/if}}" data-trigger="soruTaslakDegistirModal"><i class="material-icons">edit</i></a></li>
+                  {{/if}}
+                </ul>
+              </div>
+            {{/if}}
+          {{/if}}
+        {{/unless}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="soruKilitleModal">
+  <div id="soruKilitleModal" class="modal bottom-sheet modal-fixed-footer">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <p>
+            <i class="material-icons large red-text">lock</i>
+          </p>
+          <p>
+            Bu soruyu kilitlemek istediğinize emin misiniz?
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">VAZGEÇ</a>
+      <a data-trigger="kilitle" class="modal-action waves-effect waves-red btn-flat ">EVET</a>
+    </div>
+  </div>
+</template>
+
+<template name="soruTaslakDegistirModal">
+  <div id="soruTaslakDegistirModal" class="modal bottom-sheet modal-fixed-footer">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <p>
+            <i class="material-icons large blue-text">edit</i>
+          </p>
+          <p>
+            {{#if taslak}}
+              Bu sorunun taslak işaretini kaldırmak istediğinize emin misiniz?
+            {{else}}
+              Bu soruyu taslak olarak işaretlemek istediğinize emin misiniz?
+            {{/if}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">VAZGEÇ</a>
+      <a data-trigger="taslakDegistir" class="modal-action waves-effect waves-red btn-flat ">EVET</a>
+    </div>
+  </div>
+</template>

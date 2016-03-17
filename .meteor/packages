@@ -1,0 +1,44 @@
+###################################
+# core                            #
+###################################
+m:lib-core
+force-ssl
+flemay:less-autoprefixer
+standard-minifiers
+appcache
+meteorhacks:kadira
+kadira:debug
+
+###################################
+# backend-specific                #
+###################################
+pbastowski:require
+materialize:materialize
+fortawesome:fontawesome
+aldeed:autoform
+gildaspk:autoform-materialize     # TODO: we are using a local fork
+lwl1991:autoform-file-materialize # TODO: we are using a local fork
+chart:chart@=1.0.2                # TODO: check official chart:chart for the v2.0.0 production release
+nilsdannemann:pdfmake@=0.1.20
+huaming:js-xlsx
+
+###################################
+# mitolojix-packages              #
+###################################
+m:lib-enums
+m:lib-collate
+m:lib-utils
+m:lib-collections
+m:lib-tckimlik
+m:lib-accounts
+m:lib-router-backend
+m:lib-models
+m:lib-clockpicker
+m:lib-favico
+
+###################################
+# consider for improvements       #
+###################################
+# browser-policy                  # TODO: https://dweldon.silvrback.com/browser-policy
+# meteorhacks:unblock             # TODO: maybe later for fine grained performance
+# meteorhacks:subs-manager        # TODO: maybe later for fine grained performance

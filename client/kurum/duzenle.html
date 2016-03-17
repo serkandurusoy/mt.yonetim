@@ -1,0 +1,29 @@
+<template name="kurumDuzenle">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless kurum}}
+        {{>notFound}}
+      {{else}}
+        {{#with kurum}}
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                {{#autoForm collection="M.C.Kurumlar" id="kurumDuzenleForm" type="update" doc=this template="materialize"}}
+                  {{> kurumFormFields}}
+                {{/autoForm}}
+              </div>
+            </div>
+          </div>
+        {{/with}}
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+

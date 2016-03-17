@@ -1,0 +1,54 @@
+<template name="mainLayout">
+  {{#if currentUser}}
+
+    {{#unless isHotReloading}}
+
+      <div class="navbar-fixed">
+        <nav class="lime darken-4">
+          <div class="nav-wrapper">
+            {{> topnav}}
+          </div>
+        </nav>
+      </div>
+
+      <ul id="sidenav" class="side-nav fixed">
+        <li class="amber">
+          <div class="aktifEgitimYili">{{aktifEgitimYili}}</div>
+          <div class="valign-wrapper">
+            <img class="valign responsive-img" src="/mitolojix-logo-yazi.svg"/>
+          </div>
+        </li>
+        {{> sidenav}}
+      </ul>
+
+      <main>
+        {{> connectionBanner}}
+        {{> Template.dynamic template=mainForGiris}}
+        <div class="container">
+          {{> Template.dynamic template=main}}
+        </div>
+      </main>
+
+      {{> Template.dynamic template=fab data=attrs.fab}}
+
+    {{else}}
+
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+
+    {{/unless}}
+
+  {{else}}
+
+    {{#if loggingIn}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{> accountsTemplate}}
+    {{/if}}
+
+  {{/if}}
+
+</template>

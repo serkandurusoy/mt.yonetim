@@ -1,0 +1,39 @@
+<template name="aktifEgitimYili">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless aktifEgitimYili}}
+        {{>notFound}}
+      {{else}}
+        {{#with aktifEgitimYili}}
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                {{> quickForm collection="M.C.AktifEgitimYili" id="aktifEgitimYiliDuzenleForm" type="update" doc=this template="materialize"}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                <div class="row">
+                  <div class="col s12">
+                    {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+                    {{#if updatedAt}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat updatedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName updatedBy}} tarafından güncellendi.{{/if}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{/with}}
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+

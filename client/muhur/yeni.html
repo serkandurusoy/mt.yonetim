@@ -1,0 +1,49 @@
+<template name="muhurYeni">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{#autoForm collection="M.C.Muhurler" id="muhurYeniForm" type="insert" template="materialize"}}
+              {{> muhurFormFields}}
+            {{/autoForm}}
+          </div>
+        </div>
+      </div>
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="muhurFormFields">
+  <div class="row">
+    <div class="col s12 m5">
+      {{>afQuickField name="ders"}}
+    </div>
+    <div class="col s8 m5">
+      {{>afQuickField name="isim"}}
+    </div>
+    <div class="col s4 m2">
+      {{>afQuickField name="sira"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="gorsel"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 right-align" style="padding-top: 3em">
+      <button type="submit" class="btn btn-large waves-effect waves-light" {{submitButtonAtts}}>
+        Kaydet <i class="material-icons left">save</i>
+      </button>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,92 @@
+passenger_log_level 4;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    server_name localhost;
+    return 301 http://www.mitolojix.com$request_uri;
+}
+
+server {
+    server_name www.mitolojix.com;
+    listen 80;
+    root /home/mitolojix/meteor-apps/mitolojix-website;
+    index index.html;
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+}
+
+server {
+    server_name yonetim.mitolojix.com;
+    listen 80;
+    listen 443 ssl;
+    ssl_prefer_server_ciphers on;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
+    ssl_dhparam /home/mitolojix/meteor-apps/ssl/dhparams.pem;
+    add_header X-Frame-Options DENY;
+    ssl_certificate /home/mitolojix/meteor-apps/ssl/yonetim.mitolojix.com.chain;
+    ssl_certificate_key /home/mitolojix/meteor-apps/ssl/yonetim.mitolojix.com.key;
+    add_header Strict-Transport-Security 'max-age=31536000';
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    keepalive_timeout 70;
+    root /home/mitolojix/meteor-apps/backend-build/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var TZ Europe/Istanbul;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_app_env production;
+    passenger_env_var NODE_ENV production;
+    passenger_env_var KADIRA_DEBUG_AUTH_KEY M!t0lojix;
+    passenger_env_var KADIRA_APP_ID qMTPb8oLLT3fuudRb;
+    passenger_env_var KADIRA_APP_SECRET ec40b6a2-352c-4d70-8a50-9d5f87a9d4dd;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL https://yonetim.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "BACKEND", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+}
+
+server {
+    server_name oyun.mitolojix.com;
+    listen 80;
+    listen 443 ssl;
+    ssl_prefer_server_ciphers on;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
+    ssl_dhparam /home/mitolojix/meteor-apps/ssl/dhparams.pem;
+    add_header X-Frame-Options DENY;
+    ssl_certificate /home/mitolojix/meteor-apps/ssl/oyun.mitolojix.com.chain;
+    ssl_certificate_key /home/mitolojix/meteor-apps/ssl/oyun.mitolojix.com.key;
+    add_header Strict-Transport-Security 'max-age=31536000';
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    keepalive_timeout 70;
+    root /home/mitolojix/meteor-apps/frontend-build/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var TZ Europe/Istanbul;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_app_env production;
+    passenger_env_var NODE_ENV production;
+    passenger_env_var KADIRA_DEBUG_AUTH_KEY M!t0lojix;
+    passenger_env_var KADIRA_APP_ID rr8SFat7ZPxdcHXCt;
+    passenger_env_var KADIRA_APP_SECRET ff0508b2-8d6d-4dcf-96ce-c9b836448b52;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL https://oyun.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "FRONTEND", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+}
+

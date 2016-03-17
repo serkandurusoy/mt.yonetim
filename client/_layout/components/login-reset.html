@@ -1,0 +1,59 @@
+<template name="accountsTemplate">
+  {{#if resetFlow}}
+    {{>resetForm}}
+  {{else}}
+    {{>loginForm}}
+  {{/if}}
+</template>
+
+<template name="resetForm">
+  <div class="container padTopBlock">
+    <form name="resetForm" class="row" autocomplete="off">
+      <div class="input-field col s6 offset-s3 m4 offset-m4">
+        <div>
+          <img class="responsive-img" src="/mitolojix-logo-yazi.svg"/>
+        </div>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2">
+        <i class="material-icons prefix">verified_user</i>
+        <input type="password" id="password" name="password" class="validate" required/>
+        <label for="password" data-error="" data-success="">Şifre</label>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2">
+        <i class="material-icons prefix">verified_user</i>
+        <input type="password" id="confirm" name="confirm" class="validate" required/>
+        <label for="confirm" data-error="" data-success="">Şifre Tekrar</label>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2 right-align">
+        <a class="waves-effect waves-teal btn-flat {{accountButtonsDisabled}}" data-trigger="cancel" style="text-transform: none">VAZGEÇ</a>
+        <button class="btn waves-effect waves-light {{accountButtonsDisabled}}" type="submit">Kaydet</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<template name="loginForm">
+  <div class="container padTopBlock">
+    <form name="loginForm" class="row" autocomplete="off">
+      <div class="input-field col s6 offset-s3 m4 offset-m4">
+        <div>
+          <img class="responsive-img" src="/mitolojix-logo-yazi.svg"/>
+        </div>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2">
+        <i class="material-icons prefix">account_box</i>
+        <input type="text" id="kullanici" name="kullanici" class="validate" required/>
+        <label for="email" data-error="" data-success="">E-posta Adresi</label>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2">
+        <i class="material-icons prefix">security</i>
+        <input type="password" id="password" name="password" class="validate" required/>
+        <label for="password" data-error="" data-success="">Şifre</label>
+      </div>
+      <div class="input-field col s12 m10 offset-m1 l8 offset-l2 right-align">
+        <a class="waves-effect waves-teal btn-flat {{accountButtonsDisabled}}" data-trigger="forgotPassword" style="text-transform: none">ŞİFREMİ UNUTTUM</a>
+        <button class="btn waves-effect waves-light {{accountButtonsDisabled}}" type="submit" style="text-transform: none">GİRİŞ</button>
+      </div>
+    </form>
+  </div>
+</template>

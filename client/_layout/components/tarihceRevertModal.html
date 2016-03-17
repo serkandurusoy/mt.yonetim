@@ -1,0 +1,21 @@
+<template name="tarihceRevertModal">
+  <div id="tarihceRevertModal" class="modal bottom-sheet modal-fixed-footer">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <p>
+            <i class="material-icons large red-text">history</i>
+          </p>
+          <p>
+            Bu versiyona geri dönmek istediğinize emin misiniz?<br>
+            <em>Devam ederseniz, bu versiyondaki bilgilerle yeni bir versiyon oluşturulacak.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">VAZGEÇ</a>
+      <a data-trigger="revert" class="modal-action waves-effect waves-red btn-flat ">EVET</a>
+    </div>
+  </div>
+</template>

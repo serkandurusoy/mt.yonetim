@@ -1,0 +1,86 @@
+<template name="kullaniciYeni">
+  {{#unless $or (userHasRole "mitolojix") (userHasRole "teknik")}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{#autoForm schema="M.C.Users.Schema" id="kullaniciYeniForm" type="method" meteormethod="kullaniciYeniMethod" template="materialize" }}
+              {{> kullaniciFormFields}}
+            {{/autoForm}}
+          </div>
+        </div>
+      </div>
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="kullaniciFormFields">
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="name"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="lastName"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="dogumTarihi"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="cinsiyet"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="emails.0.address"}}
+      {{>afQuickField name="emails.0.verified"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="tcKimlik"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="kurum"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="role"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="dersleri"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="sinif"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="sube"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 right-align" style="padding-top: 3em">
+      <button type="submit" class="btn btn-large waves-effect waves-light" {{submitButtonAtts}}>
+        Kaydet <i class="material-icons left">save</i>
+      </button>
+    </div>
+  </div>
+</template>

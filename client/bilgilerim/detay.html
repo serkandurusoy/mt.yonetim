@@ -1,0 +1,11 @@
+<template name="bilgilerimDetay">
+  {{#unless Template.subscriptionsReady}}
+    <div class="loading padTopBlock center">
+      {{> loading}}
+    </div>
+  {{else}}
+    {{#with currentUser}}
+      {{>bilgilerimDetayKart}}
+    {{/with}}
+  {{/unless}}
+</template>

@@ -1,0 +1,52 @@
+<template name="soruDuzenle">
+  {{#if userHasRole "mudur"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless soru}}
+        {{>notFound}}
+      {{else}}
+        {{#with soru}}
+          <div class="row">
+            <div class="col s12">
+              <div class="card-panel">
+                {{#if soruKullanimda}}
+                  <div class="card deep-orange accent-4">
+                    <div class="card-content white-text">
+                      <span class="card-title">Bu soru en az bir sınavda kullanılıyor.</span>
+                      <p>Yapacağınız tüm değişiklikler sınava yansıyacaktır. Eğer bunu istemiyorsanız <a href="{{pathFor 'soruDetay' _id=_id}}" class="white-text" style="text-decoration: underline">geri dönüp</a> bu soruyu kopyalayarak yeni bir soru yaratabilirsiniz.</p>
+                    </div>
+                  </div>
+                {{/if}}
+                {{#if soruMufredatEgitimYiliDegismis}}
+                  <div class="card deep-orange accent-4">
+                    <div class="card-content white-text">
+                      <span class="card-title">Bu soru geçmiş bir eğitim yılına ait.</span>
+                      <p>Bu soru {{alan.egitimYili}} eğitim yılına ait. Devam ederseniz aşağıdaki ilgili alanlarda güncel eğitim yılının müfredatına ait konu ve kazanımlar arasından seçim yapmanız gerekecektir. Eğer bunu istemiyorsanız <a href="{{pathFor 'soruDetay' _id=_id}}" class="white-text" style="text-decoration: underline">geri dönüp</a> bu soruyu kopyalayarak güncel eğitim yılı müfredatı ile yeni bir soru yaratabilirsiniz.</p>
+                    </div>
+                  </div>
+                {{else}}
+                  {{#if soruMufredatVersionDegismis}}
+                    <div class="card deep-orange accent-4">
+                      <div class="card-content white-text">
+                        <span class="card-title">Bu sorunun müfredatında değişiklik var.</span>
+                        <p>Sorunun kaydedildiği son tarihten bu yana ilgili müfredatta değişiklikler gerçekleşti. Devam ederseniz aşağıdaki ilgili alanlarda güncel konu ve kazanımlar arasından seçim yapmanız gerekecektir. Eğer bunu istemiyorsanız <a href="{{pathFor 'soruDetay' _id=_id}}" class="white-text" style="text-decoration: underline">geri dönüp</a> bu soruyu kopyalayarak güncel müfredat ile yeni bir soru yaratabilirsiniz.</p>
+                      </div>
+                    </div>
+                  {{/if}}
+                {{/if}}
+                {{#autoForm collection="M.C.Sorular" id="soruDuzenleForm" type="update" doc=this template="materialize"}}
+                  {{> soruFormFields}}
+                {{/autoForm}}
+              </div>
+            </div>
+          </div>
+        {{/with}}
+      {{/unless}}
+    {{/unless}}
+  {{/if}}
+</template>

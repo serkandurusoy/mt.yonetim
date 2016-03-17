@@ -1,0 +1,94 @@
+<template name="mufredatDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#unless ref}}
+              {{#unless $or (userHasRole "mudur") (userHasRole "ogretmen")}}
+                {{#if aktif}}
+                  <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
+                {{/if}}
+              {{/unless}}
+            {{/unless}}
+            <h5>{{#if $neq kurum 'mitolojix'}}{{foreignField 'Kurumlar' kurum 'isim'}}{{else}}Mitolojix{{/if}}</h5>
+            <p>
+              {{enumLabel egitimYili}} - {{foreignField 'Dersler' ders 'isim'}}<br>
+              {{enumLabel sinif}}
+              {{#unless ref}}<br>Müfredat Versiyon No: {{_version}}{{/unless}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#each konular}}
+    <div class="row {{#unless ../aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12">
+              <h5>{{konu}}</h5>
+              {{#if icerik}}
+                <h5>İçerikler:</h5>
+                <ul>
+                  {{#each icerik}}
+                    {{#with FS.GetFile "M.FS.DersIcerik" this}}
+                      <li><a data-trigger="previewIcerik" title="Konu içeriğini görüntüle" data-url="{{url}}">{{name}}</a></li>
+                    {{/with}}
+                  {{/each}}
+                </ul>
+              {{/if}}
+              <h5>Kazanımlar:</h5>
+              <ul>
+                {{#each kazanimlar}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              {{#unless $or (userHasRole "mudur") (userHasRole "ogretmen")}}
+                <a data-trigger="revert" title="Bu versiyona geri dön" class="right"><i class="red-text material-icons">history</i></a>
+              {{/unless}}
+              {{#unless updatedAt}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'mufredatDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}oluşturuldu.<br>
+              {{/unless}}
+            {{else}}
+              {{#if updatedAt}}
+                <a title="Tarihçeyi gör" href="{{pathWithParam 'mufredatTarihce' '_id'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından {{#if _clonedFrom}}<a title="Orijinal kaydı gör" href="{{pathFor 'mufredatDetay' _id=_clonedFrom._id}}">kopyalanarak</a> {{/if}}oluşturuldu.<br>
+            {{/if}}
+            {{#if updatedAt}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat updatedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName updatedBy}} tarafından güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="previewIcerikModal">
+  <div id="previewIcerikModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <a href="{{url}}&download=true" target="_blank" class="right"><i class="material-icons">file_download</i></a>
+      <h4 class="truncate">{{fileName}}</h4>
+      <div id="pdfcontainer"><canvas id="pdfcanvas"></canvas></div>
+    </div>
+    <div class="modal-footer">
+      <a id="next" class="waves-effect waves-light btn"><i class="material-icons">fast_forward</i></a>
+      <a id="prev" class="waves-effect waves-light btn"><i class="material-icons">fast_rewind</i></a>
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">KAPAT</a>
+      <span class="left pdfPager"><span id="page_num"></span>/<span id="page_count"></span></span>
+    </div>
+  </div>
+</template>

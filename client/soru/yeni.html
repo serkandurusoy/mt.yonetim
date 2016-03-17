@@ -1,0 +1,120 @@
+<template name="soruYeni">
+  {{#if userHasRole "mudur"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{#autoForm collection="M.C.Sorular" id="soruYeniForm" doc=soruClone type="insert" template="materialize"}}
+              {{> soruFormFields}}
+            {{/autoForm}}
+          </div>
+        </div>
+      </div>
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="soruFormFields">
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="kurum"}}
+      {{>afQuickField name="kod"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="alan.ders"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="alan.sinif"}}
+      {{>afQuickField name="alan.mufredat"}}
+      {{>afQuickField name="alan.mufredatVersion"}}
+      {{>afQuickField name="alan.egitimYili"}}
+    </div>
+  </div>
+
+  {{#if $and (currentFieldValue "alan.ders") (currentFieldValue "alan.sinif") }}
+    <div class="row">
+      <div class="col s12">
+        {{>afQuickField name="alan.konu"}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if currentFieldValue "alan.konu"}}
+    <div class="row">
+      <div class="col s12">
+        {{>afQuickField name="alan.kazanimlar"}}
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="row">
+    <div class="col s12 m6">
+      {{>afQuickField name="tip"}}
+    </div>
+    <div class="col s12 m6">
+      {{>afQuickField name="zorlukDerecesi"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            <div class="row">
+              <div class="col s12">
+                {{>afQuickField name="soru.yonerge"}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col s12 m6">
+                {{>afQuickField name="soru.metin"}}
+              </div>
+              <div class="col s12 m6">
+                {{>afQuickField name="soru.gorsel"}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{#if currentFieldValue "tip"}}
+    <div class="row">
+      <div class="col s12">
+        <div class="row">
+          <div class="col s12">
+            <div class="card-panel">
+              {{>afQuickField name="yanit"}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="row">
+    <div class="col s12">
+      {{>afQuickField name="_clonedFrom"}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 right-align" style="padding-top: 3em">
+      <button type="submit" class="btn btn-large waves-effect waves-light" {{submitButtonAtts}}>
+        Kaydet <i class="material-icons left">save</i>
+      </button>
+    </div>
+  </div>
+</template>

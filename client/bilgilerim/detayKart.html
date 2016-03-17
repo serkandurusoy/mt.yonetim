@@ -1,0 +1,114 @@
+<template name="bilgilerimDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s2 {{isActiveRoute 'bilgilerimDetay' class='upload-avatar'}}">
+            {{#with FS.GetFile "M.FS.Avatar" avatar}}
+              <img src="{{url}}" alt="" class="circle responsive-img {{#unless ../ref}}{{#if ../status.online}}online{{else}}offline{{/if}}{{/unless}}" data-tooltip="{{#if isActiveRoute 'bilgilerimDetay'}}Değiştirmek için tıklayın{{/if}}">
+            {{else}}
+              {{#if $eq role 'ogrenci'}}
+                <img src="/avatar.svg" alt="" class="{{#if $eq cinsiyet 'erkek'}}blue lighten-1{{else}}pink lighten-2{{/if}} circle responsive-img {{#unless ref}}{{#if status.online}}online{{else}}offline{{/if}}{{/unless}}">
+              {{else}}
+                {{> initials options=initialsOptions online=status.online tarihceKart=ref}}
+              {{/if}}
+            {{/with}}
+          </div>
+          <div class="col s10">
+            <h5>{{name}} {{lastName}}</h5>
+            {{#with foreignField 'Kurumlar' kurum 'isim'}}{{this}}{{else}}Mitolojix{{/with}} - {{enumLabel role}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if $eq role 'ogretmen'}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12">
+              Yetkili olduğum dersler:<br>
+              {{#each dersleri}}
+                {{#unless $eq @index 0}}, {{/unless}}{{foreignField 'Dersler' this 'isim'}}
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12 m6">
+            {{tcKimlik}}
+          </div>
+          <div class="col s12 m6">
+            {{moFormat dogumTarihi 'DD.MM.YYYY'}}
+          </div>
+          <div class="col s12 m6">
+            {{emails.[0].address}}
+          </div>
+          <div class="col s12 m6">
+            {{enumLabel cinsiyet}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#unless ref}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+            {{>bilgilerimChangePassword}}
+        </div>
+      </div>
+    </div>
+  {{/unless}}
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              {{#if $eq _version 1}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+              {{/if}}
+            {{else}}
+              {{#if $gt _version 1}}
+                <a title="Tarihçeyi gör" href="{{pathFor 'bilgilerimTarihce'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+            {{/if}}
+            {{#if $gt _version 1}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat modifiedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{#if crudBy}}{{userFullName crudBy}}{{else}}{{userFullName '0'}}{{/if}} tarafından güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="bilgilerimChangePassword">
+  <form name="changePass" class="row" autocomplete="off">
+    <div class="input-field col s12 m6">
+      <i class="material-icons prefix">verified_user</i>
+      <input type="password" id="password" name="password" class="validate" required/>
+      <label for="password" data-error="" data-success="">Yeni Şifre</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <i class="material-icons prefix">verified_user</i>
+      <input type="password" id="confirm" name="confirm" class="validate" required/>
+      <label for="confirm" data-error="" data-success="">Yeni Şifre Tekrar</label>
+    </div>
+    <div class="input-field col s12 m6">
+      <i class="material-icons prefix">security</i>
+      <input type="password" id="oldpass" name="oldpass" class="validate" required/>
+      <label for="oldpass" data-error="" data-success="">Eski Şifre</label>
+    </div>
+    <div class="input-field col s12 m6 center-align">
+      <button class="btn waves-effect waves-light {{accountButtonsDisabled}}" type="submit">Kaydet</button>
+    </div>
+  </form>
+</template>

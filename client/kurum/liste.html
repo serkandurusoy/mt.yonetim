@@ -1,0 +1,41 @@
+<template name="kurumListe">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless kurumlar}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection">
+              {{#each kurumlar}}
+                {{>kurumKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="kurumKart">
+  <li class="collection-item avatar {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Kurumlar' _id}} lime lighten-3{{/if}}">
+    {{#with FS.GetFile "M.FS.KurumLogo" logo}}
+      <img src="{{url auth=false}}" alt="" class="circle">
+    {{/with}}
+    <span class="title">{{isim}}</span>
+    <p>
+      {{ilAdi adres.ilce}} / {{ilceAdi adres.ilce}}<br>
+      {{yetkili.isim}} / {{yetkili.unvan}}<br>
+      {{formatTel yetkili.telefon}} / {{yetkili.email}}
+    </p>
+    <a title="Detay gör" class="secondary-content" href="{{pathFor 'kurumDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+  </li>
+</template>
+

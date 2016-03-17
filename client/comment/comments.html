@@ -1,0 +1,48 @@
+<template name="comments">
+  <div class="row">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#unless comments}}
+              Şu ana kadar hiç yorum yapılmamış.{{#unless userHasRole "mudur"}} İlk yorum yapan siz olun.{{/unless}}
+            {{else}}
+              <ul class="collection">
+                {{#each comments}}
+                  {{>comment}}
+                {{/each}}
+              </ul>
+            {{/unless}}
+            {{#unless userHasRole "mudur"}}
+              {{>commentForm commentMeta}}
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="comment">
+  <li class="collection-item avatar">
+    {{#with createdByUser}}
+      {{#with FS.GetFile "M.FS.Avatar" avatar}}
+      <img src="{{url}}" alt="" data-tooltip={{../tooltip}} class="circle responsive-img {{#if ../status.online}}online{{else}}offline{{/if}}">
+      {{else}}
+        {{#if $eq role 'ogrenci'}}
+        <img src="/avatar.svg" alt="" data-tooltip={{tooltip}} class="{{#if $eq cinsiyet 'erkek'}}blue lighten-1{{else}}pink lighten-2{{/if}} circle responsive-img {{#if status.online}}online{{else}}offline{{/if}}">
+        {{else}}
+          {{> initials options=initialsOptions tooltip=tooltip online=status.online}}
+        {{/if}}
+      {{/with}}
+    {{/with}}
+    {{#each splitOnNewlines body}}
+      <p>{{#autolink}}{{this}}{{/autolink}}</p>
+    {{/each}}
+    <div class="grey-text right-align">{{moFrom createdAt moNow}}</div>
+  </li>
+</template>
+
+<template name="commentForm">
+  {{> quickForm collection="M.C.Comments" id="commentYeniForm" doc=this type="insert" template="materialize" buttonContent="YORUM EKLE"}}
+</template>

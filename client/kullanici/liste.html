@@ -1,0 +1,87 @@
+<template name="kullaniciListe">
+  {{#if userHasRole "ogretmen"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#if showFilters}}
+        <div class="row">
+          <div class="col s12">
+            <div class="card-panel">
+              {{> filterKullanici}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+      {{#unless kullanicilar}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection">
+              {{#each kullanicilar}}
+                {{>kullaniciKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="kullaniciKart">
+  <li class="collection-item avatar {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Users' _id}} lime lighten-3{{/if}}">
+    {{#with FS.GetFile "M.FS.Avatar" avatar}}
+      <img src="{{url}}" alt="" class="circle responsive-img {{#if ../status.online}}online{{else}}offline{{/if}}">
+    {{else}}
+      {{#if $eq role 'ogrenci'}}
+        <img src="/avatar.svg" alt="" class="{{#if $eq cinsiyet 'erkek'}}blue lighten-1{{else}}pink lighten-2{{/if}} circle responsive-img {{#if status.online}}online{{else}}offline{{/if}}">
+      {{else}}
+        {{> initials options=initialsOptions online=status.online}}
+      {{/if}}
+    {{/with}}
+    <span class="title">{{#unless emails.[0].verified}}<i class="material-icons tiny cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i>{{/unless}} {{name}} {{lastName}}</span>
+    <p>{{#if userHasRole "mitolojix"}}{{#with foreignField 'Kurumlar' kurum 'isim'}}{{this}}{{else}}Mitolojix{{/with}} - {{/if}}{{enumLabel role}}</p>
+    {{#if $eq role 'ogrenci'}}
+      <p>
+        {{enumLabel sinif}} {{sube}}
+      </p>
+    {{/if}}
+    {{#if $eq role 'ogretmen'}}
+      <p>
+        Yetkili olduğu dersler:
+        {{#each dersleri}}
+          {{#unless $eq @index 0}}, {{/unless}}{{foreignField 'Dersler' this 'isim'}}
+        {{/each}}
+      </p>
+    {{/if}}
+    <a title="Detay gör" class="secondary-content" href="{{pathFor 'kullaniciDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+  </li>
+</template>
+
+<template name="filterKullanici">
+  {{#autoForm schema=filterKullaniciForm id="filterKullaniciForm" template="materialize"}}
+    <div class="row">
+      {{#if userHasRole "mitolojix"}}
+        <div class="col s12 m4">
+          {{>afQuickField name="kurum"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="kurum"}}
+      {{/if}}
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m4{{else}}m6{{/if}}">
+        {{>afQuickField name="role"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="sinif"}}
+      </div>
+      <div class="col s12 {{#if userHasRole "mitolojix"}}m1{{else}}m2{{/if}}">
+        {{>afQuickField name="sube"}}
+      </div>
+    </div>
+  {{/autoForm}}
+</template>

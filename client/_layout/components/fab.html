@@ -1,0 +1,9 @@
+<template name="fab">
+  {{#if canViewFab}}
+    <div class="fixed-action-btn" style="bottom: 24px; right: 24px;">
+      <a title="{{#if $eq icon "add"}}Yeni kayıt oluştur{{else}}Kaydı düzenle{{/if}}" class="btn-floating btn-large {{color}}" href="{{#if paramName}}{{pathWithParam pathName paramName}}{{else}}{{pathFor pathName}}{{/if}}">
+        <i class="large material-icons">{{icon}}</i>
+      </a>
+    </div>
+  {{/if}}
+</template>

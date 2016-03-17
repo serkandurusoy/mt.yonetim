@@ -1,0 +1,28 @@
+<template name="kurumTarihce">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless tarihce 'Kurumlar'}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collapsible" data-collapsible="accordion">
+              {{#each tarihce 'Kurumlar'}}
+                <li>
+                  <div class="collapsible-header {{#if $first}}active{{/if}}"><strong>Versiyon No {{_version}}</strong></div>
+                  <div class="collapsible-body">{{>kurumDetayKart}}</div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>

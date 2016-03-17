@@ -1,0 +1,62 @@
+<template name="kurumDetayKart">
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s2">
+            {{#with FS.GetFile "M.FS.KurumLogo" logo}}
+              <img src="{{url auth=false}}" alt="" class="responsive-img">
+            {{/with}}
+          </div>
+          <div class="col s10">
+            <h5>{{isim}}</h5>
+            <p>{{adres.adres}} - {{ilceAdi adres.ilce}} - {{ilAdi adres.ilce}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12 m6">{{yetkili.isim}}<br>{{yetkili.unvan}}</div>
+            <div class="col s12 m6" style="word-wrap: break-word">{{yetkili.email}}<br>{{formatTel yetkili.telefon}}</div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            Tercih edilen şifre zorluk derecesi: {{enumLabel sifre}}.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row {{#unless aktif}}pasif{{/unless}}">
+    <div class="col s12">
+      <div class="card-panel">
+        <div class="row">
+          <div class="col s12">
+            {{#if ref}}
+              <a data-trigger="revert" title="Bu versiyona geri dön" class="right"><i class="red-text material-icons">history</i></a>
+              {{#unless updatedAt}}
+                {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+              {{/unless}}
+            {{else}}
+              {{#if updatedAt}}
+                <a title="Tarihçeyi gör" href="{{pathWithParam 'kurumTarihce' '_id'}}" class="right"><i class="material-icons">access_time</i></a>
+              {{/if}}
+              {{moFormat createdAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName createdBy}} tarafından oluşturuldu.<br>
+            {{/if}}
+            {{#if updatedAt}}Bu {{#unless ref}}{{_version}} numaralı {{/unless}}versiyonuna {{moFormat updatedAt 'DD.MM.YYYY HH:mm'}} tarihinde {{userFullName updatedBy}} tarafından güncellendi.{{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

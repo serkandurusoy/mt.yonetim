@@ -1,0 +1,15 @@
+<template name="mufredatDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless mufredat}}
+      {{>notFound}}
+    {{else}}
+      {{#with mufredat}}
+        {{>mufredatDetayKart}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>

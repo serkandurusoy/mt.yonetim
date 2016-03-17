@@ -1,0 +1,26 @@
+<template name="soruSepeti">
+  {{#if userHasRole "mudur"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless sorular}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection with-header">
+              <li class="collection-header right-align"><a data-trigger="bosalt" title="Sepeti Boşalt">Sepeti Boşalt</a></li>
+              {{#each sorular}}
+                {{>soruKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/if}}
+</template>

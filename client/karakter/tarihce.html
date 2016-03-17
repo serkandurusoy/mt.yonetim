@@ -1,0 +1,28 @@
+<template name="karakterTarihce">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless tarihce 'Karakterler'}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collapsible" data-collapsible="accordion">
+              {{#each tarihce 'Karakterler'}}
+                <li>
+                  <div class="collapsible-header {{#if $first}}active{{/if}}"><strong>Versiyon No {{_version}}</strong></div>
+                  <div class="collapsible-body">{{>karakterDetayKart}}</div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>

@@ -1,0 +1,50 @@
+<template name="kullaniciTarihce">
+  {{#if userHasRole "ogretmen"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless tarihce 'Users'}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collapsible" data-collapsible="accordion">
+              {{#each tarihce 'Users'}}
+                <li>
+                  <div class="collapsible-header {{#if $first}}active{{/if}}"><strong>Versiyon No {{_version}}</strong></div>
+                  <div class="collapsible-body">{{>kullaniciDetayKart}}</div>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/if}}
+</template>
+
+<template name="kullaniciTarihceRevertModal">
+  <div id="kullaniciTarihceRevertModal" class="modal bottom-sheet modal-fixed-footer">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <p>
+            <i class="material-icons large red-text">history</i>
+          </p>
+          <p>
+            Bu versiyona geri dönmek istediğinize emin misiniz?<br>
+            <em>Devam ederseniz, bu versiyondaki bilgilerle yeni bir versiyon oluşturulacak.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">VAZGEÇ</a>
+      <a data-trigger="revert" class="modal-action waves-effect waves-red btn-flat ">EVET</a>
+    </div>
+  </div>
+</template>

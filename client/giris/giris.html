@@ -1,0 +1,9 @@
+<template name="giris">
+  {{#unless Template.subscriptionsReady}}
+    <div class="loading padTopBlock center">
+      {{> loading}}
+    </div>
+  {{else}}
+    {{>timeline}}
+  {{/unless}}
+</template>

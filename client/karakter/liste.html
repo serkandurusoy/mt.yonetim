@@ -1,0 +1,36 @@
+<template name="karakterListe">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless karakterler}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection">
+              {{#each karakterler}}
+                {{>karakterKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="karakterKart">
+  <li class="collection-item avatar {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Karakterler' _id}} lime lighten-3{{/if}}">
+    {{#with FS.GetFile "M.FS.Karakter" gorsel}}
+      <img src="{{url}}" alt="" class="circle">
+    {{/with}}
+    <p>{{enumLabel cinsiyet}}</p>
+    <a title="Detay gör" class="secondary-content" href="{{pathFor 'karakterDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+  </li>
+</template>
+

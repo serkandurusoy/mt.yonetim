@@ -1,0 +1,64 @@
+<template name="mufredatListe">
+  {{#unless Template.subscriptionsReady}}
+    <div class="loading padTopBlock center">
+      {{> loading}}
+    </div>
+  {{else}}
+    {{#if showFilters}}
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel">
+            {{> filterMufredat}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+    {{#unless mufredat}}
+      {{>notFound}}
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+          <ul class="collection">
+            {{#each mufredat}}
+              {{>mufredatKart}}
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="mufredatKart">
+  <li class="collection-item {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Mufredat' _id}} lime lighten-3{{/if}}">
+    <div>
+      <a title="Detay gör" class="secondary-content" href="{{pathFor 'mufredatDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+      {{#if $neq kurum 'mitolojix'}}{{foreignField 'Kurumlar' kurum 'isim'}}{{else}}Mitolojix{{/if}}<br>
+      {{enumLabel egitimYili}} - {{foreignField 'Dersler' ders 'isim'}}<br>
+      {{enumLabel sinif}}
+    </div>
+  </li>
+</template>
+
+<template name="filterMufredat">
+  {{#autoForm schema=filterMufredatForm id="filterMufredatForm" template="materialize"}}
+    <div class="row">
+      {{#if $or (userHasRole "mitolojix") (userHasRole "teknik")}}
+        <div class="col s12 m3">
+          {{>afQuickField name="kurum"}}
+        </div>
+      {{else}}
+        {{>afQuickField name="kurum"}}
+      {{/if}}
+      <div class="col s12 {{#if $or (userHasRole "mitolojix") (userHasRole "teknik")}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="sinif"}}
+      </div>
+      <div class="col s12 {{#if $or (userHasRole "mitolojix") (userHasRole "teknik")}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="ders"}}
+      </div>
+      <div class="col s12 {{#if $or (userHasRole "mitolojix") (userHasRole "teknik")}}m3{{else}}m4{{/if}}">
+        {{>afQuickField name="egitimYili"}}
+      </div>
+    </div>
+  {{/autoForm}}
+</template>
