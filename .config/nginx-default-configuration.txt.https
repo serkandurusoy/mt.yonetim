@@ -21,6 +21,25 @@ server {
 }
 
 server {
+    server_name ulmanws.com;
+    listen 80;
+    return 301 http://www.ulmanws.com$request_uri;
+}
+
+server {
+    server_name www.ulmanws.com;
+    listen 80;
+    root /home/mitolojix/meteor-apps/uws-website;
+    index index.html;
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+}
+
+server {
     server_name yonetim.mitolojix.com;
     listen 80;
     listen 443 ssl;
