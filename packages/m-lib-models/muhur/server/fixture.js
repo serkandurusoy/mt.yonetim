@@ -1,5 +1,5 @@
 Meteor.startup(function () {
-  if (Meteor.settings.public.APP === 'BACKEND' && M.C.Dersler.find().count() === 0 && M.C.Muhurler.find().count() === 0 && M.C.Mufredat.find().count() === 0) {
+  if (Meteor.settings.public.APP === 'YONETIM' && M.C.Dersler.find().count() === 0 && M.C.Muhurler.find().count() === 0 && M.C.Mufredat.find().count() === 0) {
     var dersler = [
       {
         ders: 'Matematik',

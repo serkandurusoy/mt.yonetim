@@ -1,5 +1,5 @@
 Meteor.startup(function () {
-  if (Meteor.settings.public.APP === 'BACKEND' && (M.C.Iller.find().count() === 0 || M.C.Ilceler.find().count() === 0) ) {
+  if (Meteor.settings.public.APP === 'YONETIM' && (M.C.Iller.find().count() === 0 || M.C.Ilceler.find().count() === 0) ) {
     var ilArray = [
         {il: 'Adana'},
         {il: 'Adıyaman'},

@@ -1,4 +1,4 @@
-if (Meteor.settings.public.APP === 'BACKEND') {
+if (Meteor.settings.public.APP === 'YONETIM') {
   SyncedCron.add({
     name: '1 aydan eski storiesi sil',
     schedule: function(parser) {

@@ -2,7 +2,7 @@
 # core                            #
 ###################################
 m:lib-core
-force-ssl
+# force-ssl                       # we are letting nginx handle this
 flemay:less-autoprefixer
 standard-minifiers
 appcache
@@ -10,7 +10,7 @@ meteorhacks:kadira
 kadira:debug
 
 ###################################
-# backend-specific                #
+# yonetim-specific                #
 ###################################
 pbastowski:require
 materialize:materialize
@@ -31,7 +31,7 @@ m:lib-utils
 m:lib-collections
 m:lib-tckimlik
 m:lib-accounts
-m:lib-router-backend
+m:lib-router-yonetim
 m:lib-models
 m:lib-clockpicker
 m:lib-favico

@@ -1,4 +1,6 @@
 passenger_log_level 4;
+passenger_max_pool_size 8;
+passenger_max_instances_per_app 6;
 
 server {
     listen 80 default_server;
@@ -10,7 +12,7 @@ server {
 server {
     server_name www.mitolojix.com;
     listen 80;
-    root /home/mitolojix/meteor-apps/mitolojix-website;
+    root /home/mitolojix/meteor-apps/www;
     index index.html;
 
     location / {
@@ -29,7 +31,7 @@ server {
 server {
     server_name www.ulmanws.com;
     listen 80;
-    root /home/mitolojix/meteor-apps/uws-website;
+    root /home/mitolojix/meteor-apps/uws-www;
     index index.html;
 
     location / {
@@ -40,8 +42,13 @@ server {
 }
 
 server {
-    server_name yonetim.mitolojix.com;
     listen 80;
+    server_name yonetim.mitolojix.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    server_name yonetim.mitolojix.com;
     listen 443 ssl;
     ssl_prefer_server_ciphers on;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -54,7 +61,7 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     keepalive_timeout 70;
-    root /home/mitolojix/meteor-apps/backend-build/bundle/public;
+    root /home/mitolojix/meteor-apps/builds/yonetim/bundle/public;
     passenger_enabled on;
     passenger_sticky_sessions on;
     passenger_env_var TZ Europe/Istanbul;
@@ -68,15 +75,24 @@ server {
     passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
     passenger_env_var ROOT_URL https://yonetim.mitolojix.com;
     passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
-    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "BACKEND", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "YONETIM", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
     passenger_env_var HTTP_FORWARDED_COUNT 1;
     passenger_app_type node;
     passenger_startup_file main.js;
+    passenger_min_instances 1;
+    passenger_force_max_concurrent_requests_per_process 100;
+}
+
+passenger_pre_start https://yonetim.mitolojix.com/;
+
+server {
+    listen 80;
+    server_name oyun.mitolojix.com;
+    return 301 https://$server_name$request_uri;
 }
 
 server {
     server_name oyun.mitolojix.com;
-    listen 80;
     listen 443 ssl;
     ssl_prefer_server_ciphers on;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -89,7 +105,7 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
     keepalive_timeout 70;
-    root /home/mitolojix/meteor-apps/frontend-build/bundle/public;
+    root /home/mitolojix/meteor-apps/builds/oyun/bundle/public;
     passenger_enabled on;
     passenger_sticky_sessions on;
     passenger_env_var TZ Europe/Istanbul;
@@ -103,9 +119,12 @@ server {
     passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
     passenger_env_var ROOT_URL https://oyun.mitolojix.com;
     passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
-    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "FRONTEND", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "OYUN", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
     passenger_env_var HTTP_FORWARDED_COUNT 1;
     passenger_app_type node;
     passenger_startup_file main.js;
+    passenger_min_instances 1;
+    passenger_force_max_concurrent_requests_per_process 100;
 }
 
+passenger_pre_start https://oyun.mitolojix.com/;

@@ -297,7 +297,7 @@ Meteor.methods({
         if (_.where(data.sinavKagitlari, {sube: sube}).length > 0) {
           return {
             sube: sube,
-            sinavKagitlari: _.map(_.sortBy(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'lastNameCollate'),'nameCollate'), function(sinavKagidi,ix) {
+            sinavKagitlari: _.sortBy(_.sortBy(_.map(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'sira'), function(sinavKagidi,ix) {
               var counts = _.countBy(sinavKagidi.yanitlar, function(yanit) {
                 return yanit.yanitlandi === 0 ? 'bosYanit' : (yanit.dogru === true ? 'dogruYanit' : 'yanlisYanit');
               });
@@ -316,8 +316,12 @@ Meteor.methods({
                 netYuzde: statFormat(math.chain(math.chain(dogruYanit).subtract(math.chain(yanlisYanit).divide(3).done()).done()).divide(stats.soruSayisi).multiply(100).done()),
                 puan: sinavKagidi.puan,
                 sira: sinavKagidi.sira,
-                subeSira: ix + 1
+                subeSira: ix + 1,
+                lastNameCollate: sinavKagidi.lastNameCollate,
+                nameCollate: sinavKagidi.nameCollate
               };
+            }), 'lastNameCollate'),'nameCollate').map(function(sinavKagidi) {
+              return _.omit(sinavKagidi, ['lastNameCollate','nameCollate']);
             })
           };
         }

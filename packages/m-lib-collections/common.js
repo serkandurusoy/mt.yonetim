@@ -86,7 +86,7 @@ M.C.setUpCollection = function(model) {
   }
 };
 
-if (Meteor.settings.public.APP === 'FRONTEND') {
+if (Meteor.settings.public.APP === 'OYUN') {
   SimpleSchema.extendOptions({
     autoform: Match.Optional(Object)
   });

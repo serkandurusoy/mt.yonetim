@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'm:lib-router-backend',
+  name: 'm:lib-router-yonetim',
   version: '0.0.1',
-  summary: 'Routing for mitolojix backend'
+  summary: 'Routing for mitolojix yonetim'
 });
 
 Package.onUse(function(api) {

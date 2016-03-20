@@ -1,5 +1,5 @@
 Meteor.startup(function () {
-  if (Meteor.settings.public.APP === 'BACKEND' && M.C.Karakterler.find().count() === 0) {
+  if (Meteor.settings.public.APP === 'YONETIM' && M.C.Karakterler.find().count() === 0) {
     _.each(M.E.Cinsiyet, function(cinsiyet) {
       for (var i=1; i<=10; i++) {
         var karakterGorselId='';

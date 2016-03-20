@@ -1,4 +1,4 @@
-# Mitolojix Backend Application
+# Mitolojix Yonetim
 
 First, you should check out the repositories:
 

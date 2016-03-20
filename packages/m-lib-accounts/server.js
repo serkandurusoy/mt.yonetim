@@ -42,11 +42,11 @@ Accounts.validateLoginAttempt(function(attempt) {
   }
 
   if (user.role === 'ogrenci') {
-    if (Meteor.settings.public.APP === 'BACKEND') {
+    if (Meteor.settings.public.APP === 'YONETIM') {
       throw new Meteor.Error(403, 'This application is only for teachers and administrators');
     }
   } else {
-    if (Meteor.settings.public.APP === 'FRONTEND') {
+    if (Meteor.settings.public.APP === 'OYUN') {
       throw new Meteor.Error(403, 'This application is only for students');
     }
   }

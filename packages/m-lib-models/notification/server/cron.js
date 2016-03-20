@@ -1,4 +1,4 @@
-if (Meteor.settings.public.APP === 'BACKEND') {
+if (Meteor.settings.public.APP === 'YONETIM') {
   SyncedCron.add({
     name: 'Online olmayan herkese bekleyen notificationsini hatırlat.',
     schedule: function (parser) {

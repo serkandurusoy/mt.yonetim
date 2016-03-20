@@ -1,5 +1,5 @@
 Meteor.startup(function() {
-  if (Meteor.settings.public.APP === 'BACKEND' && M.C.Users.find().count() === 0) {
+  if (Meteor.settings.public.APP === 'YONETIM' && M.C.Users.find().count() === 0) {
 
     var userArray = [
       {

@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'm:lib-router-frontend',
+  name: 'm:lib-router-oyun',
   version: '0.0.1',
-  summary: 'Routing for mitolojix frontend'
+  summary: 'Routing for mitolojix oyun'
 });
 
 Package.onUse(function(api) {
