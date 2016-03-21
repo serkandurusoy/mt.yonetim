@@ -43,7 +43,7 @@ M.C.Users.Schema = new SimpleSchema({
     custom: function() {
       var tcKimlik = this.field('tcKimlik');
       var dg = this.value;
-      if (tcKimlik.value === '00000000000') {
+      if (_.contains(['00000000001','00000000002','00000000003'], tcKimlik.value)) {
         return true;
       } else {
         var min = moment.tz(new Date(new Date().getFullYear() - 80,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate();
