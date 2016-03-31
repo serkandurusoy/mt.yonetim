@@ -1,6 +1,6 @@
 SyncedCron.options = {
   //Log job run details to console
-  log: true,
+  log: false,
 
   //Name of collection to use for synchronisation and logging
   collectionName: 'cronHistory',
@@ -18,8 +18,8 @@ SyncedCron.options = {
   //run `db.cronHistory.dropIndex({startedAt: 1})`) and re-run your
   //project. SyncedCron will recreate the index with the updated TTL.
 
-  // this is 1 year
-  collectionTTL: 31536000
+  // this is 1 week
+  collectionTTL: 657000
 };
 
 Meteor.startup(function() {

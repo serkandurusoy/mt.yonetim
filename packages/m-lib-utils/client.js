@@ -160,6 +160,20 @@ Template.registerHelper('enumLabel', function(val) {
   return M.L.enumLabel(val);
 });
 
+Template.registerHelper( 'liveTime', function (dateA) {
+  var locale = mo.currentLocale.get();
+  var result;
+
+  var dateA = mo._getMoment( dateA );
+  var dateB = mo.now.get();
+
+  if ( dateA && dateB ) {
+    result = dateA.from( dateB );
+  }
+
+  return result;
+});
+
 Template.registerHelper('userInKurum', function(kurumId) {
   return M.L.userInKurum(Meteor.userId(),kurumId);
 });

@@ -39,7 +39,7 @@
     {{#each splitOnNewlines body}}
       <p>{{#autolink}}{{this}}{{/autolink}}</p>
     {{/each}}
-    <div class="grey-text right-align">{{moFrom createdAt moNow}}</div>
+    <div class="grey-text right-align">{{liveTime createdAt}}</div>
   </li>
 </template>
 

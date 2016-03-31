@@ -4,7 +4,6 @@
 m:lib-core
 # force-ssl                       # we are letting nginx handle this
 flemay:less-autoprefixer
-standard-minifiers
 appcache
 meteorhacks:kadira
 kadira:debug
@@ -42,3 +41,5 @@ m:lib-favico
 # browser-policy                  # TODO: https://dweldon.silvrback.com/browser-policy
 # meteorhacks:unblock             # TODO: maybe later for fine grained performance
 # meteorhacks:subs-manager        # TODO: maybe later for fine grained performance
+standard-minifier-css
+standard-minifier-js
