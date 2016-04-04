@@ -182,7 +182,8 @@ Meteor.publishComposite('sinifArkadaslarim', function() {
           aktif: true,
           kurum: user.kurum,
           role: 'ogrenci',
-          sinif: user.sinif
+          sinif: user.sinif,
+          puan: {$gte: 70}
         }, {
           fields: {
             name: 1,
