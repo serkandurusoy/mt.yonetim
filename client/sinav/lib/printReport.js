@@ -265,7 +265,7 @@ M.L.analizRaporuContent = function(res){
 };
 
 M.L.testMaddeAnaliziContent = function(res) {
-  var sayfaBoyu = 20;
+  var sayfaBoyu = 25;
 
   var tamSayfaSayisi = parseInt(res.report.sorular.length/sayfaBoyu);
   var artikSayfa = res.report.sorular.length % sayfaBoyu;
@@ -279,10 +279,10 @@ M.L.testMaddeAnaliziContent = function(res) {
     var rows = [];
 
     var header = [
-      {text: 'ŞB', bold: true, alignment: 'center', margin: [0,43,0,0]},{text: 'Öğrenci', bold: true, margin: [2,43,0,0]}
+      {text: 'ŞB', bold: true, alignment: 'center', margin: [0,30,0,0]},{text: 'Öğrenci', bold: true, margin: [2,30,0,0]}
     ];
     _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      header.push({image: M.L.WriteRotatedText(res.report.sorular[ix].kod), fit:[7,53], alignment: 'center'});
+      header.push({image: M.L.WriteRotatedText(res.report.sorular[ix].kod), fit:[5,38], alignment: 'center'});
     });
     rows.push(header);
 
@@ -303,24 +303,24 @@ M.L.testMaddeAnaliziContent = function(res) {
     });
 
     var footer = [
-      {text: ''},{text: 'Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
+      {text: ''},{text: 'Sınıf Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
     ];
     _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      footer.push({text: res.report.sorular[ix].dogruOran, alignment: 'center', color: res.report.sorular[ix].dogruOran === '100.00' ? 'darkgreen' : (res.report.sorular[ix].dogruOran === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 8, margin: [0,2,0,0]});
+      footer.push({text: res.report.sorular[ix].dogruOran, alignment: 'center', color: res.report.sorular[ix].dogruOran === '100.00' ? 'darkgreen' : (res.report.sorular[ix].dogruOran === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
     });
     rows.push(footer);
 
     var widths = [
-      22,192
+      22,160
     ];
     _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      widths.push(27);
+      widths.push(22);
     });
 
     var table = [
       {
         margin: [0,0,0,20],
-        style: 'mainFont',
+        style: 'smallTableFont',
         table: {
           widths: widths,
           body: rows
