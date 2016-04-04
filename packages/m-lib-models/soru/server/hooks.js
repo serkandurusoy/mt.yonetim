@@ -129,7 +129,10 @@ M.C.Sorular.after.update(function(userId, doc, fieldNames, modifier, options) {
 
       M.C.Comments.insert(comment);
 
-      M.C.Sinavlar.find({'sorular.soruId': _id}).forEach(function(sinav) {
+      M.C.Sinavlar.find({
+        iptal: false,
+        'sorular.soruId': _id
+      }).forEach(function(sinav) {
         var sinavComment = {
           collection: 'Sinavlar',
           doc: sinav._id,

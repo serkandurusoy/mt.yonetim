@@ -77,6 +77,11 @@ Template.notification.events({
 });
 
 Template.topmenu.events({
+  'click [data-trigger="notification-temizle"]': function(e,t) {
+    M.C.Notifications.find({to: Meteor.userId()}, {fields: {_id: 1}}).forEach(function(notification) {
+      M.C.Notifications.remove({_id: notification._id});
+    });
+  },
   'click [data-activates="searchbox"]': function(e,t) {
     e.preventDefault();
     t.parent().searching.set(true);

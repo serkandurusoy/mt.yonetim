@@ -15,20 +15,18 @@
     {{#if searchableRoute}}
       <li><a data-activates="searchbox"><i class="material-icons">search</i></a></li>
     {{/if}}
-    {{#if notifications}}
-      <li><a data-activates="notifications-active-menu"><i class="material-icons shake shake-rotate shake-constant hover-stop orange-text text-darken-1">notifications_active</i></a></li>
-    {{else}}
-      <li><a data-activates="notifications-menu"><i class="material-icons">notifications</i></a></li>
-    {{/if}}
+    <li><a data-activates="notifications-menu"><i class="material-icons{{#if notifications}} shake shake-rotate shake-constant hover-stop orange-text text-darken-1{{/if}}">{{#if notifications}}notifications_active{{else}}notifications{{/if}}</i></a></li>
     <li><a data-activates="user-menu"><i class="material-icons">person</i></a></li>
   </ul>
-  <ul id="notifications-active-menu" class="dropdown-content">
-    {{#each notifications}}
-      {{>notification}}
-    {{/each}}
-  </ul>
   <ul id="notifications-menu" class="dropdown-content">
-    <li><a>Bekleyen uyarı yok</a></li>
+    {{#if notifications}}
+      <li><a data-trigger="notification-temizle" class="blue-text" style="font-style: italic; font-size: 90%">bildirimleri temizle</a></li>
+      {{#each notifications}}
+        {{>notification}}
+      {{/each}}
+    {{else}}
+      <li><a>Bekleyen uyarı yok</a></li>
+    {{/if}}
   </ul>
   <ul id="user-menu" class="dropdown-content">
     <li><a href="{{pathFor 'bilgilerimDetay'}}">Bilgilerim</a></li>
