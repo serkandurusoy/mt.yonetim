@@ -274,71 +274,81 @@ M.L.testMaddeAnaliziContent = function(res) {
 
   var content = [];
 
-  _.each(_.range( sayfaSayisi ), function(sayfa) {
-    var rangeEnd = sayfa * sayfaBoyu + ((sayfaSayisi === sayfa + 1) ? (!!artikSayfa ? artikSayfa : sayfaBoyu) : sayfaBoyu);
-    var rows = [];
+  _.each(res.report.subeler, function(sube) {
 
-    var header = [
-      {text: 'ŞB', bold: true, alignment: 'center', margin: [0,30,0,0]},{text: 'Öğrenci', bold: true, margin: [2,30,0,0]}
-    ];
-    _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      header.push({image: M.L.WriteRotatedText(res.report.sorular[ix].kod), fit:[5,38], alignment: 'center'});
-    });
-    rows.push(header);
+    _.each(_.range( sayfaSayisi ), function(sayfa) {
+      var rangeEnd = sayfa * sayfaBoyu + ((sayfaSayisi === sayfa + 1) ? (!!artikSayfa ? artikSayfa : sayfaBoyu) : sayfaBoyu);
+      var rows = [];
 
-    _.each(res.report.subeler, function(sube) {
-      _.each(sube.sinavKagitlari, function(sinavKagidi) {
-        var row = [{text: res.meta.sinifKisa + sube.sube, bold: true, alignment: 'center'}];
-        row.push({text: sinavKagidi.ogrenci, margin: [2,0,0,0]});
-        _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-          row.push({
-            text: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'B' : ( (sinavKagidi.yanitlar[ix].dogru === true ? 'D' : 'Y') + (res.meta.tip === 'Alıştırma Testi' ? sinavKagidi.yanitlar[ix].yanitlandi.toString() : '' ) ),
-            color: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'goldenrod' : (sinavKagidi.yanitlar[ix].dogru === true ? 'gray' : 'darkred'),
-            bold: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? true : !sinavKagidi.yanitlar[ix].dogru,
-            alignment: 'center'
+      var header = [
+        {text: 'ŞB', bold: true, alignment: 'center', margin: [0,30,0,0]},{text: 'Öğrenci', bold: true, margin: [2,30,0,0]}
+      ];
+      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+        header.push({image: M.L.WriteRotatedText(res.report.sorular[ix].kod), fit:[5,38], alignment: 'center'});
+      });
+      rows.push(header);
+
+        _.each(sube.sinavKagitlari, function(sinavKagidi) {
+          var row = [{text: res.meta.sinifKisa + sube.sube, bold: true, alignment: 'center'}];
+          row.push({text: sinavKagidi.ogrenci, margin: [2,0,0,0]});
+          _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+            row.push({
+              text: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'B' : ( (sinavKagidi.yanitlar[ix].dogru === true ? 'D' : 'Y') + (res.meta.tip === 'Alıştırma Testi' ? sinavKagidi.yanitlar[ix].yanitlandi.toString() : '' ) ),
+              color: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'goldenrod' : (sinavKagidi.yanitlar[ix].dogru === true ? 'gray' : 'darkred'),
+              bold: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? true : !sinavKagidi.yanitlar[ix].dogru,
+              alignment: 'center'
+            });
           });
+          rows.push(row);
         });
-        rows.push(row);
-      })
-    });
 
-    var footer = [
-      {text: ''},{text: 'Sınıf Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
-    ];
-    _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      footer.push({text: res.report.sorular[ix].dogruOran, alignment: 'center', color: res.report.sorular[ix].dogruOran === '100.00' ? 'darkgreen' : (res.report.sorular[ix].dogruOran === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
-    });
-    rows.push(footer);
+      var subeFooter = [
+        {text: ''},{text: 'Şube Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
+      ];
+      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+        subeFooter.push({text: sube.dogruOran[ix], alignment: 'center', color: sube.dogruOran[ix] === '100.00' ? 'darkgreen' : (sube.dogruOran[ix] === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
+      });
+      rows.push(subeFooter);
 
-    var widths = [
-      22,160
-    ];
-    _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
-      widths.push(22);
-    });
+      var sinifFooter = [
+        {text: ''},{text: 'Sınıf Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
+      ];
+      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+        sinifFooter.push({text: res.report.sorular[ix].dogruOran, alignment: 'center', color: res.report.sorular[ix].dogruOran === '100.00' ? 'darkgreen' : (res.report.sorular[ix].dogruOran === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
+      });
+      rows.push(sinifFooter);
 
-    var table = [
-      {
-        margin: [0,0,0,20],
-        style: 'smallTableFont',
-        table: {
-          widths: widths,
-          body: rows
-        },
-        layout:  {
-          hLineWidth: function(i, node) { return 1; },
-          vLineWidth: function(i, node) { return 1; },
-          hLineColor: function(i, node) { return '#aaa'; },
-          vLineColor: function(i, node) { return '#aaa'; },
-          paddingLeft: function(i, node) { return 0; },
-          paddingRight: function(i, node) { return 0; },
-          paddingTop: function(i, node) { return 4; },
-          paddingBottom: function(i, node) { return 4; }
+      var widths = [
+        22,160
+      ];
+      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+        widths.push(22);
+      });
+
+      var table = [
+        {
+          margin: [0,0,0,40],
+          style: 'smallTableFont',
+          table: {
+            widths: widths,
+            body: rows
+          },
+          layout:  {
+            hLineWidth: function(i, node) { return 1; },
+            vLineWidth: function(i, node) { return 1; },
+            hLineColor: function(i, node) { return '#aaa'; },
+            vLineColor: function(i, node) { return '#aaa'; },
+            paddingLeft: function(i, node) { return 0; },
+            paddingRight: function(i, node) { return 0; },
+            paddingTop: function(i, node) { return 4; },
+            paddingBottom: function(i, node) { return 4; }
+          }
         }
-      }
-    ];
+      ];
 
-    content.push(table);
+      content.push(table);
+
+    });
 
   });
 

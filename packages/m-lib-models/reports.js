@@ -197,6 +197,12 @@ Meteor.methods({
                   };
                 })
               };
+            }),
+            dogruOran: _.map(_.pluck(data.sinav.sorular, 'soruId'), function(soruId) {
+              var tumYanitlar = _.flatten(_.pluck(_.where(data.sinavKagitlari, {sube: sube}), 'yanitlar'));
+              var tumSayi = _.where(tumYanitlar, {soruId: soruId}).length || 0;
+              var dogruSayi = _.where(tumYanitlar, {dogru: true, soruId: soruId}).length || 0;
+              return statFormat(math.chain(dogruSayi).divide(tumSayi).multiply(100).done());
             })
           };
         }
