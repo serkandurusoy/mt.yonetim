@@ -186,7 +186,7 @@ Meteor.methods({
         if (_.where(data.sinavKagitlari, {sube: sube}).length > 0) {
           return {
             sube: sube,
-            sinavKagitlari: _.map(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'ogrenci'), function(sinavKagidi) {
+            sinavKagitlari: _.map(_.sortBy(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'lastNameCollate'), 'nameCollate'), function(sinavKagidi) {
               var ogrenci = M.C.Users.findOne({_id: sinavKagidi.ogrenci});
               return {
                 ogrenci: ogrenci.name + ' ' + ogrenci.lastName,
