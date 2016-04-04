@@ -58,7 +58,6 @@ M.C.setUpCollection({
       label: 'Kod',
       type: String,
       index: 1,
-      unique: true,
       autoValue: function() {
         if (this.isInsert) {
           if (Meteor.isServer) {
