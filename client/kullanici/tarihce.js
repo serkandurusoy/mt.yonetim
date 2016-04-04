@@ -27,13 +27,13 @@ Template.kullaniciTarihceRevertModal.events({
     var revert = Session.get('revert');
     M.C.Users.update({_id: revert._id}, {$set: revert.doc}, function(err,res) {
       if (err) {
-        Materialize.toast('İşlem başarısız, düzenleme ekranını deneyin', M.E.ToastDismiss, 'red');
+        toastr.error('İşlem başarısız, düzenleme ekranını deneyin');
       }
       if (res) {
         Accounts.forgotPassword(
           {email: revert.email},
           function(err) {
-            Materialize.toast('Kullanıcıya şifre yenileme mesajı iletildi', M.E.ToastDismiss, 'green');
+            toastr.success('Kullanıcıya şifre yenileme mesajı iletildi');
           }
         )
       }

@@ -26,19 +26,19 @@ Template.resetForm.events({
     check(confirm, String);
 
     if (password!== confirm) {
-      Materialize.toast('Şifre ile tekrarı aynı olmalı', M.E.ToastDismiss, 'red');
+      toastr.error('Şifre ile tekrarı aynı olmalı');
     } else {
       Session.set('accountButtonsDisabled', 'disabled');
       Meteor.call('getSifreZorlukFromToken', Session.get('resetToken'), function(error, result) {
         if (error) {
           M.L.clearSessionVariable('accountButtonsDisabled');
-          Materialize.toast('Geçersiz bağlantı, yeniden istek oluşturun', M.E.ToastDismiss, 'red');
+          toastr.error('Geçersiz bağlantı, yeniden istek oluşturun');
         } else {
           var userId = result.userId;
           var sifreZorluk = result.sifreZorluk;
           if ( !M.L.validatePasswordStrength(userId, password, sifreZorluk) ) {
             M.L.clearSessionVariable('accountButtonsDisabled');
-            Materialize.toast(_.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail, M.E.ToastDismiss, 'red');
+            toastr.error(_.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail);
           } else {
             Accounts.resetPassword(
               Session.get('resetToken'),
@@ -47,9 +47,9 @@ Template.resetForm.events({
                 M.L.clearSessionVariable('accountButtonsDisabled');
                 if (err) {
                   if (err.error && err.error === 403) {
-                    Materialize.toast('Geçersiz bağlantı, yeniden istek oluşturun', M.E.ToastDismiss, 'red');
+                    toastr.error('Geçersiz bağlantı, yeniden istek oluşturun');
                   } else {
-                    Materialize.toast(M.E.BilinmeyenHataMessage, M.E.ToastDismiss, 'red');
+                    toastr.error(M.E.BilinmeyenHataMessage);
                   }
                 } else {
                   M.L.clearSessionVariable('resetToken');
@@ -81,17 +81,17 @@ Template.loginForm.events({
     M.L.clearSessionVariable('resetToken');
 
     if (kullanici.length < 1) {
-      Materialize.toast('E-posta adresi girilmeli', M.E.ToastDismiss, 'red');
+      toastr.error('E-posta adresi girilmeli');
     } else {
       if (!M.L.TestEmail(kullanici)) {
-        Materialize.toast('Geçerli bir eposta adresi girilmeli', M.E.ToastDismiss, 'red');
+        toastr.error('Geçerli bir eposta adresi girilmeli');
       } else {
         Session.set('accountButtonsDisabled', 'disabled');
         Accounts.forgotPassword(
           {email: kullanici},
           function(err) {
             M.L.clearSessionVariable('accountButtonsDisabled');
-            Materialize.toast('Posta kutunuzu kontrol edin', M.E.ToastDismiss, 'green');
+            toastr.success('Posta kutunuzu kontrol edin');
           }
         )
       }
@@ -108,7 +108,7 @@ Template.loginForm.events({
     M.L.clearSessionVariable('resetToken');
 
     if (!M.L.TestEmail(kullanici)) {
-      Materialize.toast('E-posta adresi veya şifre hatalı', M.E.ToastDismiss, 'red');
+      toastr.error('E-posta adresi veya şifre hatalı');
     } else {
       Session.set('accountButtonsDisabled', 'disabled');
       Meteor.loginWithPassword(
@@ -118,9 +118,9 @@ Template.loginForm.events({
           M.L.clearSessionVariable('accountButtonsDisabled');
           if (err) {
             if (err.error && err.error === 403) {
-              Materialize.toast('E-posta adresi veya şifre hatalı', M.E.ToastDismiss, 'red');
+              toastr.error('E-posta adresi veya şifre hatalı');
             } else {
-              Materialize.toast(M.E.BilinmeyenHataMessage, M.E.ToastDismiss, 'red');
+              toastr.error(M.E.BilinmeyenHataMessage);
             }
           } else {
             Meteor.logoutOtherClients();

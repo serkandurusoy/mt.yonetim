@@ -14,6 +14,7 @@ kadira:debug
 pbastowski:require
 materialize:materialize
 fortawesome:fontawesome
+chrismbeckett:toastr
 aldeed:autoform
 gildaspk:autoform-materialize     # TODO: we are using a local fork
 lwl1991:autoform-file-materialize # TODO: we are using a local fork

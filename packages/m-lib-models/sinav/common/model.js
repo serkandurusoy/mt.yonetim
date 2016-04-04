@@ -783,7 +783,7 @@ if (Meteor.isServer) {
       check(sinavId, String);
       var sinav = M.C.Sinavlar.findOne({_id: sinavId});
       var uygunSorular = Meteor.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
-      var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: this.userId, soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}).map(function(sepet) {return sepet.soru;});
+      var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: this.userId, soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(function(sepet) {return sepet.soru;});
       if (!sepetSoruIdArray || sepetSoruIdArray.length === 0) {
         M.L.ThrowError({error:'404',reason:'Soru bulunamadı',details:'Sepette sınava uygun soru bulunamadı'});
       }

@@ -43,7 +43,7 @@ M.FS.KurumLogo = new FS.Collection("M.FS.KurumLogo", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       }
     }
   }
@@ -59,7 +59,7 @@ M.FS.Avatar = new FS.Collection("M.FS.Avatar", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       }
     }
   }
@@ -75,7 +75,7 @@ M.FS.DersIcerik = new FS.Collection("M.FS.DersIcerik", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxPDFMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxPDFMessage);
       }
     }
   }
@@ -91,7 +91,7 @@ M.FS.SoruGorsel = new FS.Collection("M.FS.SoruGorsel", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       }
     }
   }
@@ -107,7 +107,7 @@ M.FS.Muhur = new FS.Collection("M.FS.Muhur", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       }
     }
   }
@@ -123,7 +123,7 @@ M.FS.Karakter = new FS.Collection("M.FS.Karakter", {
     },
     onInvalid: function (message) {
       if (Meteor.isClient) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       }
     }
   }

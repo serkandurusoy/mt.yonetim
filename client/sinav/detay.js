@@ -14,7 +14,7 @@ Template.sinavDetay.onCreated(function() {
         if (yeniSinav && yeniSinav === FlowRouter.getParam('_id')) {
           var sinav = M.C.Sinavlar.findOne({_id: yeniSinav});
           if (sinav) {
-            Materialize.toast('Sınava soru ekleyebilirsiniz.', M.E.ToastDismiss, 'green');
+            toastr.success('Sınava soru ekleyebilirsiniz.');
           }
           M.L.clearSessionVariable('yeniSinav');
         }
@@ -213,13 +213,13 @@ Template.sinavDetayKart.events({
   },
   'click [data-analizRaporu]': function(e,t) {
     e.preventDefault();
-    Materialize.toast('Rapor hazırlanıyor, lüften bekleyin.', M.E.ToastDismiss, 'green', function() {
+    toastr.success('Rapor hazırlanıyor, lüften bekleyin.', null, {onHidden: function() {
       Meteor.call('analizRaporu', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            Materialize.toast('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.', M.E.ToastDismiss, 'red');
+            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
-            Materialize.toast('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
@@ -227,17 +227,17 @@ Template.sinavDetayKart.events({
           M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sinav-analiz-raporu.pdf', t.data.kod + ' Sınav Analiz Raporu');
         }
       })
-    });
+    }});
   },
   'click [data-testMaddeAnalizi]': function(e,t) {
     e.preventDefault();
-    Materialize.toast('Rapor hazırlanıyor, lüften bekleyin.', M.E.ToastDismiss, 'green', function() {
+    toastr.success('Rapor hazırlanıyor, lüften bekleyin.', null, {onHidden: function() {
       Meteor.call('testMaddeAnalizi', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            Materialize.toast('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.', M.E.ToastDismiss, 'red');
+            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
-            Materialize.toast('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
@@ -245,17 +245,17 @@ Template.sinavDetayKart.events({
           M.L.PrintReport(res, content, 'landscape', t.data.kod + '-sinav-madde-analizi.pdf', t.data.kod + ' Sınav Madde Analizi');
         }
       })
-    });
+    }});
   },
   'click [data-testCeldiriciAnalizi]': function(e,t) {
     e.preventDefault();
-    Materialize.toast('Rapor hazırlanıyor, lüften bekleyin.', M.E.ToastDismiss, 'green', function() {
+    toastr.success('Rapor hazırlanıyor, lüften bekleyin.', null, {onHidden: function() {
       Meteor.call('testCeldiriciAnalizi', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            Materialize.toast('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.', M.E.ToastDismiss, 'red');
+            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
-            Materialize.toast('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
@@ -263,17 +263,17 @@ Template.sinavDetayKart.events({
           M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sinav-celdirici-analizi.pdf', t.data.kod + ' Sınav Çeldirici Analizi');
         }
       })
-    });
+    }});
   },
   'click [data-subeBazindaPuanlar]': function(e,t) {
     e.preventDefault();
-    Materialize.toast('Rapor hazırlanıyor, lüften bekleyin.', M.E.ToastDismiss, 'green', function() {
+    toastr.success('Rapor hazırlanıyor, lüften bekleyin.', null, {onHidden: function() {
       Meteor.call('subeBazindaPuanlar', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            Materialize.toast('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.', M.E.ToastDismiss, 'red');
+            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
-            Materialize.toast('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
@@ -281,17 +281,17 @@ Template.sinavDetayKart.events({
           M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sube-bazinda-puanlar.pdf', t.data.kod + ' Şube Bazında Puanlar');
         }
       })
-    });
+    }});
   },
   'click [data-sinifBazindaPuanlar]': function(e,t) {
     e.preventDefault();
-    Materialize.toast('Rapor hazırlanıyor, lüften bekleyin.', M.E.ToastDismiss, 'green', function() {
+    toastr.success('Rapor hazırlanıyor, lüften bekleyin.', null, {onHidden: function() {
       Meteor.call('sinifBazindaPuanlar', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            Materialize.toast('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.', M.E.ToastDismiss, 'red');
+            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
-            Materialize.toast('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
@@ -299,7 +299,7 @@ Template.sinavDetayKart.events({
           M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sinif-bazinda-puanlar.pdf', t.data.kod + ' Sınıf Bazında Puanlar');
         }
       })
-    });
+    }});
   }
 });
 
@@ -368,9 +368,9 @@ Template.soruCikarModal.events({
         complete: function() {
           Blaze.remove(soruCikarModalView);
           if (err) {
-            Materialize.toast('Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+            toastr.error('Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin.');
           } else if (res) {
-            Materialize.toast('Soru sınavdan çıkarıldı.', M.E.ToastDismiss, 'green');
+            toastr.success('Soru sınavdan çıkarıldı.');
           }
         }
       });
@@ -385,9 +385,9 @@ Template.sorularinTumunuCikarModal.events({
         complete: function() {
           Blaze.remove(sorularinTumunuCikarModalView);
           if (err) {
-            Materialize.toast('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin', M.E.ToastDismiss, 'red');
+            toastr.error('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin');
           } else if (res) {
-            Materialize.toast('Sınavdaki tüm sorular çıkarıldı', M.E.ToastDismiss, 'green');
+            toastr.success('Sınavdaki tüm sorular çıkarıldı');
           }
         }
       });
@@ -400,7 +400,7 @@ Template.soruEkleModal.helpers({
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
     var uygunSorular = ReactiveMethod.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
     //TODO: diger benzer liste helper'larini da bunun gibi yap, reactive undefined sorunu kalmasin _.pluck yuzunden gelen
-    var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: Meteor.userId(), soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}).map(function(sepet) {return sepet.soru;});
+    var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: Meteor.userId(), soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(function(sepet) {return sepet.soru;});
     //TODO: sort and group by konu
     var sorularCursor = sepetSoruIdArray && M.C.Sorular.find({_id: {$in: sepetSoruIdArray}});
     return sorularCursor && sorularCursor.count() && sorularCursor;
@@ -412,10 +412,10 @@ Template.soruEkleModal.events({
     e.preventDefault();
     Meteor.call('sepetiSinavaEkle', FlowRouter.getParam('_id'), function(err,res) {
       if (err) {
-        Materialize.toast('Bir hata oluştu daha sonra veya tek tek eklemeyi deneyin', M.E.ToastDismiss, 'red')
+        toastr.error('Bir hata oluştu daha sonra veya tek tek eklemeyi deneyin')
       }
       if (res) {
-        Materialize.toast('Sepetinizdeki tüm uygun sorular sınava eklendi', M.E.ToastDismiss, 'green')
+        toastr.success('Sepetinizdeki tüm uygun sorular sınava eklendi')
       }
     });
   }
@@ -427,9 +427,9 @@ Template.soruEkleKart.events({
     var soru = t.data._id;
     Meteor.call('sinavaSoruEkleCikar',sinav,soru,'ekle', function(err,res) {
       if (err) {
-        Materialize.toast('Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin.', M.E.ToastDismiss, 'red');
+        toastr.error('Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin.');
       } else if (res) {
-        Materialize.toast('Soru sınava eklendi.', M.E.ToastDismiss, 'green');
+        toastr.success('Soru sınava eklendi.');
       }
     });
   }

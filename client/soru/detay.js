@@ -10,7 +10,7 @@ Template.soruDetay.onCreated(function() {
         if (yeniVeyaEditSoru && yeniVeyaEditSoru === FlowRouter.getParam('_id')) {
           var soru = M.C.Sorular.findOne({_id: yeniVeyaEditSoru});
           if (soru) {
-            Materialize.toast('Sorunun güncel önizlemesini bu ekrandan yapabilirsiniz.', M.E.ToastDismiss, 'green');
+            toastr.success('Sorunun güncel önizlemesini bu ekrandan yapabilirsiniz.');
           }
           M.L.clearSessionVariable('yeniVeyaEditSoru');
         }

@@ -28,7 +28,7 @@ Template.ogrenciYukleme.events({
     var kurum = t.$('#kurum').val();
     t.disabled.set(!!kurum ? "": "disabled");
     if (!kurum) {
-      Materialize.toast('Öğrencilerin yükleneceği kurum seçilmeli', M.E.ToastDismiss, 'red');
+      toastr.error('Öğrencilerin yükleneceği kurum seçilmeli');
     }
   },
   'change #ogrenciler': function(e,t) {
@@ -51,8 +51,8 @@ Template.ogrenciYukleme.events({
           t.$('#ogrenciler,#ogrencilerpath').val("");
           t.ogrenciListesi.set(null);
           t.status.clear();
-          Materialize.toast('Dosya okunuyor, lütfen bekleyin.', M.E.ToastDismiss, 'green', function() {
-            ogrenciler = _.filter(ogrenciler, function(ogrenci) {
+          toastr.success('Dosya okunuyor, lütfen bekleyin.', null, {onHidden: function() {
+            ogrenciler = _.filter(ogrenciler, function (ogrenci) {
               return Match.test(ogrenci, new SimpleSchema({
                 __rowNum__: {
                   type: Number,
@@ -61,12 +61,12 @@ Template.ogrenciYukleme.events({
                 AD: {
                   type: String,
                   min: 2,
-                  max:32
+                  max: 32
                 },
                 SOYAD: {
                   type: String,
                   min: 2,
-                  max:32
+                  max: 32
                 },
                 CINSIYET: {
                   type: String,
@@ -76,7 +76,7 @@ Template.ogrenciYukleme.events({
                   type: String,
                   min: 11,
                   max: 11,
-                  custom: function() {
+                  custom: function () {
                     var tckimlik = this.value.toString();
                     if (tckimlik.indexOf('000000000') === 0 && tckimlik.length === 11) {
                       return true;
@@ -91,7 +91,7 @@ Template.ogrenciYukleme.events({
                   type: String,
                   min: 10,
                   max: 10,
-                  custom: function() {
+                  custom: function () {
                     var dogumTarihi = this.value.toString();
                     return moment(dogumTarihi, "YYYY-MM-DD").isValid() ? true : 'notAllowed'
                   }
@@ -101,7 +101,7 @@ Template.ogrenciYukleme.events({
                   min: 10,
                   max: 128,
                   regEx: SimpleSchema.RegEx.Email,
-                  custom: function() {
+                  custom: function () {
                     var value = this.value;
                     var testFormat = M.L.TestEmail(M.L.Trim(value).toLowerCase());
                     if (!testFormat) {
@@ -122,23 +122,23 @@ Template.ogrenciYukleme.events({
             });
             if (ogrenciler.length > 0) {
               t.ogrenciListesi.set(ogrenciler);
-              Materialize.toast('Dosya okundu, aşağıdaki kayıtlar yükleme için denenecekler.', M.E.ToastDismiss, 'green');
+              toastr.success('Dosya okundu, aşağıdaki kayıtlar yükleme için denenecekler.');
             } else {
               t.ogrenciListesi.set(null);
-              Materialize.toast('Dosyada yüklenmeye uygun kayıt bulunamadı.', M.E.ToastDismiss, 'red');
+              toastr.error('Dosyada yüklenmeye uygun kayıt bulunamadı.');
             }
-          });
+          }});
         } else {
           t.$('#ogrenciler,#ogrencilerpath').val("");
           t.ogrenciListesi.set(null);
-          Materialize.toast('Bilinmeyen bir hata oluştu, yüklenen dosya okunamadı.', M.E.ToastDismiss, 'red');
+          toastr.error('Bilinmeyen bir hata oluştu, yüklenen dosya okunamadı.');
         }
       };
       reader.readAsArrayBuffer(file);
     } else {
       t.$('#ogrenciler,#ogrencilerpath').val("");
       t.ogrenciListesi.set(null);
-      Materialize.toast('XLS uzantılı ve geçerli bir Excel dosyası seçilmeli', M.E.ToastDismiss, 'red');
+      toastr.error('XLS uzantılı ve geçerli bir Excel dosyası seçilmeli');
     }
   },
   'click [data-trigger="yukle"]': function(e,t) {

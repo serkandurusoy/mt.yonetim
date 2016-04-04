@@ -31,7 +31,7 @@ Template.bilgilerimDetayKart.events({
     fileSelect.addEventListener('change', function(e) {
       var avatar = e.target.files[0];
       if (!avatar.type.match('image/*') || !(avatar.size <= M.E.uploadMaxImage)) {
-        Materialize.toast(M.E.uploadMaxImageMessage, M.E.ToastDismiss, 'red');
+        toastr.error(M.E.uploadMaxImageMessage);
       } else {
         var avatarFS = new FS.File(avatar);
         avatarFS.metadata = avatarFS.metadata || {};
@@ -39,7 +39,7 @@ Template.bilgilerimDetayKart.events({
           if (!error) {
             Meteor.call('setAvatar', uploaded._id, function(error,result) {
               if (error) {
-                Materialize.toast(M.E.BilinmeyenHataMessage, M.E.ToastDismiss, 'red');
+                toastr.error(M.E.BilinmeyenHataMessage);
               }
             });
           }
@@ -70,16 +70,16 @@ Template.bilgilerimChangePassword.events({
 
     Meteor.call('checkPassword', digest, function(err, result) {
       if (!result) {
-        Materialize.toast('Eski şifrenizi doğru girmelisiniz', M.E.ToastDismiss, 'red');
+        toastr.error('Eski şifrenizi doğru girmelisiniz');
       }
       if (result) {
         if (password !== confirm) {
-          Materialize.toast('Şifre ile tekrarı aynı olmalı', M.E.ToastDismiss, 'red');
+          toastr.error('Şifre ile tekrarı aynı olmalı');
         } else if ( !M.L.validatePasswordStrength(Meteor.userId(), password) ) {
           var userKurum = Meteor.user().kurum;
           var kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
           var sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
-          Materialize.toast(_.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail, M.E.ToastDismiss, 'red');
+          toastr.error(_.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail);
         } else {
           Session.set('accountButtonsDisabled', 'disabled');
           Accounts.changePassword(
@@ -88,9 +88,9 @@ Template.bilgilerimChangePassword.events({
             function(err) {
               M.L.clearSessionVariable('accountButtonsDisabled');
               if (err) {
-                Materialize.toast(M.E.BilinmeyenHataMessage, M.E.ToastDismiss, 'red');
+                toastr.error(M.E.BilinmeyenHataMessage);
               } else {
-                Materialize.toast('Şifreniz başarıyla değiştirildi', M.E.ToastDismiss, 'green');
+                toastr.success('Şifreniz başarıyla değiştirildi');
               }
             }
           );

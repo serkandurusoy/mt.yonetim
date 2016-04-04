@@ -4,7 +4,7 @@ Template.soruFavori.onCreated(function() {
 
 Template.soruFavori.helpers({
   sorular: function(){
-    var favoriSoruIdArray = _.pluck(M.C.SoruFavorileri.find({createdBy: Meteor.userId()}).fetch(), 'soru');
+    var favoriSoruIdArray = _.pluck(M.C.SoruFavorileri.find({createdBy: Meteor.userId()}, {sort: {createdAt: 1}}).fetch(), 'soru');
     var sorularCursor = M.C.Sorular.find({_id: {$in: favoriSoruIdArray}},{sort:{kurum: -1, 'alan.ders': -1}}); //TODO: sort by dersCollate
     return sorularCursor.count() && sorularCursor;
   }
@@ -15,10 +15,10 @@ Template.soruFavori.events({
     e.preventDefault();
     Meteor.call('soruFavoriBosalt', function(err,res) {
       if (err) {
-        Materialize.toast('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin', M.E.ToastDismiss, 'red')
+        toastr.error('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin')
       }
       if (res) {
-        Materialize.toast('Favorilerim listenizdeki tüm sorular boşaltıldı', M.E.ToastDismiss, 'green')
+        toastr.success('Favorilerim listenizdeki tüm sorular boşaltıldı')
       }
     });
   }
