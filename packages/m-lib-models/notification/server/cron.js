@@ -58,10 +58,10 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               '\n\n'
             );
             notificationHTML = notificationHTML.concat(
-              '<p>',
-              '<strong>Konu:</strong> ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'sınav' : 'soru', '<br/>',
-              '<strong>Adet:</strong> ' , notification.count , '<br/>',
-              '<strong>Detay:</strong> <a target="_blank" href="' , notification.url , '">' , notification.url , '</a>',
+              '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">',
+              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Konu:</strong> ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'sınav' : 'soru', '<br/>',
+              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Adet:</strong> ' , notification.count , '<br/>',
+              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Detay:</strong> <a style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333" target="_blank" href="' , notification.url , '">' , notification.url , '</a>',
               '</p>'
             );
           });
@@ -80,12 +80,12 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               + 'Detay bağlantılarına tıklayarak ayrıntıları görebilirsiniz.'
               + '\n\n'
               + 'Saygılarımızla,\nMitolojix\n',
-              html: '<html><head></head><body>'
-              + '<p>Sayın ' + userDoc.name + ' ' + userDoc.lastName + ',</p>'
-              + '<p>Aşağıdaki konularda, belirtilen adetler kadar yeni yorum dikkatinizi bekliyor.</p>'
+              html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + userDoc.name + ' ' + userDoc.lastName + ',</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Aşağıdaki konularda, belirtilen adetler kadar yeni yorum dikkatinizi bekliyor.</p>'
               + notificationHTML
-              + '<p>Detay bağlantılarına tıklayarak ayrıntıları görebilirsiniz.</p>'
-              + '<p>Saygılarımızla,<br/>Mitolojix</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Detay bağlantılarına tıklayarak ayrıntıları görebilirsiniz.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
               + '</body></html>'
             });
           }

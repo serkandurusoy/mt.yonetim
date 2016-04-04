@@ -380,11 +380,11 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' adresine tıklayabilirsin.'
                   + '\n\n'
                   + 'Sevgiler,\nMitolojix\n',
-                  html: '<html><head></head><body>'
-                  + '<p>Sevgili ' + user.name + ',</p>'
-                  + '<p>' + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.</p>'
-                  + '<p>Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
-                  + '<p>Sevgiler,<br/>Mitolojix</p>'
+                  html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgiler,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
 
@@ -398,10 +398,10 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.'
                   + '\n\n'
                   + 'Saygılarımızla,\nMitolojix\n',
-                  html: '<html><head></head><body>'
-                  + '<p>Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-                  + '<p>Mitolojix uygulamasında ' + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.</p>'
-                  + '<p>Saygılarımızla,<br/>Mitolojix</p>'
+                  html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
 
@@ -483,11 +483,11 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                 + 'Sınavın açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.'
                 + '\n\n'
                 + 'Saygılarımızla,\nMitolojix\n',
-                html: '<html><head></head><body>'
-                + '<p>Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-                + '<p>' + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve sınav öğrencilere açılamamıştır.' + '</p>'
-                + '<p>Sınavın açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.</p>'
-                + '<p>Saygılarımızla,<br/>Mitolojix</p>'
+                html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve sınav öğrencilere açılamamıştır.' + '</p>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sınavın açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.</p>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                 + '</body></html>'
               });
             });
@@ -587,12 +587,12 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' adresine tıklayabilirsin.'
                   + '\n\n'
                   + 'Başarılar,\nMitolojix\n',
-                  html: '<html><head></head><body>'
-                  + '<p>Sevgili ' + user.name + ',</p>'
-                  + '<p>Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.</p>'
-                  + '<p>' + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.</p>'
-                  + '<p>Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
-                  + '<p>Başarılar,<br/>Mitolojix</p>'
+                  html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
 
@@ -608,11 +608,11 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + 'Sınav ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetin + muhur + ' mühürü kazanılabilir.'
                   + '\n\n'
                   + 'Saygılarımızla,\nMitolojix\n',
-                  html: '<html><head></head><body>'
-                  + '<p>Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-                  + '<p>Mitolojix uygulamasında '+ kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk yeni bir ' + tip + ' açıldı.</p>'
-                  + '<p>Sınav ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetin + muhur + ' mühürü kazanılabilir.</p>'
-                  + '<p>Saygılarımızla,<br/>Mitolojix</p>'
+                  html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında '+ kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk yeni bir ' + tip + ' açıldı.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sınav ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetin + muhur + ' mühürü kazanılabilir.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
 
