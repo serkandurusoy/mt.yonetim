@@ -76,12 +76,12 @@ Template.loginForm.helpers({
 Template.loginForm.events({
   'click [data-trigger="forgotPassword"]' : function(e,t) {
     e.preventDefault();
-    var kullanici = M.L.Trim(t.$('[name="kullanici"]').val());
+    var kullanici = M.L.LatinizeLower(M.L.Trim(t.$('[name="kullanici"]').val()));
     check(kullanici, String);
     M.L.clearSessionVariable('resetToken');
 
     if (kullanici.length < 1) {
-      Materialize.toast('Kullanıcı adı girilmeli', M.E.ToastDismiss, 'red');
+      Materialize.toast('E-posta adresi girilmeli', M.E.ToastDismiss, 'red');
     } else {
       if (!M.L.TestEmail(kullanici)) {
         Materialize.toast('Geçerli bir eposta adresi girilmeli', M.E.ToastDismiss, 'red');
@@ -100,7 +100,7 @@ Template.loginForm.events({
   },
   'submit form': function(e,t) {
     e.preventDefault();
-    var kullanici = M.L.Trim(t.$('[name="kullanici"]').val());
+    var kullanici = M.L.LatinizeLower(M.L.Trim(t.$('[name="kullanici"]').val()));
     var password = M.L.Trim(t.$('[name="password"]').val());
     check(kullanici, String);
     check(password, String);
@@ -108,7 +108,7 @@ Template.loginForm.events({
     M.L.clearSessionVariable('resetToken');
 
     if (!M.L.TestEmail(kullanici)) {
-      Materialize.toast('Kullanıcı adı veya şifre hatalı', M.E.ToastDismiss, 'red');
+      Materialize.toast('E-posta adresi veya şifre hatalı', M.E.ToastDismiss, 'red');
     } else {
       Session.set('accountButtonsDisabled', 'disabled');
       Meteor.loginWithPassword(
@@ -118,7 +118,7 @@ Template.loginForm.events({
           M.L.clearSessionVariable('accountButtonsDisabled');
           if (err) {
             if (err.error && err.error === 403) {
-              Materialize.toast('Kullanıcı adı veya şifre hatalı', M.E.ToastDismiss, 'red');
+              Materialize.toast('E-posta adresi veya şifre hatalı', M.E.ToastDismiss, 'red');
             } else {
               Materialize.toast(M.E.BilinmeyenHataMessage, M.E.ToastDismiss, 'red');
             }

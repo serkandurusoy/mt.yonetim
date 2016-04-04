@@ -80,6 +80,7 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
     body+=('Mitolojix oyununda senin için bir hesap oluşturuldu. Hesabını etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifreni tanımlaman gerekiyor.\n\n');
     body+=(url + '\n\n');
     body+=('Tanımlayacağın şifre' + getSifreMesaji(user) + '\n\n');
+    body+=('Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresini kullanacaksın.\n\n');
     body+=('Başarılar,\nMitolojix\n');
   } else {
     url = getYonetimUrl(url);
@@ -87,6 +88,7 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
     body+=('Sizin adınıza bir Mitolojix hesabı oluşturuldu. Hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifrenizi tanımlamanız gerekiyor.\n\n');
     body+=(url + '\n\n');
     body+=('Tanımlayacağınız şifre' + getSifreMesaji(user) + '\n\n');
+    body+=('Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.\n\n');
     body+=('Saygılarımızla,\nMitolojix\n');
   }
   return body;
@@ -99,6 +101,7 @@ Accounts.emailTemplates.enrollAccount.html = function(user, url) {
     body+=('<p>Sevgili ' + user.name + ',</p>');
     body+=('<p>Mitolojix oyununda senin için bir hesap oluşturuldu. Hesabını etkinleştirmek için <a href="' + url + '" target="_blank">buraya tıklayarak</a> şifreni tanımlaman gerekiyor.</p>');
     body+=('<p>Tanımlayacağın şifre' + getSifreMesaji(user) + '</p>');
+    body+=('<p>Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresini kullanacaksın.</p>');
     body+=('<p>Başarılar,<br/>Mitolojix</p>');
     body+=('</body></html>');
   } else {
@@ -107,6 +110,7 @@ Accounts.emailTemplates.enrollAccount.html = function(user, url) {
     body+=('<p>Sayın ' + user.name + ' ' + user.lastName + ',</p>');
     body+=('<p>Sizin adınıza bir Mitolojix hesabı oluşturuldu. Hesabınızı etkinleştirmek için <a href="' + url + '" target="_blank">buraya tıklayarak</a> şifrenizi tanımlamanız gerekiyor.</p>');
     body+=('<p>Tanımlayacağınız şifre' + getSifreMesaji(user) + '</p>');
+    body+=('<p>Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.</p>');
     body+=('<p>Saygılarımızla,<br/>Mitolojix</p>');
     body+=('</body></html>');
   }
