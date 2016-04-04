@@ -2,19 +2,13 @@
 # core                            #
 ###################################
 m:lib-core
-# force-ssl                       # we are letting nginx handle this
-flemay:less-autoprefixer
-appcache
-meteorhacks:kadira
-kadira:debug
 
 ###################################
 # yonetim-specific                #
 ###################################
 pbastowski:require
-materialize:materialize
+materialize:materialize@0.97.6_1
 fortawesome:fontawesome
-chrismbeckett:toastr
 aldeed:autoform
 gildaspk:autoform-materialize     # TODO: we are using a local fork
 lwl1991:autoform-file-materialize # TODO: we are using a local fork
@@ -35,12 +29,11 @@ m:lib-router-yonetim
 m:lib-models
 m:lib-clockpicker
 m:lib-favico
+m:lib-toastr
 
 ###################################
 # consider for improvements       #
 ###################################
 # browser-policy                  # TODO: https://dweldon.silvrback.com/browser-policy
-# meteorhacks:unblock             # TODO: maybe later for fine grained performance
+# meteorhacks:unblock             # TODO: maybe later for fine grained publication performance
 # meteorhacks:subs-manager        # TODO: maybe later for fine grained performance
-standard-minifier-css
-standard-minifier-js

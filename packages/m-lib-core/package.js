@@ -25,6 +25,11 @@ Package.onUse(function(api) {
     'accounts-base',
     'accounts-password',
     'fastclick',
+    'appcache',
+    'standard-minifier-css',
+    'standard-minifier-js',
+    'meteorhacks:kadira@2.0.0',
+    'kadira:debug@3.0.0',
     'kadira:flow-router@2.0.0',
     'kadira:blaze-layout@2.0.0',
     'zimme:active-route@2.3.0',
@@ -67,7 +72,8 @@ Package.onUse(function(api) {
     'cfs:ui@0.1.0',
     'pascoual:pdfjs@1.1.114',
     'manuel:reactivearray@1.0.0',
-    'rubaxa:sortable@1.3.0'
+    'rubaxa:sortable@1.3.0',
+    'flemay:less-autoprefixer@1.0.0'
   ];
 
   api.imply(packages);

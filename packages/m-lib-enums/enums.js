@@ -11,8 +11,6 @@ M.E.uploadMaxImageMessage = 'Yalnızca 2MB altındaki resim dosyaları yükleneb
 M.E.uploadMaxPDF = 20 * 1024 * 1024; // 20MB
 M.E.uploadMaxPDFMessage = 'Yalnızca 20MB altındaki PDF dosyaları yüklenebilir';
 
-M.E.ToastDismiss = 4000;
-
 M.E.PickadateOptions = {
   labelMonthNext: 'Sonraki ay',
   labelMonthPrev: 'Önceki ay',
