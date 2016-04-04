@@ -120,7 +120,7 @@ Meteor.methods({
         tumYanitlarSayisi: tumYanitlarSayisi,
         dogruYanitSayisi: dogruYanitSayisi,
         ortalamaDY: statFormat(math.chain(dogruYanitSayisi).divide(tumYanitlarSayisi).multiply(soruSayisi).done()),
-        zorluk: statFormat(math.chain(math.sum(_.pluck(M.C.Sorular.find({_id: {$in: _.pluck(sinav.sorular, 'soruId')}}, {fields: {zorlukDerecesi: 1}}).fetch(), 'zorlukDerecesi'))).divide(soruSayisi).done())
+        zorluk: statFormat(math.chain(math.sum(_.pluck(sinav.sorular, 'zorlukDerecesi'))).divide(soruSayisi).done())
       }
     };
 
@@ -144,7 +144,8 @@ Meteor.methods({
       return {
         kod: soru.kod,
         tip: M.L.enumLabel(soru.tip),
-        zorlukDerecesi: soru.zorlukDerecesi,
+        zorlukDerecesi: _.findWhere(data.sinav.sorular, {soruId: soruId}).zorlukDerecesi,
+        puan: _.findWhere(data.sinav.sorular, {soruId: soruId}).puan,
         dogruSayi: dogruSayi,
         dogruOran: statFormat(math.chain(dogruSayi).divide(tumSayi).multiply(100).done()),
         yanlisSayi: yanlisSayi,

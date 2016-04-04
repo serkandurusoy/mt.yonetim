@@ -353,6 +353,7 @@ M.L.testCeldiriciAnaliziContent = function(res) {
       {text: 'Kod', bold: true},
       {text: 'Tip', bold: true},
       {text: 'ZD', bold: true, alignment: 'center'},
+      {text: 'PN', bold: true, alignment: 'right'},
       {text: 'DA', bold: true, alignment: 'right'},
       {text: 'DY', bold: true, alignment: 'right'},
       {text: 'YA', bold: true, alignment: 'right'},
@@ -369,6 +370,7 @@ M.L.testCeldiriciAnaliziContent = function(res) {
       {text: row.kod, color: color},
       {text: row.tip, color: color},
       {text: row.zorlukDerecesi.toString(), alignment: 'center', color: color},
+      {text: row.puan.toString(), alignment: 'right', color: color},
       {text: row.dogruSayi.toString(), alignment: 'right', color: color},
       {text: row.dogruOran, alignment: 'right', color: color},
       {text: row.yanlisSayi.toString(), alignment: 'right', color: color},
@@ -383,7 +385,7 @@ M.L.testCeldiriciAnaliziContent = function(res) {
       margin: [0,0,0,0],
       style: 'mainFont',
       table: {
-        widths: [30, 60, '*', 20, 40, 50, 40, 50, 40, 50],
+        widths: [30, 60, '*', 20, 40, 40, 50, 40, 50, 40, 50],
         body: rows
       },
       layout:  {
