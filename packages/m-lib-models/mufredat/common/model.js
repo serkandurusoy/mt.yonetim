@@ -275,6 +275,6 @@ M.C.setUpCollection({
 });
 
 if (Meteor.isServer) {
-  M.C.Mufredat.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Mufredat.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
+  M.C.Mufredat.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  M.C.Mufredat.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
 }

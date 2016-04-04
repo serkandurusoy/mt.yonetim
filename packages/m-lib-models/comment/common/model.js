@@ -49,9 +49,9 @@ M.C.Comments.attachSchema(M.C.Comments.Schema);
 M.C.Comments.attachBehaviour('timestampable',{updatedAt: false, updatedBy: false});
 
 if (Meteor.isServer) {
-  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
-  M.C.Comments.permit('update').never().apply();
-  M.C.Comments.permit('remove').never().apply();
+  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('teknik').allowInClientCode();
+  M.C.Comments.permit('insert').ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+  M.C.Comments.permit('update').never().allowInClientCode();
+  M.C.Comments.permit('remove').never().allowInClientCode();
 }

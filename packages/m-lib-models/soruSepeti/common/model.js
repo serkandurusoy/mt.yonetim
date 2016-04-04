@@ -25,11 +25,11 @@ M.C.setUpCollection({
 });
 
 if (Meteor.isServer) {
-  M.C.SoruSepetleri.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-  M.C.SoruSepetleri.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
+  M.C.SoruSepetleri.permit('insert').ifLoggedIn().userHasRole('teknik').allowInClientCode();
+  M.C.SoruSepetleri.permit('insert').ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
 
-  M.C.SoruSepetleri.permit('remove').ifLoggedIn().userHasRole('teknik').userOwnsDoc().apply();
-  M.C.SoruSepetleri.permit('remove').ifLoggedIn().userHasRole('ogretmen').userOwnsDoc().apply();
+  M.C.SoruSepetleri.permit('remove').ifLoggedIn().userHasRole('teknik').userOwnsDoc().allowInClientCode();
+  M.C.SoruSepetleri.permit('remove').ifLoggedIn().userHasRole('ogretmen').userOwnsDoc().allowInClientCode();
 }
 
 Meteor.methods({

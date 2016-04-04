@@ -71,7 +71,7 @@ M.C.Stories.attachSchema(M.C.Stories.Schema);
 
 if (Meteor.isServer) {
   // All operations are done on the server within collection hooks and crons
-  M.C.Stories.permit('insert').never().apply();
-  M.C.Stories.permit('update').never().apply();
-  M.C.Stories.permit('remove').never().apply();
+  M.C.Stories.permit('insert').never().allowInClientCode();
+  M.C.Stories.permit('update').never().allowInClientCode();
+  M.C.Stories.permit('remove').never().allowInClientCode();
 }

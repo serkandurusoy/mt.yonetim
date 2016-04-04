@@ -1021,11 +1021,11 @@ M.C.Sorular.before.update(function (userId, doc, fields, modifier, options) {
 });
 
 if (Meteor.isServer) {
-  M.C.Sorular.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Sorular.permit('insert').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().apply(); // TODO: Must have access to soru
+  M.C.Sorular.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  M.C.Sorular.permit('insert').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().allowInClientCode(); // TODO: Must have access to soru
 
-  M.C.Sorular.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Sorular.permit('update').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().apply(); // TODO: Must have access to soru
+  M.C.Sorular.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  M.C.Sorular.permit('update').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().allowInClientCode(); // TODO: Must have access to soru
 }
 
 if (Meteor.isServer) {

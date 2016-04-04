@@ -25,11 +25,11 @@ M.C.setUpCollection({
 });
 
 if (Meteor.isServer) {
-  M.C.SoruFavorileri.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-  M.C.SoruFavorileri.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
+  M.C.SoruFavorileri.permit('insert').ifLoggedIn().userHasRole('teknik').allowInClientCode();
+  M.C.SoruFavorileri.permit('insert').ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
 
-  M.C.SoruFavorileri.permit('remove').ifLoggedIn().userHasRole('teknik').userOwnsDoc().apply();
-  M.C.SoruFavorileri.permit('remove').ifLoggedIn().userHasRole('ogretmen').userOwnsDoc().apply();
+  M.C.SoruFavorileri.permit('remove').ifLoggedIn().userHasRole('teknik').userOwnsDoc().allowInClientCode();
+  M.C.SoruFavorileri.permit('remove').ifLoggedIn().userHasRole('ogretmen').userOwnsDoc().allowInClientCode();
 }
 
 Meteor.methods({

@@ -57,7 +57,7 @@ Package.onUse(function(api) {
     'zimme:collection-timestampable@1.0.0',
     'mickaelfm:vermongo@1.0.0',
     'meteorhacks:aggregate@1.0.0',
-    'ongoworks:security@1.0.0',
+    'ongoworks:security@2.0.0',
     'reywood:publish-composite@1.0.0',
     'tmeasday:publish-counts@0.7.0',
     'cfs:standard-packages@0.5.0',

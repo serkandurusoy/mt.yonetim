@@ -56,16 +56,16 @@ M.C.Notifications.attachSchema(M.C.Notifications.Schema);
 
 if (Meteor.isServer) {
   // All inserts are done on the server within collection hooks, client can remove own document
-  M.C.Notifications.permit('insert').never().apply();
-  M.C.Notifications.permit('update').never().apply();
+  M.C.Notifications.permit('insert').never().allowInClientCode();
+  M.C.Notifications.permit('update').never().allowInClientCode();
 
   Security.defineMethod('notificationOwner', {
     //fetch: [],
     //transform: null,
-    deny: function (type, role, userId, doc, fields, modifier) {
-      return !(doc.to === userId);
+    allow: function (type, role, userId, doc, fields, modifier) {
+      return doc.to === userId;
     }
   });
 
-  M.C.Notifications.permit('remove').notificationOwner().apply();
+  M.C.Notifications.permit('remove').notificationOwner().allowInClientCode();
 }

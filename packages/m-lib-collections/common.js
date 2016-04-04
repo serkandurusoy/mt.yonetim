@@ -72,12 +72,12 @@ M.C.setUpCollection = function(model) {
   M.C[model.object].vermongo({timestamps: false, userId: false, ignoredFields: ['searchSource']});
 
   if (Meteor.isServer) {
-    M.C[model.object].permit('insert').ifLoggedIn().userHasRole(model.permissions.insert).apply();
-    M.C[model.object].permit('update').ifLoggedIn().userHasRole(model.permissions.update).apply();
+    M.C[model.object].permit('insert').ifLoggedIn().userHasRole(model.permissions.insert).allowInClientCode();
+    M.C[model.object].permit('update').ifLoggedIn().userHasRole(model.permissions.update).allowInClientCode();
     if (model.permissions.remove) {
-      M.C[model.object].permit('remove').ifLoggedIn().userHasRole(model.permissions.remove).apply();
+      M.C[model.object].permit('remove').ifLoggedIn().userHasRole(model.permissions.remove).allowInClientCode();
     } else {
-      M.C[model.object].permit('remove').never().apply();
+      M.C[model.object].permit('remove').never().allowInClientCode();
     }
 
     _.each(model.indexes, function (ix) {

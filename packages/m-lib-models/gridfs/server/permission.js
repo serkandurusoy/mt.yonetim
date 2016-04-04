@@ -1,74 +1,48 @@
-M.FS.KurumLogo.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.KurumLogo.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.KurumLogo.files.permit('remove').never().apply();
+Security.permit([ 'insert' ]).collections([ M.FS.KurumLogo ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.KurumLogo ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.KurumLogo ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.KurumLogo ]).allowInClientCode();
 
-M.FS.KurumLogo.allow({
-  download: function(userId, fileObj) {
-    return true;
-  }
-});
 
-M.FS.Avatar.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Avatar.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Avatar.files.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.Avatar.files.permit('update').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.Avatar.files.permit('insert').ifLoggedIn().userHasRole('mudur').apply();
-M.FS.Avatar.files.permit('update').ifLoggedIn().userHasRole('mudur').apply();
-M.FS.Avatar.files.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.Avatar.files.permit('update').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.Avatar.files.permit('remove').never().apply();
+Security.permit([ 'insert' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('mudur').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('mudur').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.Avatar ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.Avatar ]).ifLoggedIn().allowInClientCode();
 
-M.FS.Avatar.allow({
-  download: function(userId, fileObj) {
-    return !!userId;
-  }
-});
 
-M.FS.DersIcerik.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.DersIcerik.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.DersIcerik.files.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.DersIcerik.files.permit('update').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.DersIcerik.files.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.DersIcerik.files.permit('update').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.DersIcerik.files.permit('remove').never().apply();
+Security.permit([ 'insert' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.DersIcerik ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().allowInClientCode();
 
-M.FS.DersIcerik.allow({
-  download: function(userId, fileObj) {
-    return !!userId;
-  }
-});
 
-M.FS.SoruGorsel.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.SoruGorsel.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.SoruGorsel.files.permit('insert').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.SoruGorsel.files.permit('update').ifLoggedIn().userHasRole('teknik').apply();
-M.FS.SoruGorsel.files.permit('insert').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.SoruGorsel.files.permit('update').ifLoggedIn().userHasRole('ogretmen').apply();
-M.FS.SoruGorsel.files.permit('remove').never().apply();
+Security.permit([ 'insert' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('teknik').allowInClientCode();
+Security.permit([ 'insert' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().userHasRole('ogretmen').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.SoruGorsel ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().allowInClientCode();
 
-M.FS.SoruGorsel.allow({
-  download: function(userId, fileObj) {
-    return !!userId;
-  }
-});
 
-M.FS.Muhur.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Muhur.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Muhur.files.permit('remove').never().apply();
+Security.permit([ 'insert' ]).collections([ M.FS.Muhur ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Muhur ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.Muhur ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.Muhur ]).allowInClientCode();
 
-M.FS.Muhur.allow({
-  download: function(userId, fileObj) {
-    return true;
-  }
-});
 
-M.FS.Karakter.files.permit('insert').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Karakter.files.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-M.FS.Karakter.files.permit('remove').never().apply();
-
-M.FS.Karakter.allow({
-  download: function(userId, fileObj) {
-    return true;
-  }
-});
-
+Security.permit([ 'insert' ]).collections([ M.FS.Karakter ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.Karakter ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.Karakter ]).never().allowInClientCode();
+Security.permit([ 'download' ]).collections([ M.FS.Karakter ]).allowInClientCode();

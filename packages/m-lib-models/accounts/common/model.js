@@ -706,31 +706,31 @@ if (Meteor.isServer) {
   Security.defineMethod('userHasRole', {
     //fetch: [],
     //transform: null,
-    deny: function (type, role, userId, doc, fields, modifier) {
-      return !(M.L.userHasRole(userId,role));
+    allow: function (type, role, userId, doc, fields, modifier) {
+      return M.L.userHasRole(userId,role);
     }
   });
 
   Security.defineMethod('userInDocKurum', {
     //fetch: [],
     //transform: null,
-    deny: function (type, arg, userId, doc, fields, modifier) {
-      return !(M.L.userInKurum(userId,doc.kurum));
+    allow: function (type, arg, userId, doc, fields, modifier) {
+      return M.L.userInKurum(userId,doc.kurum);
     }
   });
 
   Security.defineMethod('userOwnsDoc', {
     //fetch: [],
     //transform: null,
-    deny: function (type, arg, userId, doc, fields, modifier) {
-      return !( userId === doc.createdBy );
+    allow: function (type, arg, userId, doc, fields, modifier) {
+      return userId === doc.createdBy;
     }
   });
 
-  M.C.Users.permit('insert').never().apply();
-  M.C.Users.permit('update').ifLoggedIn().userHasRole('mitolojix').apply();
-  M.C.Users.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Users.permit('remove').never().apply();
+  Security.permit([ 'insert' ]).collections([ Meteor.users ]).never().allowInClientCode();
+  Security.permit([ 'update' ]).collections([ Meteor.users ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+  Security.permit([ 'update' ]).collections([ Meteor.users ]).ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  Security.permit([ 'remove' ]).collections([ Meteor.users ]).never().allowInClientCode();
 
   Meteor.methods({
     'setAvatar': function(avatarId) {

@@ -732,11 +732,11 @@ M.C.Sinavlar.before.update(function (userId, doc, fields, modifier, options) {
 });
 
 if (Meteor.isServer) {
-  M.C.Sinavlar.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Sinavlar.permit('insert').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().apply(); // TODO: Must have access to sinav
+  M.C.Sinavlar.permit('insert').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  M.C.Sinavlar.permit('insert').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().allowInClientCode(); // TODO: Must have access to sinav
 
-  M.C.Sinavlar.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().apply();
-  M.C.Sinavlar.permit('update').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().apply(); // TODO: Must have access to sinav
+  M.C.Sinavlar.permit('update').ifLoggedIn().userHasRole('teknik').userInDocKurum().allowInClientCode();
+  M.C.Sinavlar.permit('update').ifLoggedIn().userHasRole('ogretmen').userInDocKurum().allowInClientCode(); // TODO: Must have access to sinav
 }
 
 // TODO: bu gibi isClient ve daha ziyade isServer bloklarini temizle ve ait olduklari yerlere al
