@@ -77,7 +77,7 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
   if (user.role === 'ogrenci') {
     url = getOyunUrl(url);
     body+=('Sevgili ' + user.name + ',\n\n');
-    body+=('Mitolojix oyununda senin için bir hesap oluşturuldu. Hesabını etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifreni tanımlaman gerekiyor.\n\n');
+    body+=(M.C.Kurumlar.findOne({_id: user.kurum}).isim + ' senin için Mitolojix oyununda bir hesap oluşturdu. Hesabını etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifreni tanımlaman gerekiyor. Bu konuda henüz bilgin yoksa, önce öğretmenlerine danışabilirsin.\n\n');
     body+=(url + '\n\n');
     body+=('Tanımlayacağın şifre' + getSifreMesaji(user) + '\n\n');
     body+=('Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresini kullanacaksın.\n\n');
@@ -99,7 +99,7 @@ Accounts.emailTemplates.enrollAccount.html = function(user, url) {
     url = getOyunUrl(url);
     body+=('<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>');
-    body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix oyununda senin için bir hesap oluşturuldu. Hesabını etkinleştirmek için <a href="' + url + '" target="_blank">buraya tıklayarak</a> şifreni tanımlaman gerekiyor.</p>');
+    body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + M.C.Kurumlar.findOne({_id: user.kurum}).isim + ' senin için Mitolojix oyununda bir hesap oluşturdu. Hesabını etkinleştirmek için <a href="' + url + '" target="_blank">buraya tıklayarak</a> şifreni tanımlaman gerekiyor. Bu konuda henüz bilgin yoksa, önce öğretmenlerine danışabilirsin.</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Tanımlayacağın şifre' + getSifreMesaji(user) + '</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresini kullanacaksın.</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>');
