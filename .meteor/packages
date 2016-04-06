@@ -27,6 +27,7 @@ m:lib-tckimlik
 m:lib-accounts
 m:lib-router-yonetim
 m:lib-models
+m:lib-sinav-soru-component
 m:lib-clockpicker
 m:lib-favico
 m:lib-toastr

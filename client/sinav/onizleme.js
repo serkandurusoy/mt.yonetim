@@ -2,7 +2,6 @@ Template.sinavOnizlemeModal.onCreated(function() {
   var template = this;
 
   template.seciliSoruIndex = new ReactiveVar(0);
-  template.eslestirme = new ReactiveDict();
 
   template.autorun(function() {
     template.subscribe('fssorugorsel');
@@ -18,7 +17,6 @@ Template.sinavOnizlemeModal.onCreated(function() {
           }
         }
         _.each(seciliSoru.yanit.eslestirme, function(eslesme, ix) {
-          template.eslestirme.set('eslestirme'+seciliSoruIndex,[null,null]);
           M.L.CizgiCiz(ix,ix,'eslestirme');
         })
       }
@@ -28,10 +26,6 @@ Template.sinavOnizlemeModal.onCreated(function() {
 });
 
 Template.sinavOnizlemeModal.helpers({
-  formatliBoslukDoldurma: function(cevap) {
-    var bosluklar = '<p>' + splitOnNewlines(cevap.replace(/\[(.+?)\]/g, "<span class=\"boslukDoldurSecenekSpan\">$1</span>")).join('</p><p>') + '</p>';
-    return bosluklar;
-  },
   formatliSinavSuresi: function(t) {
     return M.L.FormatSinavSuresi(t*60*1000);
   },
@@ -62,16 +56,6 @@ Template.sinavOnizlemeModal.events({
     e.preventDefault();
     Blaze.remove(sinavOnizlemeView);
   },
-  'click .sol': function(e,t) {
-    t.$('.soruCubugu').animate({
-      scrollLeft: '-=64'
-    }, 0);
-  },
-  'click .sag': function(e,t) {
-    t.$('.soruCubugu').animate({
-      scrollLeft: '+=64'
-    }, 0);
-  },
   'click [data-soruIndex]': function(e,t) {
     var ix = e.currentTarget.getAttribute('data-soruIndex');
     t.seciliSoruIndex.set(ix);
@@ -88,7 +72,6 @@ Template.sinavOnizlemeModal.events({
           }
         }
         _.each(seciliSoru.yanit.eslestirme, function(eslesme, ix) {
-          t.eslestirme.set('eslestirme'+ t.seciliSoruIndex.get(),[null,null]);
           M.L.CizgiCiz(ix,ix,'eslestirme');
         })
       }

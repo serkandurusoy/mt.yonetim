@@ -1,9 +1,4 @@
-Template.soruOnizlemeModal.onCreated(function() {
-  this.eslestirme = new ReactiveDict();
-});
-
 Template.soruOnizlemeModal.onRendered(function() {
-  var template = this;
   Tracker.afterFlush(function() {
     var seciliSoru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
     if (seciliSoru && seciliSoru.tip === 'eslestirme') {
@@ -14,7 +9,6 @@ Template.soruOnizlemeModal.onRendered(function() {
         }
       }
       _.each(seciliSoru.yanit.eslestirme, function(eslesme, ix) {
-        template.eslestirme.set('eslestirme',[null,null]);
         M.L.CizgiCiz(ix,ix,'eslestirme');
       })
     }
@@ -22,10 +16,6 @@ Template.soruOnizlemeModal.onRendered(function() {
 });
 
 Template.soruOnizlemeModal.helpers({
-  formatliBoslukDoldurma: function(cevap) {
-    var bosluklar = '<p>' + splitOnNewlines(cevap.replace(/\[(.+?)\]/g, "<span class=\"boslukDoldurSecenekSpan\">$1</span>")).join('</p><p>') + '</p>';
-    return bosluklar;
-  },
   seciliSoru: function() {
     return M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
   }
