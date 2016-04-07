@@ -1,18 +1,23 @@
 Template.soruboslukDoldurma.onCreated(function() {
-  this.yanit = this.data.sinav === true && M.C.SinavKagitlari.findOne({
-      _id: this.data.sinavKagidiId
-    }).yanitlar[this.data.seciliSoruIndex].yanit;
+  var template = this;
+  template.autorun(function() {
+    template.yanit = template.data.sinav === true && M.C.SinavKagitlari.findOne({
+        _id: template.data.sinavKagidiId
+      }).yanitlar[template.data.seciliSoruIndex].yanit;
+  })
 });
 
 Template.soruboslukDoldurma.onRendered(function() {
   var template = this;
-  if (template.data.sinav === true) {
+  template.autorun(function() {
     Tracker.afterFlush(function() {
-      _.each(template.yanit.cevaplar, function(cevap,cIx) {
-        $('input[type="text"]#'+cIx).val(cevap);
-      })
+      if (template.data.sinav === true && template.yanit.cevaplar.length >= 0) {
+        _.each(template.yanit.cevaplar, function(cevap,cIx) {
+          $('input[type="text"]#'+cIx).val(cevap);
+        })
+      }
     })
-  }
+  })
 });
 
 Template.soruboslukDoldurma.helpers({

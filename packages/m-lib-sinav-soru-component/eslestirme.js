@@ -1,43 +1,47 @@
 Template.sorueslestirme.onCreated(function() {
-  this.seciliSoru = this.data.sinav === true && M.C.SinavKagitlari.findOne({
-      _id: this.data.sinavKagidiId
-    }).yanitlar[this.data.seciliSoruIndex];
-
-  this.yanit = this.seciliSoru.yanit;
-
-  this.eslestirme = new ReactiveVar([null,null]);
-
+  var template = this;
+  template.eslestirme = new ReactiveVar([null,null]);
+  template.autorun(function() {
+    template.seciliSoru = template.data.sinav === true && M.C.SinavKagitlari.findOne({
+        _id: template.data.sinavKagidiId
+      }).yanitlar[template.data.seciliSoruIndex];
+    template.yanit = template.seciliSoru.yanit;
+    template.eslestirme.set([null,null]);
+  })
 });
 
 Template.sorueslestirme.onRendered(function() {
   var template = this;
+  template.autorun(function() {
+    Tracker.afterFlush(function() {
 
-  Tracker.afterFlush(function() {
-    if (template.data.sinav === true) {
-      var eslestirLength = template.yanit.sol.length;
-      for(var sol=0;sol<eslestirLength;sol++) {
-        for(var sag=0;sag<eslestirLength;sag++) {
-          M.L.CizgiSil(sol,sag,'eslestirme');
+      if (template.data.sinav === true && template.yanit.eslestirme.length >= 0) {
+        var eslestirLength = template.yanit.sol.length;
+        for(var sol=0;sol<eslestirLength;sol++) {
+          for(var sag=0;sag<eslestirLength;sag++) {
+            M.L.CizgiSil(sol,sag,'eslestirme');
+          }
         }
+        _.each(template.yanit.eslestirme, function(eslesme) {
+          template.eslestirme.set([null,null]);
+          if (template.seciliSoru.yanitlandi > 0) {
+            M.L.CizgiCiz(eslesme[0],eslesme[1],'eslestirme');
+          }
+        });
+      } else {
+        var eslestirLength = template.data.solsecenekler.length;
+        for(var sol=0;sol<eslestirLength;sol++) {
+          for(var sag=0;sag<eslestirLength;sag++) {
+            M.L.CizgiSil(sol,sag,'eslestirme');
+          }
+        }
+        _.each(_.range(eslestirLength), function(ix) {
+          M.L.CizgiCiz(ix,ix,'eslestirme');
+        });
       }
-      _.each(template.yanit.eslestirme, function(eslesme) {
-        template.eslestirme.set([null,null]);
-        if (template.seciliSoru.yanitlandi > 0) {
-          M.L.CizgiCiz(eslesme[0],eslesme[1],'eslestirme');
-        }
-      });
-    } else {
-      var eslestirLength = template.data.solsecenekler.length;
-      for(var sol=0;sol<eslestirLength;sol++) {
-        for(var sag=0;sag<eslestirLength;sag++) {
-          M.L.CizgiSil(sol,sag,'eslestirme');
-        }
-      }
-      _.each(_.range(eslestirLength), function(ix) {
-        M.L.CizgiCiz(ix,ix,'eslestirme');
-      });
-    }
-  });
+
+    })
+  })
 });
 
 Template.sorueslestirme.helpers({

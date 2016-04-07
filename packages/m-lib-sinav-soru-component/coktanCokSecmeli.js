@@ -1,7 +1,10 @@
 Template.sorucoktanCokSecmeli.onCreated(function() {
-  this.yanit = this.data.sinav === true && M.C.SinavKagitlari.findOne({
-      _id: this.data.sinavKagidiId
-    }).yanitlar[this.data.seciliSoruIndex].yanit;
+  var template = this;
+  template.autorun(function() {
+    template.yanit = template.data.sinav === true && M.C.SinavKagitlari.findOne({
+        _id: template.data.sinavKagidiId
+      }).yanitlar[template.data.seciliSoruIndex].yanit;
+  })
 });
 
 Template.sorucoktanCokSecmeli.helpers({
