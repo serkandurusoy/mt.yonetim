@@ -71,33 +71,37 @@ Template.eslestirmeKutu.helpers({
 
 Template.sorueslestirme.events({
   'click .eslestir': function(e,t) {
-    //TODO: This is limited to 10 options
-    var seciliSoruIndex = t.data.seciliSoruIndex;
-    var len = t.yanit.eslestirme.length;
-    var id = e.currentTarget.getAttribute('id');
-    var ix = parseInt(id.substr(4,1));
-    if (id.substr(0,3) === 'sol') {
-      for(var i=0;i<len;i++) {
-        M.L.CizgiSil(ix,i,'eslestirme');
+    if (t.data.sinav === true) {
+      //TODO: This is limited to 10 options
+      var seciliSoruIndex = t.data.seciliSoruIndex;
+      var len = t.yanit.eslestirme.length;
+      var id = e.currentTarget.getAttribute('id');
+      var ix = parseInt(id.substr(4,1));
+      if (id.substr(0,3) === 'sol') {
+        for(var i=0;i<len;i++) {
+          M.L.CizgiSil(ix,i,'eslestirme');
+        }
+        t.eslestirme.set('eslestirme'+ seciliSoruIndex,[ix,t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1]]);
+      } else {
+        for(var i=0;i<len;i++) {
+          M.L.CizgiSil(i,ix,'eslestirme');
+        }
+        t.eslestirme.set('eslestirme'+ seciliSoruIndex,[t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0],ix]);
       }
-      t.eslestirme.set('eslestirme'+ seciliSoruIndex,[ix,t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1]]);
-    } else {
-      for(var i=0;i<len;i++) {
-        M.L.CizgiSil(i,ix,'eslestirme');
+      if (_.isNumber(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0]) && _.isNumber(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1])) {
+        M.L.CizgiCiz(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0],t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1],'eslestirme');
+        t.eslestirme.set('eslestirme'+ seciliSoruIndex,[null,null]);
       }
-      t.eslestirme.set('eslestirme'+ seciliSoruIndex,[t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0],ix]);
-    }
-    if (_.isNumber(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0]) && _.isNumber(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1])) {
-      M.L.CizgiCiz(t.eslestirme.get('eslestirme'+ seciliSoruIndex)[0],t.eslestirme.get('eslestirme'+ seciliSoruIndex)[1],'eslestirme');
-      t.eslestirme.set('eslestirme'+ seciliSoruIndex,[null,null]);
     }
   },
   'click .cizgi': function(e,t) {
-    var seciliSoruIndex = t.data.seciliSoruIndex;
-    var id = e.currentTarget.getAttribute('id');
-    var sol = id.substr(4,1);
-    var sag = id.substr(10,1);
-    t.eslestirme.set('eslestirme'+ seciliSoruIndex,[null,null]);
-    M.L.CizgiSil(sol,sag,'eslestirme');
+    if (t.data.sinav === true) {
+      var seciliSoruIndex = t.data.seciliSoruIndex;
+      var id = e.currentTarget.getAttribute('id');
+      var sol = id.substr(4,1);
+      var sag = id.substr(10,1);
+      t.eslestirme.set('eslestirme'+ seciliSoruIndex,[null,null]);
+      M.L.CizgiSil(sol,sag,'eslestirme');
+    }
   }
 });
