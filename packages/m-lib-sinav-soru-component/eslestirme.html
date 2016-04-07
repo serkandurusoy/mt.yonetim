@@ -1,9 +1,10 @@
 <template name="sorueslestirme">
+  {{#let sinav=sinav eslemeIcinSeciliKutu=eslemeIcinSeciliKutu}}
   <div id="eslestirme" style="padding: 0 60px 60px 60px; text-align: center;">
     <div style="width: 45%; float: left;">
       {{#each solsecenekler}}
-        {{#if ../sinav}}
-          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=0 sinav=true id=(join "sol" @index) index=@index}}
+        {{#if sinav}}
+          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=eslemeIcinSeciliKutu secimSirasi=0 sinav=sinav id=(join "sol" @index) index=@index}}
         {{else}}
           {{>eslestirmeKutu metin=solMetin gorsel=solGorsel secimSirasi=0 id=(join "sol" @index) index=@index}}
         {{/if}}
@@ -11,14 +12,15 @@
     </div>
     <div style="width: 45%; float: right;">
       {{#each sagsecenekler}}
-        {{#if ../sinav}}
-          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=1 sinav=true id=(join "sag" @index) index=@index}}
+        {{#if sinav}}
+          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=eslemeIcinSeciliKutu secimSirasi=1 sinav=sinav id=(join "sag" @index) index=@index}}
         {{else}}
           {{>eslestirmeKutu metin=sagMetin gorsel=sagGorsel secimSirasi=1 id=(join "sag" @index) index=@index}}
         {{/if}}
       {{/each}}
     </div>
   </div>
+  {{/let}}
 </template>
 
 <template name="eslestirmeKutu">
