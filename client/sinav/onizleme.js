@@ -31,9 +31,5 @@ Template.sinavOnizlemeModal.events({
   'click .dugmeNav.anaEkran': function(e,t) {
     e.preventDefault();
     Blaze.remove(sinavOnizlemeView);
-  },
-  'click [data-soruIndex]': function(e,t) {
-    var ix = e.currentTarget.getAttribute('data-soruIndex');
-    t.seciliSoruIndex.set(ix);
   }
 });

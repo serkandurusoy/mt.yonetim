@@ -24,3 +24,12 @@ Template.soruboslukDoldurma.helpers({
     }
   }
 });
+
+Template.soruboslukDoldurma.events({
+  'keydown .boslukDoldurSecenek, blur .boslukDoldurSecenek': function(e,t) {
+    var len = t.$(e.currentTarget).val().length;
+    if (len >= 7) {
+      t.$(e.currentTarget).attr('size', len + 1);
+    }
+  }
+});
