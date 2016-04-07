@@ -1,0 +1,19 @@
+<template name="soruyonerge">
+  <div style="position: absolute; top: {{topYonerge}}px; left: {{left}}px; width: 320px; height: 70px; overflow: hidden; word-wrap: break-word;">
+    {{seciliSoru.yonerge}}
+  </div>
+  {{#if $or seciliSoru.metin seciliSoru.gorsel}}
+    <div class="aciklamAlani" style="position: absolute; top: {{topMetin}}px; left: {{left}}px; width: 320px; height: 370px; overflow: hidden;">
+      <div style="margin-bottom: 20px; word-wrap: break-word;">{{#each splitOnNewlines seciliSoru.metin}}<p>{{this}}</p>{{/each}}</div>
+      <div style="text-align: center">
+        {{#with FS.GetFile "M.FS.SoruGorsel" seciliSoru.gorsel}}
+          <img style="max-width: 90%; border-radius: 16px; border: 1px solid #57492B" alt="" src="{{url}}"/>
+        {{/with}}
+      </div>
+    </div>
+  {{else}}
+    <div style="position: absolute; top: {{topMetin}}px; left: {{left}}px; width: 320px; height: 370px; padding-top: 50px; overflow: hidden; text-align: center;">
+      <img src="/assets/_bilesen/logo/altyazi-240.png" alt="">
+    </div>
+  {{/if}}
+</template>

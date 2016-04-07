@@ -1,0 +1,31 @@
+<template name="sorueslestirme">
+  <div id="eslestirme" style="padding: 0 60px 60px 60px; text-align: center;">
+    <div style="width: 45%; float: left;">
+      {{#each solsecenekler}}
+        {{#if ../sinav}}
+          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=0 sinav=true id=(join "sol" @index) index=@index}}
+        {{else}}
+          {{>eslestirmeKutu metin=solMetin gorsel=solGorsel secimSirasi=0 id=(join "sol" @index) index=@index}}
+        {{/if}}
+      {{/each}}
+    </div>
+    <div style="width: 45%; float: right;">
+      {{#each sagsecenekler}}
+        {{#if ../sinav}}
+          {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=1 sinav=true id=(join "sag" @index) index=@index}}
+        {{else}}
+          {{>eslestirmeKutu metin=sagMetin gorsel=sagGorsel secimSirasi=1 id=(join "sag" @index) index=@index}}
+        {{/if}}
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="eslestirmeKutu">
+  <div class="eslestir{{#if sinav}}{{#if eslemeIcinSecili eslemeIcinSeciliKutu secimSirasi index}} seciliEslesme{{/if}}{{/if}}" id="{{id}}">
+    {{metin}}{{#if metin}}<br>{{/if}}
+    {{#with FS.GetFile "M.FS.SoruGorsel" gorsel}}
+      <img style="max-width: 100%; max-height: 88px; border-radius: 8px; border: 1px solid #57492B" alt="" src="{{url}}"/>
+    {{/with}}
+  </div>
+</template>
