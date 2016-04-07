@@ -51,3 +51,62 @@ Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix) {
   }
   return undefined;
 });
+
+M.L.komponentSec = function(seciliSoru) {
+  if (seciliSoru) {
+    var template=null,data=null;
+
+    switch (seciliSoru.tip) {
+      case 'dogruYanlis':
+        template = 'sorudogruYanlis';
+        data = {
+          dogruchecked: seciliSoru.yanit.dogruYanlis.cevap === true,
+          yanlischecked: seciliSoru.yanit.dogruYanlis.cevap === false,
+          disabled: true
+        };
+        break;
+      case 'coktanTekSecmeli':
+        template = 'sorucoktanTekSecmeli';
+        data = {
+          secenekler: seciliSoru.yanit.coktanTekSecmeli,
+          disabled: true
+        };
+        break;
+      case 'coktanCokSecmeli':
+        template = 'sorucoktanCokSecmeli';
+        data = {
+          secenekler: seciliSoru.yanit.coktanCokSecmeli,
+          disabled: true
+        };
+        break;
+      case 'siralama':
+        template = 'sorusiralama';
+        data = {
+          secenekler: seciliSoru.yanit.siralama
+        };
+        break;
+      case 'eslestirme':
+        template = 'sorueslestirme';
+        data = {
+          solsecenekler: seciliSoru.yanit.eslestirme,
+          sagsecenekler: seciliSoru.yanit.eslestirme
+        };
+        break;
+      case 'boslukDoldurma':
+        template = 'soruboslukDoldurma';
+        data = {
+          cevap: seciliSoru.yanit.boslukDoldurma.cevap
+        };
+        break;
+      default:
+        template = null;
+        data = null;
+        break;
+    }
+
+    return {
+      template: template,
+      data: data
+    }
+  }
+};
