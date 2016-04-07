@@ -86,7 +86,7 @@
         {{#if ../sinav}}
           {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=0 sinav=true id=(join "sol" @index) index=@index}}
         {{else}}
-          {{>eslestirmeKutu metin=solMetin gorsel=solGorsel secimSirasi=0 sinav=false id=(join "sol" @index) index=@index}}
+          {{>eslestirmeKutu metin=solMetin gorsel=solGorsel secimSirasi=0 id=(join "sol" @index) index=@index}}
         {{/if}}
       {{/each}}
     </div>
@@ -95,7 +95,7 @@
         {{#if ../sinav}}
           {{>eslestirmeKutu metin=metin gorsel=gorsel eslemeIcinSeciliKutu=../eslemeIcinSeciliKutu secimSirasi=1 sinav=true id=(join "sag" @index) index=@index}}
         {{else}}
-          {{>eslestirmeKutu metin=sagMetin gorsel=sagGorsel secimSirasi=1 sinav=false id=(join "sag" @index) index=@index}}
+          {{>eslestirmeKutu metin=sagMetin gorsel=sagGorsel secimSirasi=1 id=(join "sag" @index) index=@index}}
         {{/if}}
       {{/each}}
     </div>
@@ -118,11 +118,21 @@
 </template>
 
 <template name="sorucubugu">
-  {{#if soruSayisiCubugaSigmiyor}}
+  {{#if $gt (getLength sorular) 14}}
     <a class="sol" style="top: 713px; left: 29px;"></a>
-  {{/if}}
-  <div class="soruCubugu" style="position: absolute; top: 704px; left: 64px; width: 896px; height: 50px; white-space: nowrap; overflow: hidden;">{{#each sorular}}<div data-soruIndex="{{@index}}" class="{{#if $eq @index ../seciliSoruIndex}}secili{{/if}}{{#if ../sinav}}{{#if cevapVerildi @index}} cevapVerildi{{/if}}{{cevapDogruYanlis @index}}{{/if}}" style="cursor: pointer !important; margin: 0 8px 0 7px; width: 49px; height: 49px; padding-top: 11px; display: inline-block; font-weight: bold; font-size: 20px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{plusOne @index}}</div>{{/each}}</div>
-  {{#if soruSayisiCubugaSigmiyor}}
     <a class="sag" style="top: 713px; left: 958px;"></a>
   {{/if}}
+  <div class="soruCubugu" style="position: absolute; top: 704px; left: 64px; width: 896px; height: 50px; white-space: nowrap; overflow: hidden; font-size: 0;">
+    {{#each sorular}}
+      {{>soruNumarasi index=@index seciliSoruIndex=(parseInt ../seciliSoruIndex) sinav=../sinav}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="soruNumarasi">
+  <div data-soruIndex="{{index}}"
+       class="{{#if $eq index seciliSoruIndex}}secili{{/if}}{{#if sinav}}{{#if cevapVerildi index}} cevapVerildi{{/if}}{{cevapDogruYanlis index}}{{/if}}"
+       style="cursor: pointer !important; margin: 0 8px 0 7px; width: 49px; height: 49px; padding-top: 11px; display: inline-block; font-weight: bold; font-size: 20px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+    {{plusOne index}}
+  </div>
 </template>

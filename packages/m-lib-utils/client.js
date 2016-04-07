@@ -121,6 +121,10 @@ Template.registerHelper('isOdd', function(num) {
   return !!(num%2);
 });
 
+Template.registerHelper('parseInt', function(numTxt) {
+  return parseInt(numTxt);
+});
+
 Template.registerHelper('join', function(/*arguments*/) {
   var args = Array.prototype.slice.call(arguments);
   args.pop();
