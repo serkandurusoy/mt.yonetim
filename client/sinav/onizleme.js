@@ -1,4 +1,5 @@
 Template.sinavOnizlemeModal.onCreated(function() {
+  template.renderComponent = new ReactiveVar(true);
   this.seciliSoruIndex = new ReactiveVar(0);
   this.subscribe('fssorugorsel');
   this.sinav = new ReactiveVar(M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')}));
@@ -10,6 +11,9 @@ Template.sinavOnizlemeModal.helpers({
   },
   sinav: function() {
     return Template.instance().sinav.get();
+  },
+  renderComponent: function() {
+    return Template.instance().renderComponent.get();
   },
   seciliSoruIndex: function() {
     return Template.instance().seciliSoruIndex.get();

@@ -25,7 +25,10 @@ Template.sorucubugu.events({
   },
   'click [data-soruIndex]': function(e,t) {
     var ix = e.currentTarget.getAttribute('data-soruIndex');
+    t.parent().renderComponent.set(false);
+    Tracker.flush();
     t.parent().seciliSoruIndex.set(ix);
+    t.parent().renderComponent.set(true);
   }
 });
 

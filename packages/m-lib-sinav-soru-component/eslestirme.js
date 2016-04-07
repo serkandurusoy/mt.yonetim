@@ -1,11 +1,26 @@
 Template.sorueslestirme.onCreated(function() {
   var template = this;
+  template.seciliSoru = new ReactiveVar();
+  template.yanit = new ReactiveVar();
   template.eslestirme = new ReactiveVar([null,null]);
+
+  template.sinav = new ReactiveVar();
+  template.sinavKagidiId = new ReactiveVar();
+  template.seciliSoruIndex = new ReactiveVar();
+  template.solsecenekler = new ReactiveVar();
+  template.sagsecenekler = new ReactiveVar();
+
   template.autorun(function() {
-    template.seciliSoru = template.data.sinav === true && M.C.SinavKagitlari.findOne({
-        _id: template.data.sinavKagidiId
-      }).yanitlar[template.data.seciliSoruIndex];
-    template.yanit = template.seciliSoru.yanit;
+    template.sinav.set(Template.currentData().sinav);
+    template.sinavKagidiId.set(Template.currentData().sinavKagidiId);
+    template.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
+    template.solsecenekler.set(Template.currentData().solsecenekler);
+    template.sagsecenekler.set(Template.currentData().sagsecenekler);
+
+    template.seciliSoru.set(template.sinav.get() === true && M.C.SinavKagitlari.findOne({
+        _id: template.sinavKagidiId.get()
+      }).yanitlar[template.seciliSoruIndex.get()]);
+    template.yanit.set(template.seciliSoru.get().yanit);
     template.eslestirme.set([null,null]);
   })
 });
@@ -15,21 +30,21 @@ Template.sorueslestirme.onRendered(function() {
   template.autorun(function() {
     Tracker.afterFlush(function() {
 
-      if (template.data.sinav === true && template.yanit.eslestirme.length >= 0) {
-        var eslestirLength = template.yanit.sol.length;
+      if (template.sinav.get() === true && template.yanit.get().eslestirme.length >= 0) {
+        var eslestirLength = template.yanit.get().sol.length;
         for(var sol=0;sol<eslestirLength;sol++) {
           for(var sag=0;sag<eslestirLength;sag++) {
             M.L.CizgiSil(sol,sag,'eslestirme');
           }
         }
-        _.each(template.yanit.eslestirme, function(eslesme) {
+        _.each(template.yanit.get().eslestirme, function(eslesme) {
           template.eslestirme.set([null,null]);
-          if (template.seciliSoru.yanitlandi > 0) {
+          if (template.seciliSoru.get().yanitlandi > 0) {
             M.L.CizgiCiz(eslesme[0],eslesme[1],'eslestirme');
           }
         });
       } else {
-        var eslestirLength = template.data.solsecenekler.length;
+        var eslestirLength = template.solsecenekler.get().length;
         for(var sol=0;sol<eslestirLength;sol++) {
           for(var sag=0;sag<eslestirLength;sag++) {
             M.L.CizgiSil(sol,sag,'eslestirme');
@@ -46,17 +61,17 @@ Template.sorueslestirme.onRendered(function() {
 
 Template.sorueslestirme.helpers({
   solsecenekler: function() {
-    if (Template.instance().data.sinav === true) {
-      return Template.instance().yanit.sol;
+    if (Template.instance().sinav.get() === true) {
+      return Template.instance().yanit.get().sol;
     } else {
-      return Template.instance().data.solsecenekler;
+      return Template.instance().solsecenekler.get();
     }
   },
   sagsecenekler: function() {
-    if (Template.instance().data.sinav === true) {
-      return Template.instance().yanit.sag;
+    if (Template.instance().sinav.get() === true) {
+      return Template.instance().yanit.get().sag;
     } else {
-      return Template.instance().data.sagsecenekler;
+      return Template.instance().sagsecenekler.get();
     }
   },
   eslemeIcinSeciliKutu: function() {
@@ -72,10 +87,9 @@ Template.eslestirmeKutu.helpers({
 
 Template.sorueslestirme.events({
   'click .eslestir': function(e,t) {
-    if (t.data.sinav === true) {
+    if (t.sinav.get() === true) {
       //TODO: This is limited to 10 options
-      var seciliSoruIndex = t.data.seciliSoruIndex;
-      var len = t.yanit.eslestirme.length;
+      var len = t.yanit.get().eslestirme.length;
       var id = e.currentTarget.getAttribute('id');
       var ix = parseInt(id.substr(4,1));
       if (id.substr(0,3) === 'sol') {
@@ -96,8 +110,7 @@ Template.sorueslestirme.events({
     }
   },
   'click .cizgi': function(e,t) {
-    if (t.data.sinav === true) {
-      var seciliSoruIndex = t.data.seciliSoruIndex;
+    if (t.sinav.get() === true) {
       var id = e.currentTarget.getAttribute('id');
       var sol = id.substr(4,1);
       var sag = id.substr(10,1);
