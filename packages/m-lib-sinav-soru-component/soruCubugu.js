@@ -35,11 +35,11 @@ Template.sorucubugu.events({
   }
 });
 
-Template.registerHelper('cevapVerildi', function(sinavKagidiId, ix) {
+Template.registerHelper('cevapVerildi', function(sinavKagidiId, ix, cevapAnahtari) {
   var sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });
-  return sinavKagidi && sinavKagidi.yanitlar[ix].yanitlandi;
+  return !cevapAnahtari && sinavKagidi && sinavKagidi.yanitlar[ix].yanitlandi;
 });
 
 Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAnahtari) {
@@ -51,7 +51,7 @@ Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAna
       return undefined;
     } else {
       var sinav = M.C.Sinavlar.findOne({_id: sinavKagidi.sinav});
-      var yanit = _.find(sinavKagidi.yanitlar, {soruId: sinav.sorular[ix].soruId});
+      var yanit = _.findWhere(sinavKagidi.yanitlar, {soruId: sinav.sorular[ix].soruId});
       if (yanit.yanitlandi > 0) {
         if (yanit.dogru === true) {
           return ' cevapDogru';
