@@ -1,0 +1,58 @@
+passenger_log_level 4;
+passenger_max_pool_size 4;
+passenger_max_instances_per_app 3;
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    server_name localhost;
+    return 301 http://www.mitolojix.com$request_uri;
+}
+
+server {
+    server_name yonetim.test.mitolojix.com;
+    listen 80;
+    root /home/mitolojix/meteor-apps/builds/yonetim/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var TZ Europe/Istanbul;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_app_env production;
+    passenger_env_var NODE_ENV production;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojixtest;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL http://yonetim.test.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "YONETIM", "URL": { "OYUN": "http://oyun.test.mitolojix.com", "YONETIM": "http://yonetim.test.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+    passenger_min_instances 1;
+    passenger_force_max_concurrent_requests_per_process 100;
+}
+
+passenger_pre_start http://yonetim.test.mitolojix.com/;
+
+server {
+    server_name oyun.test.mitolojix.com;
+    listen 80;
+    root /home/mitolojix/meteor-apps/builds/oyun/bundle/public;
+    passenger_enabled on;
+    passenger_sticky_sessions on;
+    passenger_env_var TZ Europe/Istanbul;
+    passenger_env_var PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_app_env production;
+    passenger_env_var NODE_ENV production;
+    passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojixtest;
+    passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
+    passenger_env_var ROOT_URL http://oyun.test.mitolojix.com;
+    passenger_env_var MAIL_URL smtp://admin%40mitolojix.com:M!t0lojix@smtp-relay.gmail.com:587;
+    passenger_env_var METEOR_SETTINGS '{ "public": { "APP": "OYUN", "URL": { "OYUN": "http://oyun.test.mitolojix.com", "YONETIM": "http://yonetim.test.mitolojix.com" } } }';
+    passenger_env_var HTTP_FORWARDED_COUNT 1;
+    passenger_app_type node;
+    passenger_startup_file main.js;
+    passenger_min_instances 1;
+    passenger_force_max_concurrent_requests_per_process 100;
+}
+
+passenger_pre_start http://oyun.test.mitolojix.com/;

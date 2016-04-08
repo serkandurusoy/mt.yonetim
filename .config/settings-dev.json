@@ -1,0 +1,9 @@
+{
+  "public": {
+    "APP": "YONETIM",
+    "URL": {
+      "OYUN": "http://localhost:4000",
+      "YONETIM": "http://localhost:3000"
+    }
+  }
+}
