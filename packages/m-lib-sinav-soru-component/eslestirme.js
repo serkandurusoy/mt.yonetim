@@ -5,6 +5,8 @@ Template.sorueslestirme.onCreated(function() {
   template.eslestirme = new ReactiveVar([null,null]);
 
   template.sinav = new ReactiveVar();
+  template.cevapAnahtari = new ReactiveVar();
+
   template.sinavKagidiId = new ReactiveVar();
   template.seciliSoruIndex = new ReactiveVar();
   template.solsecenekler = new ReactiveVar();
@@ -12,6 +14,7 @@ Template.sorueslestirme.onCreated(function() {
 
   template.autorun(function() {
     template.sinav.set(Template.currentData().sinav);
+    template.cevapAnahtari.set(Template.currentData().cevapAnahtari);
     template.sinavKagidiId.set(Template.currentData().sinavKagidiId);
     template.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
     template.solsecenekler.set(Template.currentData().solsecenekler);
@@ -87,7 +90,7 @@ Template.eslestirmeKutu.helpers({
 
 Template.sorueslestirme.events({
   'click .eslestir': function(e,t) {
-    if (t.sinav.get() === true) {
+    if (t.sinav.get() === true && !t.cevapAnahtari.get()) {
       //TODO: This is limited to 10 options
       var len = t.yanit.get().eslestirme.length;
       var id = e.currentTarget.getAttribute('id');
@@ -110,7 +113,7 @@ Template.sorueslestirme.events({
     }
   },
   'click .cizgi': function(e,t) {
-    if (t.sinav.get() === true) {
+    if (t.sinav.get() === true && !t.cevapAnahtari.get()) {
       var id = e.currentTarget.getAttribute('id');
       var sol = id.substr(4,1);
       var sag = id.substr(10,1);

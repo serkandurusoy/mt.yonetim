@@ -89,7 +89,10 @@ M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
         egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
       });
 
-      var ogrenciYaniti = _.where(sinavKagidi.yanitlar, {soruId: seciliSoru._id}).yanit;
+      var ogrenciYaniti = _.findWhere(sinavKagidi.yanitlar, {soruId: seciliSoru._id}).yanit;
+      var ogrenciYanitiIndex = sinavKagidi.yanitlar.findIndex(function(yanit) {
+        return yanit.soruId === seciliSoru._id;
+      });
 
       switch (seciliSoru.tip) {
         case 'dogruYanlis':
@@ -103,14 +106,18 @@ M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
         case 'coktanTekSecmeli':
           template = 'sorucoktanTekSecmeli';
           data = {
-            secenekler: ogrenciYaniti.secenekler,
+            sinav: true,
+            sinavKagidiId: sinavKagidi._id,
+            seciliSoruIndex: ogrenciYanitiIndex,
             disabled: true
           };
           break;
         case 'coktanCokSecmeli':
           template = 'sorucoktanCokSecmeli';
           data = {
-            secenekler: ogrenciYaniti.secenekler,
+            sinav: true,
+            sinavKagidiId: sinavKagidi._id,
+            seciliSoruIndex: ogrenciYanitiIndex,
             disabled: true
           };
           break;
@@ -123,8 +130,10 @@ M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
         case 'eslestirme':
           template = 'sorueslestirme';
           data = {
-            solsecenekler: ogrenciYaniti.sol,
-            sagsecenekler: ogrenciYaniti.sag
+            sinav: true,
+            cevapAnahtari: true,
+            sinavKagidiId: sinavKagidi._id,
+            seciliSoruIndex: ogrenciYanitiIndex
           };
           break;
         case 'boslukDoldurma':
