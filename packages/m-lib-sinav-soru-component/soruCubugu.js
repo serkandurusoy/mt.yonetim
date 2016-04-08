@@ -28,6 +28,9 @@ Template.sorucubugu.events({
     t.parent().renderComponent.set(false);
     Tracker.flush();
     t.parent().seciliSoruIndex.set(ix);
+    if (!!t.parent().ogrenciYanitiGoster) {
+      t.parent().ogrenciYanitiGoster.set(false);
+    }
     t.parent().renderComponent.set(true);
   }
 });
@@ -39,77 +42,159 @@ Template.registerHelper('cevapVerildi', function(sinavKagidiId, ix) {
   return sinavKagidi && sinavKagidi.yanitlar[ix].yanitlandi;
 });
 
-Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix) {
+Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAnahtari) {
   var sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });
-  if (sinavKagidi && sinavKagidi.tip === 'alistirma' && sinavKagidi.yanitlar[ix].yanitlandi > 0) {
-    if (sinavKagidi.yanitlar[ix].dogru === true) {
-      return ' cevapDogru';
-    } else if (sinavKagidi.yanitlar[ix].dogru === false) {
-      return ' cevapYanlis';
-    } else {
+  if (cevapAnahtari === true) {
+    if (!sinavKagidi) {
       return undefined;
+    } else {
+      var sinav = M.C.Sinavlar.findOne({_id: sinavKagidi.sinav});
+      var yanit = _.find(sinavKagidi.yanitlar, {soruId: sinav.sorular[ix].soruId});
+      if (yanit.yanitlandi > 0) {
+        if (yanit.dogru === true) {
+          return ' cevapDogru';
+        } else if (yanit.dogru === false) {
+          return ' cevapYanlis';
+        }
+      } else {
+        return undefined;
+      }
+    }
+  } else {
+    if (sinavKagidi && sinavKagidi.tip === 'alistirma' && sinavKagidi.yanitlar[ix].yanitlandi > 0 ) {
+      if (sinavKagidi.yanitlar[ix].dogru === true) {
+        return ' cevapDogru';
+      } else if (sinavKagidi.yanitlar[ix].dogru === false) {
+        return ' cevapYanlis';
+      } else {
+        return undefined;
+      }
     }
   }
   return undefined;
 });
 
-M.L.komponentSec = function(seciliSoru) {
+M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
+  var template=null,data=null;
+
   if (seciliSoru) {
-    var template=null,data=null;
+    if (ogrenciYanitGoster) {
 
-    switch (seciliSoru.tip) {
-      case 'dogruYanlis':
-        template = 'sorudogruYanlis';
-        data = {
-          dogruchecked: seciliSoru.yanit.dogruYanlis.cevap === true,
-          yanlischecked: seciliSoru.yanit.dogruYanlis.cevap === false,
-          disabled: true
-        };
-        break;
-      case 'coktanTekSecmeli':
-        template = 'sorucoktanTekSecmeli';
-        data = {
-          secenekler: seciliSoru.yanit.coktanTekSecmeli,
-          disabled: true
-        };
-        break;
-      case 'coktanCokSecmeli':
-        template = 'sorucoktanCokSecmeli';
-        data = {
-          secenekler: seciliSoru.yanit.coktanCokSecmeli,
-          disabled: true
-        };
-        break;
-      case 'siralama':
-        template = 'sorusiralama';
-        data = {
-          secenekler: seciliSoru.yanit.siralama
-        };
-        break;
-      case 'eslestirme':
-        template = 'sorueslestirme';
-        data = {
-          solsecenekler: seciliSoru.yanit.eslestirme,
-          sagsecenekler: seciliSoru.yanit.eslestirme
-        };
-        break;
-      case 'boslukDoldurma':
-        template = 'soruboslukDoldurma';
-        data = {
-          cevap: seciliSoru.yanit.boslukDoldurma.cevap
-        };
-        break;
-      default:
-        template = null;
-        data = null;
-        break;
-    }
+      var sinavKagidi = M.C.SinavKagitlari.findOne({
+        sinav: Session.get('sinavYanitGoster'),
+        ogrenci: Meteor.userId(),
+        ogrenciSinavaGirdi: true,
+        egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
+      });
 
-    return {
-      template: template,
-      data: data
+      var ogrenciYaniti = _.where(sinavKagidi.yanitlar, {soruId: seciliSoru._id}).yanit;
+
+      switch (seciliSoru.tip) {
+        case 'dogruYanlis':
+          template = 'sorudogruYanlis';
+          data = {
+            dogruchecked: ogrenciYaniti.cevap === true,
+            yanlischecked: ogrenciYaniti.cevap === false,
+            disabled: true
+          };
+          break;
+        case 'coktanTekSecmeli':
+          template = 'sorucoktanTekSecmeli';
+          data = {
+            secenekler: ogrenciYaniti.secenekler,
+            disabled: true
+          };
+          break;
+        case 'coktanCokSecmeli':
+          template = 'sorucoktanCokSecmeli';
+          data = {
+            secenekler: ogrenciYaniti.secenekler,
+            disabled: true
+          };
+          break;
+        case 'siralama':
+          template = 'sorusiralama';
+          data = {
+            secenekler: ogrenciYaniti.secenekler
+          };
+          break;
+        case 'eslestirme':
+          template = 'sorueslestirme';
+          data = {
+            solsecenekler: ogrenciYaniti.sol,
+            sagsecenekler: ogrenciYaniti.sag
+          };
+          break;
+        case 'boslukDoldurma':
+          template = 'soruboslukDoldurma';
+          data = {
+            cevap: _.map(seciliSoru.yanit.boslukDoldurma.cevap.replace(/\[[^\]]*?\]/g, '||||').split('||||'), function(m,x){return (m)+(ogrenciYaniti.cevaplar[x]?('['+ogrenciYaniti.cevaplar[x]+']'):'')}).join('')
+          };
+          break;
+        default:
+          template = null;
+          data = null;
+          break;
+      }
+
+    } else {
+
+      switch (seciliSoru.tip) {
+        case 'dogruYanlis':
+          template = 'sorudogruYanlis';
+          data = {
+            dogruchecked: seciliSoru.yanit.dogruYanlis.cevap === true,
+            yanlischecked: seciliSoru.yanit.dogruYanlis.cevap === false,
+            disabled: true
+          };
+          break;
+        case 'coktanTekSecmeli':
+          template = 'sorucoktanTekSecmeli';
+          data = {
+            secenekler: seciliSoru.yanit.coktanTekSecmeli,
+            disabled: true
+          };
+          break;
+        case 'coktanCokSecmeli':
+          template = 'sorucoktanCokSecmeli';
+          data = {
+            secenekler: seciliSoru.yanit.coktanCokSecmeli,
+            disabled: true
+          };
+          break;
+        case 'siralama':
+          template = 'sorusiralama';
+          data = {
+            secenekler: seciliSoru.yanit.siralama
+          };
+          break;
+        case 'eslestirme':
+          template = 'sorueslestirme';
+          data = {
+            solsecenekler: seciliSoru.yanit.eslestirme,
+            sagsecenekler: seciliSoru.yanit.eslestirme
+          };
+          break;
+        case 'boslukDoldurma':
+          template = 'soruboslukDoldurma';
+          data = {
+            cevap: seciliSoru.yanit.boslukDoldurma.cevap
+          };
+          break;
+        default:
+          template = null;
+          data = null;
+          break;
+      }
+
     }
   }
+
+  return {
+    template: template,
+    data: data
+  }
+
 };

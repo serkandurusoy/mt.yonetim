@@ -5,14 +5,14 @@
   {{/if}}
   <div class="soruCubugu" style="position: absolute; top: 704px; left: 64px; width: 896px; height: 50px; white-space: nowrap; overflow: hidden; font-size: 0;">
     {{#each sorular}}
-      {{>soruNumarasi index=@index seciliSoruIndex=(parseInt ../seciliSoruIndex) sinav=../sinav sinavKagidiId=../sinavKagidiId}}
+      {{>soruNumarasi index=@index seciliSoruIndex=(parseInt ../seciliSoruIndex) sinav=../sinav sinavKagidiId=../sinavKagidiId cevapAnahtari=../cevapAnahtari}}
     {{/each}}
   </div>
 </template>
 
 <template name="soruNumarasi">
   <div data-soruIndex="{{index}}"
-       class="{{#if $eq index seciliSoruIndex}}secili{{/if}}{{#if sinav}}{{#if cevapVerildi sinavKagidiId index}} cevapVerildi{{/if}}{{cevapDogruYanlis sinavKagidiId index}}{{/if}}"
+       class="{{#if $eq index seciliSoruIndex}}secili{{/if}}{{#if $or sinav cevapAnahtari}}{{#if cevapVerildi sinavKagidiId index}} cevapVerildi{{/if}}{{cevapDogruYanlis sinavKagidiId index cevapAnahtari}}{{/if}}"
        style="cursor: pointer !important; margin: 0 8px 0 7px; width: 49px; height: 49px; padding-top: 11px; display: inline-block; font-weight: bold; font-size: 20px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
     {{plusOne index}}
   </div>
