@@ -377,7 +377,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.'
                   + '\n\n'
-                  + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' adresine tıklayabilirsin.'
+                  + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' bağlantısına tıklayabilirsin.'
                   + '\n\n'
                   + 'Sevgiler,\nMitolojix\n',
                   html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
@@ -564,6 +564,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               var muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
               var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
               var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+              var muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
               var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
               var tip = M.L.enumLabel(sinav.tip);
               var soruSayisi = sinav.sorular.length;
@@ -584,14 +585,15 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + '\n\n'
                   + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.'
                   + '\n\n'
-                  + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' adresine tıklayabilirsin.'
+                  + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' bağlantısına tıklayabilirsin.'
                   + '\n\n'
                   + 'Başarılar,\nMitolojix\n',
                   html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için mühüre tıklayabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
