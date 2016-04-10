@@ -2,14 +2,14 @@ M.E.ZorlukDereceleri = [1,2,3,4,5];
 
 M.E.Levenshtein = [0,1,2,3,4,5];
 
-M.E.GraphicsMagickNotInstalledMessage = 'Graphicsmagic library is not installed on the server. Cannot scale down images';
+M.E.GraphicsMagickNotInstalledMessage = 'Graphicsmagic library is not installed on the server. Cannot scale down images.';
 
-M.E.BilinmeyenHataMessage = 'Bilinmeyen bir hata oluştu daha sonra tekrar deneyin';
+M.E.BilinmeyenHataMessage = 'Bilinmeyen bir hata oluştu. Daha sonra tekrar deneyin.';
 
 M.E.uploadMaxImage = 2 * 1024 * 1024; // 2MB
-M.E.uploadMaxImageMessage = 'Yalnızca 2MB altındaki resim dosyaları yüklenebilir';
+M.E.uploadMaxImageMessage = 'Yalnızca 2MB altındaki resim dosyaları yüklenebilir.';
 M.E.uploadMaxPDF = 20 * 1024 * 1024; // 20MB
-M.E.uploadMaxPDFMessage = 'Yalnızca 20MB altındaki PDF dosyaları yüklenebilir';
+M.E.uploadMaxPDFMessage = 'Yalnızca 20MB altındaki PDF dosyaları yüklenebilir.';
 
 M.E.PickadateOptions = {
   labelMonthNext: 'Sonraki ay',
@@ -52,9 +52,9 @@ M.E.CinsiyetObjects = [
 M.E.Cinsiyet = _.pluck(M.E.CinsiyetObjects,'name');
 
 M.E.SifreObjects = [
-  {name: 'kolay', label: 'Kolay', detail: 'En az 6 karakter olmalı ve boşluk içermemeli'},
-  {name: 'orta', label: 'Orta', detail: 'En az 6 karakter olmalı, boşluk içermemeli, en az bir harf ve bir rakam içermeli'},
-  {name: 'zor', label: 'Zor', detail: 'En az 6 karakter olmalı, boşluk içermemeli, en az bir küçük harf, en az bir büyük harf, en az bir rakam ve en az bir noktalama işareti içermeli'}
+  {name: 'kolay', label: 'Kolay', detail: 'En az 6 karakter olmalı ve boşluk içermemeli.'},
+  {name: 'orta', label: 'Orta', detail: 'En az 6 karakter olmalı, boşluk içermemeli, en az bir harf ve bir rakam içermeli.'},
+  {name: 'zor', label: 'Zor', detail: 'En az 6 karakter olmalı, boşluk içermemeli, en az bir küçük harf, en az bir büyük harf, en az bir rakam ve en az bir noktalama işareti içermeli.'}
 ];
 M.E.Sifre = _.pluck(M.E.SifreObjects,'name');
 

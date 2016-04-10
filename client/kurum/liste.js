@@ -6,7 +6,7 @@ Template.kurumListe.onCreated(function() {
     if (keywords) {
       Meteor.call('search.kurum',keywords, function(err,res) {
         if (err) {
-          toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
+          toastr.error(M.E.BilinmeyenHataMessage);
           template.searchResults.set({_id: {$in: []}});
         }
         if (res) {

@@ -28,7 +28,7 @@ Template.ogrenciYukleme.events({
     var kurum = t.$('#kurum').val();
     t.disabled.set(!!kurum ? "": "disabled");
     if (!kurum) {
-      toastr.error('Öğrencilerin yükleneceği kurum seçilmeli');
+      toastr.error('Öğrencilerin yükleneceği kurum seçilmeli.');
     }
   },
   'change #ogrenciler': function(e,t) {
@@ -51,7 +51,7 @@ Template.ogrenciYukleme.events({
           t.$('#ogrenciler,#ogrencilerpath').val("");
           t.ogrenciListesi.set(null);
           t.status.clear();
-          toastr.success('Dosya okunuyor, lütfen bekleyin.', null, {onHidden: function() {
+          toastr.success('Dosya okunuyor. Lütfen bekleyin.', null, {onHidden: function() {
             ogrenciler = _.filter(ogrenciler, function (ogrenci) {
               return Match.test(ogrenci, new SimpleSchema({
                 __rowNum__: {
@@ -122,7 +122,7 @@ Template.ogrenciYukleme.events({
             });
             if (ogrenciler.length > 0) {
               t.ogrenciListesi.set(ogrenciler);
-              toastr.success('Dosya okundu, aşağıdaki kayıtlar yükleme için denenecekler.');
+              toastr.success('Dosya okundu. Aşağıdaki kayıtlar yükleme için denenecekler.');
             } else {
               t.ogrenciListesi.set(null);
               toastr.error('Dosyada yüklenmeye uygun kayıt bulunamadı.');
@@ -131,14 +131,14 @@ Template.ogrenciYukleme.events({
         } else {
           t.$('#ogrenciler,#ogrencilerpath').val("");
           t.ogrenciListesi.set(null);
-          toastr.error('Bilinmeyen bir hata oluştu, yüklenen dosya okunamadı.');
+          toastr.error('Bilinmeyen bir hata oluştu. Yüklenen dosya okunamadı.');
         }
       };
       reader.readAsArrayBuffer(file);
     } else {
       t.$('#ogrenciler,#ogrencilerpath').val("");
       t.ogrenciListesi.set(null);
-      toastr.error('XLS uzantılı ve geçerli bir Excel dosyası seçilmeli');
+      toastr.error('XLS uzantılı ve geçerli bir Excel dosyası seçilmeli.');
     }
   },
   'click [data-trigger="yukle"]': function(e,t) {

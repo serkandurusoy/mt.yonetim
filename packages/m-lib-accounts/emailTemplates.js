@@ -10,8 +10,8 @@ var getSifreMesaji = function(user) {
   var userKurum = user.kurum;
   var kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
   var sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
-  var sifreZorlukAciklama = _.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail
-  return ' ' + sifreZorlukAciklama.charAt(0).toLowerCase() + sifreZorlukAciklama.slice(1) + '.';
+  var sifreZorlukAciklama = _.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail;
+  return ' ' + sifreZorlukAciklama.charAt(0).toLowerCase() + sifreZorlukAciklama.slice(1);
 };
 
 Accounts.emailTemplates.from = '"Mitolojix" <admin@mitolojix.com>';

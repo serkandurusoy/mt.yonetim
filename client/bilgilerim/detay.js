@@ -70,11 +70,11 @@ Template.bilgilerimChangePassword.events({
 
     Meteor.call('checkPassword', digest, function(err, result) {
       if (!result) {
-        toastr.error('Eski şifrenizi doğru girmelisiniz');
+        toastr.error('Eski şifrenizi doğru girmelisiniz.');
       }
       if (result) {
         if (password !== confirm) {
-          toastr.error('Şifre ile tekrarı aynı olmalı');
+          toastr.error('Şifre ile tekrarı aynı olmalı.');
         } else if ( !M.L.validatePasswordStrength(Meteor.userId(), password) ) {
           var userKurum = Meteor.user().kurum;
           var kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
@@ -90,7 +90,7 @@ Template.bilgilerimChangePassword.events({
               if (err) {
                 toastr.error(M.E.BilinmeyenHataMessage);
               } else {
-                toastr.success('Şifreniz başarıyla değiştirildi');
+                toastr.success('Şifreniz başarıyla değiştirildi.');
               }
             }
           );

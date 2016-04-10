@@ -15,10 +15,10 @@ Template.soruFavori.events({
     e.preventDefault();
     Meteor.call('soruFavoriBosalt', function(err,res) {
       if (err) {
-        toastr.error('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin')
+        toastr.error(M.E.BilinmeyenHataMessage)
       }
       if (res) {
-        toastr.success('Favorilerim listenizdeki tüm sorular boşaltıldı')
+        toastr.success('Favorilerim listenizdeki tüm sorular boşaltıldı.')
       }
     });
   }

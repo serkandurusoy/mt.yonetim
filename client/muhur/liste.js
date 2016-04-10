@@ -7,7 +7,7 @@ Template.muhurListe.onCreated(function() {
     if (_.isString(keywords) || _.isObject(filters)) {
       Meteor.call('search.muhur',keywords, filters, function(err,res) {
         if (err) {
-          toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
+          toastr.error(M.E.BilinmeyenHataMessage);
           template.searchResults.set({});
         }
         if (res) {

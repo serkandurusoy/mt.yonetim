@@ -16,10 +16,10 @@ Template.soruSepeti.events({
     e.preventDefault();
     Meteor.call('soruSepetiBosalt', function(err,res) {
       if (err) {
-        toastr.error('Bir hata oluştu daha sonra veya tek tek çıkarmayı deneyin')
+        toastr.error(M.E.BilinmeyenHataMessage)
       }
       if (res) {
-        toastr.success('Sepetinizdeki tüm sorular boşaltıldı')
+        toastr.success('Sepetinizdeki tüm sorular boşaltıldı.')
       }
     });
   }
