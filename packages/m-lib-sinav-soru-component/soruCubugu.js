@@ -59,17 +59,19 @@ Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAna
           return ' cevapYanlis';
         }
       } else {
-        return undefined;
+        return ' cevapBos';
       }
     }
   } else {
-    if (sinavKagidi && sinavKagidi.tip === 'alistirma' && sinavKagidi.yanitlar[ix].yanitlandi > 0 ) {
-      if (sinavKagidi.yanitlar[ix].dogru === true) {
-        return ' cevapDogru';
-      } else if (sinavKagidi.yanitlar[ix].dogru === false) {
-        return ' cevapYanlis';
+    if (sinavKagidi && sinavKagidi.tip === 'alistirma') {
+      if (sinavKagidi.yanitlar[ix].yanitlandi > 0 ) {
+        if (sinavKagidi.yanitlar[ix].dogru === true) {
+          return ' cevapDogru';
+        } else if (sinavKagidi.yanitlar[ix].dogru === false) {
+          return ' cevapYanlis';
+        }
       } else {
-        return undefined;
+        return ' cevapBos';
       }
     }
   }
