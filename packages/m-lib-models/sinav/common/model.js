@@ -287,8 +287,15 @@ M.C.setUpCollection({
       index: 1,
       custom: function() {
         var saat = this;
+        var tarih = this.field('acilisTarihi');
         if (saat.isSet) {
-          return M.L.TestSaat(saat.value) ? true : 'notAllowed';
+          if (!M.L.TestSaat(saat.value)) {
+            return 'notAllowed';
+          } else if ( tarih.isSet ) {
+            return moment(tarih.value).hour(saat.value.split(':')[0]).minute(saat.value.split(':')[1]).isAfter(moment()) ? true : 'acilisSonraOlmali';
+          } else {
+            return true;
+          }
         }
       },
       autoform: {
