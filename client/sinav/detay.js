@@ -453,9 +453,12 @@ Template.sinavOgrencilerModal.onCreated(function() {
 });
 
 Template.sinavOgrencilerModal.helpers({
-  subeler: function() {
+  sinifSube: function() {
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
-    return sinav && sinav.subeler;
+    return sinav && {
+        sinif: sinav.sinif.substr(1,1),
+        subeler: sinav.subeler
+      };
   },
   ogrenciler: function(sube) {
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
