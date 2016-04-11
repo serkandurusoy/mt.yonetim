@@ -255,3 +255,73 @@ Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
     ]
   }
 });
+
+Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
+  check(sinavId, String);
+  var sinav = M.C.Sinavlar.findOne({
+    _id: sinavId,
+    taslak: false,
+    aktif: true,
+    iptal: false,
+    kilitli: true,
+    muhur: {$exists: true},
+    acilisZamani: {$lt: new Date()}
+  });
+  return {
+    find: function() {
+      if (sinav && this.userId && !M.L.userHasRole(this.userId, 'ogrenci') && (M.L.userHasRole(this.userId, 'mitolojix') || sinav.kurum === M.C.Users.findOne({_id: this.userId}).kurum)) {
+        return M.C.Users.find({
+          aktif: true,
+          role: 'ogrenci',
+          kurum: sinav.kurum,
+          sinif: sinav.sinif,
+          sube: {$in: sinav.subeler}
+        }, {
+          fields: {
+            aktif: 1,
+            role: 1,
+            kurum: 1,
+            sinif: 1,
+            sube: 1,
+            name: 1,
+            lastName: 1,
+            nameCollate: 1,
+            lastNameCollate: 1
+          }
+        })
+      }
+    }
+  }
+});
+
+Meteor.publishComposite('sinavinKagitlari', function(sinavId) {
+  check(sinavId, String);
+  var sinav = M.C.Sinavlar.findOne({
+    _id: sinavId,
+    taslak: false,
+    aktif: true,
+    iptal: false,
+    kilitli: true,
+    muhur: {$exists: true},
+    acilisZamani: {$lt: new Date()}
+  });
+  return {
+    find: function() {
+      if (sinav && this.userId && !M.L.userHasRole(this.userId, 'ogrenci') && (M.L.userHasRole(this.userId, 'mitolojix') || sinav.kurum === M.C.Users.findOne({_id: this.userId}).kurum)) {
+        return M.C.SinavKagitlari.find({
+          sinav: sinavId,
+          ogrenciSinavaGirdi: true
+        }, {
+          fields: {
+            _id: 1,
+            sinav: 1,
+            ogrenci: 1,
+            ogrenciSinavaGirdi: 1,
+            baslamaZamani: 1,
+            bitirmeZamani: 1
+          }
+        })
+      }
+    }
+  }
+});

@@ -229,3 +229,35 @@
     </div>
   </div>
 </template>
+
+<template name="sinavOgrencilerModal">
+  <div id="sinavOgrencilerModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      {{#each subeler}}
+        <table class="striped responsive-table">
+          <thead>
+            <tr>
+              <th>Öğrenci</th>
+              <th>Başlama</th>
+              <th>Bitirme</th>
+            </tr>
+          </thead>
+          <tbody>
+          {{#each ogrenciler this}}
+            <tr class="{{#unless sinavKagidi _id}}grey-text{{/unless}}">
+              <td>{{name}} {{lastName}}</td>
+              {{#with sinavKagidi _id}}
+                <td>{{#with baslamaZamani}}{{moFromNow this}}{{else}}...{{/with}}</td>
+                <td>{{#with bitirmeZamani}}{{moFromNow this}}{{else}}...{{/with}}</td>
+              {{/with}}
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      {{/each}}
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">KAPAT</a>
+    </div>
+  </div>
+</template>

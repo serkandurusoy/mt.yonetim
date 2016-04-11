@@ -4,6 +4,7 @@ var taslakDegistirView;
 var soruCikarModalView;
 var sorularinTumunuCikarModalView;
 var sinavBitirModalView;
+var sinavOgrencilerView;
 
 Template.sinavDetay.onCreated(function() {
   var template = this;
@@ -210,6 +211,14 @@ Template.sinavDetayKart.events({
   },
   'click [data-trigger="onizleme"]': function(e,t) {
     sinavOnizlemeView = Blaze.render(Template.sinavOnizlemeModal, document.getElementsByTagName('main')[0]);
+  },
+  'click [data-trigger="ogrenciler"]': function(e,t) {
+    var sinavOgrencilerView = Blaze.render(Template.sinavOgrencilerModal, document.getElementsByTagName('main')[0]);
+    $('#sinavOgrencilerModal').openModal({
+      complete: function() {
+        Blaze.remove(sinavOgrencilerView);
+      }
+    });
   },
   'click [data-analizRaporu]': function(e,t) {
     e.preventDefault();
@@ -435,3 +444,40 @@ Template.soruEkleKart.events({
   }
 });
 
+Template.sinavOgrencilerModal.onCreated(function() {
+  var template = this;
+  template.autorun(function() {
+    template.subscribe('sinavinOgrencileri', FlowRouter.getParam('_id'));
+    template.subscribe('sinavinKagitlari', FlowRouter.getParam('_id'));
+  });
+});
+
+Template.sinavOgrencilerModal.helpers({
+  subeler: function() {
+    var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
+    return sinav && sinav.subeler;
+  },
+  ogrenciler: function(sube) {
+    var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
+    return sinav && M.C.Users.find({
+      aktif: true,
+      role: 'ogrenci',
+      kurum: sinav.kurum,
+      sinif: sinav.sinif,
+      sube: sube
+    }, {
+      sort: {
+        sube: 1,
+        nameCollate: 1,
+        lastNameCollate: 1
+      }
+    });
+  },
+  sinavKagidi: function(ogrenci) {
+    return M.C.SinavKagitlari.findOne({
+      sinav: FlowRouter.getParam('_id'),
+      ogrenciSinavaGirdi: true,
+      ogrenci: ogrenci
+    });
+  }
+});

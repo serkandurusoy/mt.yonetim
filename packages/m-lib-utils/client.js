@@ -250,6 +250,17 @@ Template.registerHelper('sinavBaslamayiBekliyor', function(sinavId) {
   return !!sinav;
 });
 
+Template.registerHelper('sinavBaslamaTarihiGecmis', function(sinavId) {
+  var sinav = M.C.Sinavlar.findOne({
+    _id: sinavId,
+    iptal: false,
+    taslak: false,
+    kilitli: true,
+    acilisZamani: {$lt: moment(TimeSync.serverTime(null, 5 * 60 * 1000)).toDate()}
+  });
+  return !!sinav;
+});
+
 Template.registerHelper('sinavRaporlamayaUygun', function(sinavId) {
   var sinav = M.C.Sinavlar.findOne({
     _id: sinavId,

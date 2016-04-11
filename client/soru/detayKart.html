@@ -10,10 +10,6 @@
                   <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
                   <a data-trigger="cart" title="{{#if inCart}}Soru sepetimden çıkar{{else}}Soru sepetime ekle{{/if}}" class="right margin-right-6px"><i class="material-icons">{{#if inCart}}shopping_cart{{else}}add_shopping_cart{{/if}}</i></a>
                   <a data-trigger="favorite" title="{{#if inFavori}}Favori sorularımdan çıkar{{else}}Favori sorularıma ekle{{/if}}" class="right margin-right-6px"><i class="material-icons">{{#if inFavori}}favorite{{else}}favorite_border{{/if}}</i></a>
-                {{/if}}
-              {{/unless}}
-              {{#unless ref}}
-                {{#if aktif}}
                   <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
                   <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
                 {{/if}}

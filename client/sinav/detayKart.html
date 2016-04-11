@@ -5,28 +5,27 @@
         <div class="row">
           <div class="col s12">
             {{#unless ref}}
-              {{#unless userHasRole "mudur"}}
-                {{#if aktif}}
-                  <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
-                {{/if}}
-              {{/unless}}
-            {{/unless}}
-            {{#unless ref}}
               {{#if aktif}}
+                {{#unless userHasRole "mudur"}}
+                  <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
+                {{/unless}}
                 <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
                 <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
+                {{#if sinavBaslamaTarihiGecmis _id}}
+                  <span data-trigger="ogrenciler" title="Öğrenciler" class="right margin-right-6px"><i class="grey-text material-icons">people</i></span>
+                {{/if}}
+                {{#if sinavRaporlamayaUygun _id}}
+                  <span class="right margin-right-6px"><a data-activates="report-menu" title="Sınav raporları" style="white-space: nowrap"><i class="grey-text material-icons">assessment</i></a></span>
+                  <ul id="report-menu" class="dropdown-content">
+                    <li><a data-analizRaporu>Analiz Raporu</a></li>
+                    <li><a data-testMaddeAnalizi>Madde Analizleri</a></li>
+                    <li><a data-testCeldiriciAnalizi>Çeldirici Analizleri</a></li>
+                    <li><a data-subeBazindaPuanlar>Şube Bazında Puanlar</a></li>
+                    <li><a data-sinifBazindaPuanlar>Sınıf Bazında Puanlar</a></li>
+                  </ul>
+                {{/if}}
               {{/if}}
             {{/unless}}
-            {{#if sinavRaporlamayaUygun _id}}
-              <span class="right margin-right-6px"><a data-activates="report-menu" title="Sınav raporları" style="white-space: nowrap"><i class="grey-text material-icons">assessment</i></a></span>
-              <ul id="report-menu" class="dropdown-content">
-                <li><a data-analizRaporu>Analiz Raporu</a></li>
-                <li><a data-testMaddeAnalizi>Madde Analizleri</a></li>
-                <li><a data-testCeldiriciAnalizi>Çeldirici Analizleri</a></li>
-                <li><a data-subeBazindaPuanlar>Şube Bazında Puanlar</a></li>
-                <li><a data-sinifBazindaPuanlar>Sınıf Bazında Puanlar</a></li>
-              </ul>
-            {{/if}}
             <h5>
               {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Sınav başlamayı bekliyor">hourglass_empty</i> {{/if}}
               {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Sınav yayında">timer</i> {{/if}}

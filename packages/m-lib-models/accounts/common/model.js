@@ -290,7 +290,7 @@ M.C.Users.Schema = new SimpleSchema({
       return M.C.Dersler.find({},{fields: {_id: 1}}).map(function(ders) {return ders._id;});
     }
   },
-  // TODO: this can be placed into an array containing egitimYili information
+  // TODO: this MUST be placed into an array containing egitimYili information
   sinif: {
     label: 'Sınıf',
     type: String,
