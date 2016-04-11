@@ -247,8 +247,8 @@
             {{#let kagit=(sinavKagidi _id)}}
               <tr class="{{#unless kagit}}grey-text{{/unless}}">
                 <td>{{name}} {{lastName}}</td>
-                <td>{{#with kagit.baslamaZamani}}{{moFromNow this}}{{else}}...{{/with}}</td>
-                <td>{{#with kagit.bitirmeZamani}}{{moFromNow this}}{{else}}...{{/with}}</td>
+                <td>{{#with kagit.baslamaZamani}}{{moFrom this moNow}}{{else}}...{{/with}}</td>
+                <td>{{#with kagit.bitirmeZamani}}{{moFrom this moNow}}{{else}}...{{/with}}</td>
               </tr>
             {{/let}}
           {{/each}}
