@@ -56,6 +56,8 @@ Package.onUse(function(api) {
     'inputTypes/search/search.html',
     'inputTypes/select/select.html',
     'inputTypes/select/select.js',
+    'inputTypes/select-disabled/select-disabled.html',
+    'inputTypes/select-disabled/select-disabled.js',
     'inputTypes/select-checkbox/select-checkbox.html',
     'inputTypes/select-checkbox/select-checkbox.js',
     'inputTypes/select-checkbox-inline/select-checkbox-inline.html',

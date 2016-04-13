@@ -17,7 +17,7 @@ AutoForm.hooks({
   sinavDuzenleForm: {
     before: {
       update: function(doc) {
-        if (doc.$set.sorular.length > 0) {
+        if (doc.$set.sorular && doc.$set.sorular.length > 0) {
           doc.$set.sorular = AutoForm.getCurrentDataForForm('sinavDuzenleForm').doc.sorular;
         }
         return doc;

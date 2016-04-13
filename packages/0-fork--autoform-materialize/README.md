@@ -17,3 +17,4 @@ https://github.com/djhi/meteor-autoform-materialize/
 * components/afformgroup/afformgroup.js (comment out boolean-checkbox)
 * https://github.com/djhi/meteor-autoform-materialize/commit/28729996210a239896989843f4a075dd4cedc5ed
 * https://github.com/djhi/meteor-autoform-materialize/pull/75/files
+* added inputtypes/select-disabled

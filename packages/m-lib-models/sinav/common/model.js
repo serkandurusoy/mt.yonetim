@@ -38,6 +38,10 @@ M.C.setUpCollection({
         type: function() {
           if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
             return 'hidden';
+          } else {
+            var formId = AutoForm.getFormId();
+            var sorular = AutoForm.getFieldValue('sorular', formId);
+            return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
           }
         },
         class: 'browser-default',
@@ -169,6 +173,11 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Ders seçin',
+        type: function() {
+          var formId = AutoForm.getFormId();
+          var sorular = AutoForm.getFieldValue('sorular', formId);
+          return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
+        },
         options: function() {
           var user = M.C.Users.findOne({_id: Meteor.userId()});
           var olasiDersler = [];
@@ -235,7 +244,11 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Sınıf seçin',
-        type: 'select',
+        type: function() {
+          var formId = AutoForm.getFormId();
+          var sorular = AutoForm.getFieldValue('sorular', formId);
+          return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
+        },
         options: function(){
           return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
         }
