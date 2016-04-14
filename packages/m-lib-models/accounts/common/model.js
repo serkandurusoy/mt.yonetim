@@ -186,10 +186,9 @@ M.C.Users.Schema = new SimpleSchema({
         if (kurum.isInsert) {
           return user.kurum;
         }
-        // TODO: find a way to cleanly allow user kurum updates, mesela acikta kalan herseyi baskasina aktar vb
-        if (kurum.isUpdate) {
-          kurum.unset();
-        }
+      }
+      if (kurum.isUpdate) {
+        kurum.unset();
       }
     },
     autoform: {
