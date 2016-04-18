@@ -23,7 +23,7 @@ M.E.PickadateOptions = {
   weekdaysLetter: [ 'Pa', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct' ],
   today: 'Bugün',
   clear: 'Temizle',
-  close: 'Kapa',
+  close: 'Kapat',
   selectYears: true,
   selectMonths: true,
   firstDay: 1,
