@@ -238,8 +238,9 @@
           <thead>
             <tr>
               <th>Öğrenci ({{sinifSube.sinif}}{{this}})</th>
-              <th style="width: 150px;">Başlama</th>
-              <th style="width: 150px;">Bitirme</th>
+              <th style="text-align: center; width: 160px;">Başlama</th>
+              <th style="text-align: center; width: 160px;">Bitirme</th>
+              <th style="text-align: right; width: 75px; padding-right: 10px">Süre</th>
             </tr>
           </thead>
           <tbody>
@@ -247,8 +248,9 @@
             {{#let kagit=(sinavKagidi _id)}}
               <tr class="{{#unless kagit}}grey-text{{/unless}}">
                 <td>{{name}} {{lastName}}</td>
-                <td>{{#with kagit.baslamaZamani}}{{moFrom this moNow}}{{else}}...{{/with}}</td>
-                <td>{{#with kagit.bitirmeZamani}}{{moFrom this moNow}}{{else}}...{{/with}}</td>
+                <td style="text-align: center; width: 160px;">{{#with kagit.baslamaZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
+                <td style="text-align: center; width: 160px;">{{#with kagit.bitirmeZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
+                <td style="text-align: right; width: 75px; padding-right: 10px">{{#if kagit.bitirmeZamani}}{{sinavSuresiDisplay kagit.baslamaZamani kagit.bitirmeZamani}}{{else}}...{{/if}}</td>
               </tr>
             {{/let}}
           {{/each}}

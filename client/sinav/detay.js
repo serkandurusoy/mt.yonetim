@@ -482,5 +482,8 @@ Template.sinavOgrencilerModal.helpers({
       ogrenciSinavaGirdi: true,
       ogrenci: ogrenci
     });
+  },
+  sinavSuresiDisplay: function(baslama, bitirme) {
+    return M.L.FormatSinavSuresi(moment(bitirme).diff(baslama));
   }
 });
