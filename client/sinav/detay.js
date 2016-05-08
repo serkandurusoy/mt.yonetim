@@ -412,7 +412,7 @@ Template.soruEkleModal.helpers({
     var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: Meteor.userId(), soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(function(sepet) {return sepet.soru;});
     //TODO: sort and group by konu
     var sorularCursor = sepetSoruIdArray && M.C.Sorular.find({_id: {$in: sepetSoruIdArray}});
-    return sorularCursor && sorularCursor.count() && sorularCursor;
+    return sorularCursor && sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });
 

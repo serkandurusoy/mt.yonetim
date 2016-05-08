@@ -101,7 +101,7 @@ Template.soruDetayKart.onRendered(function(){
 Template.soruDetayKart.events({
   'click [data-trigger="clone"]': function(e,t) {
     var doc = t.data;
-    doc = _.extend(_.pick(doc, 'kurum', 'alan', 'tip', 'zorlukDerecesi', 'soru', 'yanit'), {aktif: true, _clonedFrom: {_id: doc._id, _version: doc._version}});
+    doc = _.extend(_.pick(doc, 'kurum', 'aciklama', 'alan', 'tip', 'zorlukDerecesi', 'soru', 'yanit'), {aktif: true, _clonedFrom: {_id: doc._id, _version: doc._version}});
     Session.set('soruClone',doc);
     FlowRouter.go('soruYeni');
   },

@@ -49,7 +49,7 @@ Package.onUse(function(api) {
     'momentjs:twix@0.9.0',
     'risul:moment-timezone@0.5.0',
     'lbee:moment-helpers@1.2.0',
-    'mizzao:timesync@0.3.0',
+    'mizzao:timesync@0.4.0',
     'east5th:check-checker@0.2.0',
     'audit-argument-checks',
     'simple:reactive-method',

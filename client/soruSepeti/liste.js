@@ -7,7 +7,7 @@ Template.soruSepeti.helpers({
     var sepetSoruIdArray = _.pluck(M.C.SoruSepetleri.find({createdBy: Meteor.userId()}, {sort: {createdAt: 1}}).fetch(), 'soru');
     //TODO: sort and group by relevant fields
     var sorularCursor = M.C.Sorular.find({_id: {$in: sepetSoruIdArray}});
-    return sorularCursor.count() && sorularCursor;
+    return sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });
 

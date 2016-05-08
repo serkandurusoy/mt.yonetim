@@ -145,6 +145,19 @@ M.C.setUpCollection({
         }
       }
     },
+    aciklama: {
+      label: 'Açıklama',
+      type: String,
+      max: 256,
+      optional: true,
+      autoValue: function() {
+        if (this.isSet) {
+          return M.L.Trim(this.value);
+        } else {
+          this.unset();
+        }
+      }
+    },
     'alan.mufredat': {
       type: String,
       autoValue: function() {

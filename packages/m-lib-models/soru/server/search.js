@@ -23,6 +23,14 @@ M.C.Sorular.attachSchema(new SimpleSchema({
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
+  'searchSource.aciklama': {
+    type: String,
+    optional: true,
+    autoValue: function() {
+      var src = this.field('aciklama');
+      return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
+    }
+  },
   'searchSource.alan.ders': {
     type: String,
     optional: true,
@@ -69,6 +77,7 @@ if (Meteor.isServer) {
   M.C.Sorular._ensureIndex({
     'searchSource.kurum': 'text',
     'searchSource.kod': 'text',
+    'searchSource.aciklama': 'text',
     'searchSource.alan.ders': 'text',
     'searchSource.alan.konu': 'text',
     'searchSource.alan.sinif': 'text',
@@ -80,8 +89,8 @@ if (Meteor.isServer) {
     weights: {
       'searchSource.kod': 3,
       'searchSource.kurum': 2,
-      'searchSource.ders': 2,
-      'searchSource.konu': 2
+      'searchSource.alan.ders': 2,
+      'searchSource.alan.konu': 2
     }
   });
 }

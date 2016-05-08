@@ -31,6 +31,19 @@
       </div>
     </div>
   </div>
+  {{#if aciklama}}
+    <div class="row {{#unless aktif}}pasif{{/unless}}">
+      <div class="col s12">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12">
+              {{aciklama}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
   <div class="row {{#unless aktif}}pasif{{/unless}}">
     <div class="col s12">
       <div class="card-panel">
@@ -246,6 +259,7 @@
                         {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
                         {{kod}} {{foreignField 'Dersler' ders 'isim'}}<br>
                         {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}} / {{enumLabel tip}}
+                        {{#if aciklama}}<br>{{aciklama}}{{/if}}
                       </div>
                     </li>
                   {{/each}}

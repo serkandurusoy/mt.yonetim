@@ -238,3 +238,132 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
   }
 });
+
+M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
+  if (doc.iptal) {
+
+    var sinav = M.C.Sinavlar.findOne({
+      _id: doc._id,
+      taslak: false,
+      aktif: true,
+      muhur: {$exists: true},
+      egitimYili: M.C.AktifEgitimYili.findOne().egitimYili,
+      acilisZamani: {$lt: new Date()}
+    });
+
+    if (sinav) {
+
+      var users = [];
+
+      // sinavi olusturan ve son guncelleyenini al
+      users = _.union(users, [sinav.createdBy]);
+      users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
+
+      // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
+      if (sinav._version > 1) {
+        sinav.versions().forEach(function(sinav) {
+          users = _.union(users, [sinav.createdBy]);
+          users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
+        })
+      }
+
+      // kurumda derse yetkisi olan ogretmenleri al
+      M.C.Users.find({
+        aktif: true,
+        kurum: sinav.kurum,
+        role: 'ogretmen',
+        dersleri: sinav.ders
+      }).forEach(function(user) {
+        users = _.union(users, [user._id]);
+      });
+
+      // sinava comment etmis kisilerin ogretmen olmayanlarinin kendi kurumlarindan roldaslarini al
+      M.C.Comments.find({
+        collection: 'Sinavlar',
+        doc: sinav._id
+      }).forEach(function(comment) {
+        var user = M.C.Users.findOne({_id: comment.createdBy});
+        if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
+          M.C.Users.find({
+            aktif: true,
+            kurum: user.kurum,
+            role: user.role
+          }).forEach(function(user) {
+            users = _.union(users, [user._id]);
+          });
+        }
+      });
+
+      // sinavin yapilacagi kurumun ayni sinif ve subelerdeki ogrencilerini al
+      M.C.Users.find({
+        aktif: true,
+        role: 'ogrenci',
+        kurum: sinav.kurum,
+        sinif: sinav.sinif,
+        sube: {$in: sinav.subeler}
+      }).forEach(function(user) {
+        users = _.union(users, [user._id]);
+      });
+
+      users = _.uniq(users);
+
+      _.each(users, function(userId) {
+
+        var user = M.C.Users.findOne({_id: userId});
+
+        if (user) {
+          var muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
+          var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+          var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+          var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+          var tip = M.L.enumLabel(sinav.tip);
+          var kod = sinav.kod;
+          var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+
+          if (user.role === 'ogrenci') {
+
+            Email.send({
+              to: user.emails[0].address,
+              from: '"Mitolojix" <admin@mitolojix.com>',
+              subject: 'Sınav iptal edildi',
+              text: 'Sevgili ' + user.name + ',\n\n'
+              + 'Mitolojix mühür taşı ' + muhurGrubu + ' grubuna eklenen ' + muhur + ' mühürü öğretmenin tarafından kaldırıldı. Yeni bir mühür eklendiğinde yine bir mesajla bilgilendirileceksin.'
+              + '\n\n'
+              + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' bağlantısına tıklayabilirsin.'
+              + '\n\n'
+              + 'Sevgiler,\nMitolojix\n',
+              html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşı ' + muhurGrubu + ' grubuna eklenen ' + muhur + ' mühürü öğretmenin tarafından kaldırıldı. Yeni bir mühür eklendiğinde yine bir mesajla bilgilendirileceksin.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgiler,<br/>Mitolojix</p>'
+              + '</body></html>'
+            });
+
+          } else {
+
+            Email.send({
+              to: user.emails[0].address,
+              from: '"Mitolojix" <admin@mitolojix.com>',
+              subject: 'Sınav iptal edildi',
+              text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
+              + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.'
+              + '\n\n'
+              + 'Saygılarımızla,\nMitolojix\n',
+              html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
+              + '</body></html>'
+            });
+
+          }
+
+        }
+
+      });
+
+    }
+
+  }
+});

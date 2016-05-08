@@ -12,7 +12,7 @@
                 <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
                 <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
                 {{#if sinavBaslamaTarihiGecmis _id}}
-                  <span data-trigger="ogrenciler" title="Öğrenciler" class="right margin-right-6px"><i class="grey-text material-icons">people</i></span>
+                  <span data-trigger="ogrenciler" title="Takip raporu" class="right margin-right-6px"><i class="grey-text material-icons">people</i></span>
                 {{/if}}
                 {{#if sinavRaporlamayaUygun _id}}
                   <span class="right margin-right-6px"><a data-activates="report-menu" title="Sınav raporları" style="white-space: nowrap"><i class="grey-text material-icons">assessment</i></a></span>
@@ -111,6 +111,7 @@
                         {{/unless}}
                         Puan: {{../puan}}<br>
                         Soru: {{kod}} / {{../zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
+                        {{#if aciklama}}{{aciklama}}<br>{{/if}}
                         Konu: {{alan.egitimYili}} / {{alan.konu}}<br>
                         Kazanımlar:<br>
                         {{#each alan.kazanimlar}}{{this}}<br>{{/each}}

@@ -42,7 +42,8 @@
       {{kod}} {{foreignField 'Dersler' alan.ders 'isim'}} / {{enumLabel alan.sinif}}<br>
       {{alan.egitimYili}} / {{alan.konu}}<br>
       {{zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
-      {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}}{{/if}}
+      {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}}<br>{{/if}}
+      {{#if aciklama}}{{aciklama}}{{/if}}
     </div>
   </li>
 </template>

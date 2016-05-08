@@ -61,6 +61,13 @@ M.C.Sorular.after.update(function(userId, doc, fieldNames, modifier, options) {
         comment.body = comment.body + ' Kilitli olarak işaretledim.';
       }
 
+      if (this.previous.aciklama !== doc.aciklama) {
+        story.operation = 'special';
+        story.specialOperation = 'Soru açıklaması değişti';
+        story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' açıklaması değiştirildi.';
+        comment.body = comment.body + ' Açıklamasını değiştirdim.';
+      }
+
       if (this.previous.tip !== doc.tip) {
         story.operation = 'special';
         story.specialOperation = 'Soru tipi ve yanıtı değişti';

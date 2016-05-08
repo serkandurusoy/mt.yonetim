@@ -6,7 +6,7 @@ Template.soruFavori.helpers({
   sorular: function(){
     var favoriSoruIdArray = _.pluck(M.C.SoruFavorileri.find({createdBy: Meteor.userId()}, {sort: {createdAt: 1}}).fetch(), 'soru');
     var sorularCursor = M.C.Sorular.find({_id: {$in: favoriSoruIdArray}},{sort:{kurum: -1, 'alan.ders': -1}}); //TODO: sort by dersCollate
-    return sorularCursor.count() && sorularCursor;
+    return sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });
 
