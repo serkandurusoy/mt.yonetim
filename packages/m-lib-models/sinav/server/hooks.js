@@ -324,7 +324,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
             Email.send({
               to: user.emails[0].address,
-              from: '"Mitolojix" <admin@mitolojix.com>',
+              from: '"Mitolojix" <bilgi@mitolojix.com>',
               subject: 'Sınav iptal edildi',
               text: 'Sevgili ' + user.name + ',\n\n'
               + 'Mitolojix mühür taşı ' + muhurGrubu + ' grubuna eklenen ' + muhur + ' mühürü öğretmenin tarafından kaldırıldı. Yeni bir mühür eklendiğinde yine bir mesajla bilgilendirileceksin.'
@@ -335,7 +335,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
               html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşı ' + muhurGrubu + ' grubuna eklenen ' + muhur + ' mühürü öğretmenin tarafından kaldırıldı. Yeni bir mühür eklendiğinde yine bir mesajla bilgilendirileceksin.</p>'
-              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3">buraya</a> tıklayabilirsin.</p>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgiler,<br/>Mitolojix</p>'
               + '</body></html>'
             });
@@ -344,7 +344,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
             Email.send({
               to: user.emails[0].address,
-              from: '"Mitolojix" <admin@mitolojix.com>',
+              from: '"Mitolojix" <bilgi@mitolojix.com>',
               subject: 'Sınav iptal edildi',
               text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
               + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.'

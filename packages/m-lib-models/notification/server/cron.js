@@ -61,7 +61,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">',
               '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Konu:</strong> ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'sınav' : 'soru', '<br/>',
               '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Adet:</strong> ' , notification.count , '<br/>',
-              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Detay:</strong> <a style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333" target="_blank" href="' , notification.url , '">' , notification.url , '</a>',
+              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Detay:</strong> <a style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #2196F3" target="_blank" href="' , notification.url , '">' , notification.url , '</a>',
               '</p>'
             );
           });
@@ -71,7 +71,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           if (userDoc) {
             Email.send({
               to: userDoc.emails[0].address,
-              from: '"Mitolojix" <admin@mitolojix.com>',
+              from: '"Mitolojix" <bilgi@mitolojix.com>',
               subject: 'Bekleyen yeni yorumlar var',
               text: 'Sayın ' + userDoc.name + ' ' + userDoc.lastName + ',\n\n'
               + 'Aşağıdaki konularda, belirtilen adetler kadar yeni yorum dikkatinizi bekliyor.'

@@ -372,7 +372,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <admin@mitolojix.com>',
+                  from: '"Mitolojix" <bilgi@mitolojix.com>',
                   subject: 'Sınav yanıtları açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.'
@@ -383,7 +383,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank">buraya</a> tıklayabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3">buraya</a> tıklayabilirsin.</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgiler,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
@@ -392,7 +392,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <admin@mitolojix.com>',
+                  from: '"Mitolojix" <bilgi@mitolojix.com>',
                   subject: 'Sınav yanıtları açıldı',
                   text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.'
@@ -475,7 +475,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             M.C.Users.find({role: 'mitolojix'}).forEach(function(user) {
               Email.send({
                 to: user.emails[0].address,
-                from: '"Mitolojix" <admin@mitolojix.com>',
+                from: '"Mitolojix" <bilgi@mitolojix.com>',
                 subject: 'Sınav öğrencilere açılamadı',
                 text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                 + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve sınav öğrencilere açılamamıştır.'
@@ -579,7 +579,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <admin@mitolojix.com>',
+                  from: '"Mitolojix" <bilgi@mitolojix.com>',
                   subject: 'Mühür taşına yeni bir mühür eklendi',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + 'Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.'
@@ -594,7 +594,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.</p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için mühre tıklayabilirsin.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
@@ -603,7 +603,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <admin@mitolojix.com>',
+                  from: '"Mitolojix" <bilgi@mitolojix.com>',
                   subject: 'Yeni bir sınav açıldı',
                   text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + kod + ' numaralı yeni bir ' + tip + ' açıldı.'

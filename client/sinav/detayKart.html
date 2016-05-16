@@ -10,7 +10,7 @@
                   <a data-trigger="clone" title="Kopyalayarak yeni kayıt oluştur" class="right"><i class="green-text material-icons">content_copy</i></a>
                 {{/unless}}
                 <span data-trigger="comment" title="Yorumlar" class="right margin-right-6px"><i class="blue-text material-icons">{{#if commentCount}}chat_bubble{{else}}chat_bubble_outline{{/if}}</i></span>
-                <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="blue-text material-icons">search</i></span>
+                <span data-trigger="{{#if getLength sorular}}onizleme{{else}}-pasif{{/if}}" title="Önizleme{{#unless getLength sorular}} yapmak için önce soru eklenmeli{{/unless}}" class="right margin-right-6px"><i class="{{#if getLength sorular}}blue-text{{else}}grey-text text-lighten-2{{/if}} material-icons">search</i></span>
                 {{#if sinavBaslamaTarihiGecmis _id}}
                   <span data-trigger="ogrenciler" title="Takip raporu" class="right margin-right-6px"><i class="grey-text material-icons">people</i></span>
                 {{/if}}
