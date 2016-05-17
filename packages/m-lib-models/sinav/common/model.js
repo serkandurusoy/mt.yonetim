@@ -134,11 +134,12 @@ M.C.setUpCollection({
         var ders = this;
         var kurum = this.field('kurum');
         var egitimYili = this.field('egitimYili');
+        var sinif = this.field('sinif');
         var tumu = M.C.Dersler.find().map(function(ders) {return ders._id;});
         if (ders.isSet && !_.contains(tumu,ders.value)) {
           return 'notAllowed';
         }
-        if (ders.isInsert && ders.isSet && kurum.isSet && egitimYili.isSet) {
+        if (ders.isInsert && ders.isSet && kurum.isSet && egitimYili.isSet && sinif.isSet) {
           var kullanilanMuhurAdedi = M.C.Sinavlar.find({
             $or: [
               {
@@ -146,6 +147,7 @@ M.C.setUpCollection({
                   {kurum: kurum.value},
                   {egitimYili: egitimYili.value},
                   {ders: ders.value},
+                  {sinif: sinif.value},
                   {muhur: {$exists: true}}
                 ]
               },
@@ -154,6 +156,7 @@ M.C.setUpCollection({
                   {kurum: kurum.value},
                   {egitimYili: egitimYili.value},
                   {ders: ders.value},
+                  {sinif: sinif.value},
                   {muhur: {$exists: false}},
                   {iptal: false}
                 ]
@@ -724,7 +727,7 @@ M.C.setUpCollection({
   },
   //TODO: this should be a PARTIAL index, not sparse, but partial is supported on Mongodb3.2 which is not supported by Meteor yet!
   /*indexes: [
-    {ix: {kurum: 1, egitimYili: 1, muhur: 1}, opt: { unique: true, sparse: true }}
+    {ix: {kurum: 1, egitimYili: 1, sinif:1, muhur: 1}, opt: { unique: true, sparse: true }}
   ],*/
   cloneable: true
 });
