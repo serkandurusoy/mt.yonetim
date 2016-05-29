@@ -1096,6 +1096,10 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'sorusuzSinavTaslakKalmali',reason:'Sorusuz sınav taslak kalmalı',details:'Sorusuz sınav taslak kalmalı'});
       }
 
+      if ( moment(sinav.acilisZamani).isBefore(moment()) ) {
+        M.L.ThrowError({error:'acilisSonraOlmali',reason:'Açılış zamanı şu andan sonra olmalı',details:'Açılış zamanı şu andan sonra olmalı'});
+      }
+
       var updateDoc = {
         taslak: !sinav.taslak
       };

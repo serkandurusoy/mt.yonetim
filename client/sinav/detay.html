@@ -107,7 +107,11 @@
             </p>
             <p>
               {{#if taslak}}
-                Bu sınavın taslak işaretini kaldırmak istediğinize emin misiniz? Taslak işareti kaldırılan bir sınav, tanımlanan süre geldiğinde öğrencilere açılır. Sınav açıldıktan sonra üzerinde değişiklik yapılamaz.
+                {{#if acilisZamaniGecmis}}
+                  Bu sınavın tanımlanan açılış zamanı geçmiş olduğundan taslak işaretini kaldıramazsınız. Önce sınavın açılış zamanını güncellemelisiniz.
+                {{else}}
+                  Bu sınavın taslak işaretini kaldırmak istediğinize emin misiniz? Taslak işareti kaldırılan bir sınav, tanımlanan süre geldiğinde öğrencilere açılır. Sınav açıldıktan sonra üzerinde değişiklik yapılamaz.
+                {{/if}}
               {{else}}
                 Bu sınavı taslak olarak işaretlemek istediğinize emin misiniz? Taslak durumdaki bir sınav, tanımlanan süre gelse dahi öğrencilere açılmaz.
               {{/if}}
@@ -116,8 +120,8 @@
         </div>
     </div>
     <div class="modal-footer">
-      <a class="modal-action modal-close waves-effect waves-green btn-flat ">VAZGEÇ</a>
-      <a data-trigger="taslakDegistir" class="modal-action waves-effect waves-red btn-flat ">EVET</a>
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">{{#if acilisZamaniGecmis}}KAPAT{{else}}VAZGEÇ{{/if}}</a>
+      {{#unless acilisZamaniGecmis}}<a data-trigger="taslakDegistir" class="modal-action waves-effect waves-red btn-flat ">EVET</a>{{/unless}}
     </div>
   </div>
 </template>

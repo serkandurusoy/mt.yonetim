@@ -47,6 +47,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
       M.C.Sinavlar.find({
         $and: [
+          {taslak: false},
           {
             sinavKagitlariKapanmaZamani: {$exists: false}
           },

@@ -328,6 +328,10 @@ Template.sinavTaslakDegistirModal.helpers({
   taslak: function() {
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
     return sinav && sinav.taslak;
+  },
+  acilisZamaniGecmis: function() {
+    var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
+    return sinav && moment(sinav.acilisZamani).isAfter(moment());
   }
 });
 
