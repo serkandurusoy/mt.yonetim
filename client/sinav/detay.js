@@ -331,7 +331,7 @@ Template.sinavTaslakDegistirModal.helpers({
   },
   acilisZamaniGecmis: function() {
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
-    return sinav && moment(sinav.acilisZamani).isAfter(moment());
+    return sinav && moment(sinav.acilisZamani).isBefore(moment());
   }
 });
 
