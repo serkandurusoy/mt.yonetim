@@ -71,7 +71,7 @@ M.C.setUpCollection({
             var initials = 'MT';
 
             if (words && words.length === 1) {
-              initials = words[0].subString(0,2)
+              initials = words[0].substring(0,2).toLocaleUpperCase()
             }
 
             if (words && words.length === 2) {
