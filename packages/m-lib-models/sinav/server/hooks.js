@@ -65,7 +65,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
     if (doc.iptal) {
       story.operation = 'special';
-      story.specialOperation = 'Test iptal edildi';
+      story.specialOperation = 'Sınav iptal edildi';
       story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' iptal edildi.';
       comment.body = comment.body + ' İptal ettim.';
     }
