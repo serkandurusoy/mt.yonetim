@@ -226,14 +226,14 @@ Template.sinavDetayKart.events({
       Meteor.call('analizRaporu', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
+            toastr.error('Bu teste giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
             toastr.error('Bilinmeyen bir hata oluştu, daha sonra tekrar deneyin.');
           }
         }
         if (res) {
           var content = M.L.analizRaporuContent(res);
-          M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sinav-analiz-raporu.pdf', t.data.kod + ' Sınav Analiz Raporu');
+          M.L.PrintReport(res, content, 'portrait', t.data.kod + '-test-analiz-raporu.pdf', t.data.kod + ' Test Analiz Raporu');
         }
       })
     }});
@@ -244,14 +244,14 @@ Template.sinavDetayKart.events({
       Meteor.call('testMaddeAnalizi', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
+            toastr.error('Bu teste giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
             toastr.error(M.E.BilinmeyenHataMessage);
           }
         }
         if (res) {
           var content = M.L.testMaddeAnaliziContent(res);
-          M.L.PrintReport(res, content, 'landscape', t.data.kod + '-sinav-madde-analizi.pdf', t.data.kod + ' Sınav Madde Analizi');
+          M.L.PrintReport(res, content, 'landscape', t.data.kod + '-test-madde-analizi.pdf', t.data.kod + ' Test Madde Analizi');
         }
       })
     }});
@@ -262,14 +262,14 @@ Template.sinavDetayKart.events({
       Meteor.call('testCeldiriciAnalizi', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
+            toastr.error('Bu teste giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
             toastr.error(M.E.BilinmeyenHataMessage);
           }
         }
         if (res) {
           var content = M.L.testCeldiriciAnaliziContent(res);
-          M.L.PrintReport(res, content, 'portrait', t.data.kod + '-sinav-celdirici-analizi.pdf', t.data.kod + ' Sınav Çeldirici Analizi');
+          M.L.PrintReport(res, content, 'portrait', t.data.kod + '-test-celdirici-analizi.pdf', t.data.kod + ' Test Çeldirici Analizi');
         }
       })
     }});
@@ -280,7 +280,7 @@ Template.sinavDetayKart.events({
       Meteor.call('subeBazindaPuanlar', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
+            toastr.error('Bu teste giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
             toastr.error(M.E.BilinmeyenHataMessage);
           }
@@ -298,7 +298,7 @@ Template.sinavDetayKart.events({
       Meteor.call('sinifBazindaPuanlar', t.data._id, function(err,res) {
         if (err) {
           if (err.reason === 'Sınav kağıdı bulunamadı') {
-            toastr.error('Bu sınava giren hiç öğrenci olmadığından rapor üretilemedi.');
+            toastr.error('Bu teste giren hiç öğrenci olmadığından rapor üretilemedi.');
           } else {
             toastr.error(M.E.BilinmeyenHataMessage);
           }
