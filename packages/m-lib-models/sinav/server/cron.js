@@ -581,7 +581,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                 Email.send({
                   to: user.emails[0].address,
                   from: '"Mitolojix" <bilgi@mitolojix.com>',
-                  subject: 'Mühür taşına yeni bir mühür eklendi',
+                  subject: 'Yeni bir test açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + 'Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.'
                   + '\n\n'
