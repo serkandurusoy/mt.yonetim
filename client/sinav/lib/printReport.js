@@ -20,8 +20,8 @@ M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
       table: {
         widths: [70, '*', 70, '*', 70, '*'],
         body: [
-          [{text: 'Sınav Adı', bold: true}, {text: res.meta.egitimYili + ' ' + res.meta.sinif + ' ' + res.meta.ders + ' ' + res.meta.sure + ' ' + res.meta.tip + (!!res.meta.aciklama ? ('\n' + res.meta.aciklama) : '') + '\n\n', colSpan: 5},{},{},{},{}],
-          [{text: 'Sınav Tarihi', bold: true}, res.meta.testTarihi, {text: 'Katılan', bold: true}, res.stats.kagitSayisi.toString(), {text: 'Soru Sayısı', bold: true}, res.stats.soruSayisi.toString()],
+          [{text: 'Test Adı', bold: true}, {text: res.meta.egitimYili + ' ' + res.meta.sinif + ' ' + res.meta.ders + ' ' + res.meta.sure + ' ' + res.meta.tip + (!!res.meta.aciklama ? ('\n' + res.meta.aciklama) : '') + '\n\n', colSpan: 5},{},{},{},{}],
+          [{text: 'Test Tarihi', bold: true}, res.meta.testTarihi, {text: 'Katılan', bold: true}, res.stats.kagitSayisi.toString(), {text: 'Soru Sayısı', bold: true}, res.stats.soruSayisi.toString()],
           [{text: 'Zorluk', bold: true}, res.stats.zorluk, {text: 'Ortalama DY', bold: true}, res.stats.ortalamaDY, {text: 'Mod', bold: true}, res.stats.mode],
           [{text: 'Std. Sapma', bold: true}, res.stats.stdSapma, {text: 'Medyan', bold: true}, res.stats.medyan, {text: 'Ranj', bold: true}, res.stats.ranj]
         ]
