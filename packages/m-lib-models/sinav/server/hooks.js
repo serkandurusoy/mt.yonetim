@@ -93,7 +93,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
     if (this.previous.ders !== doc.ders) {
       story.operation = 'special';
-      story.specialOperation = 'Test dersi değişti';
+      story.specialOperation = 'Sınav dersi değişti';
       story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' dersi değiştirildi.';
       comment.body = comment.body + ' Ait olduğu dersi değiştirdim.';
     }
