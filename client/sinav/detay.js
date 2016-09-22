@@ -15,7 +15,7 @@ Template.sinavDetay.onCreated(function() {
         if (yeniSinav && yeniSinav === FlowRouter.getParam('_id')) {
           var sinav = M.C.Sinavlar.findOne({_id: yeniSinav});
           if (sinav) {
-            toastr.success('Sınava soru ekleyebilirsiniz.');
+            toastr.success('Teste soru ekleyebilirsiniz.');
           }
           M.L.clearSessionVariable('yeniSinav');
         }
@@ -383,7 +383,7 @@ Template.soruCikarModal.events({
           if (err) {
             toastr.error(M.E.BilinmeyenHataMessage);
           } else if (res) {
-            toastr.success('Soru sınavdan çıkarıldı.');
+            toastr.success('Soru testten çıkarıldı.');
           }
         }
       });
@@ -400,7 +400,7 @@ Template.sorularinTumunuCikarModal.events({
           if (err) {
             toastr.error(M.E.BilinmeyenHataMessage);
           } else if (res) {
-            toastr.success('Sınavdaki tüm sorular çıkarıldı.');
+            toastr.success('Testteki tüm sorular çıkarıldı.');
           }
         }
       });
@@ -428,7 +428,7 @@ Template.soruEkleModal.events({
         toastr.error(M.E.BilinmeyenHataMessage)
       }
       if (res) {
-        toastr.success('Sepetinizdeki tüm uygun sorular sınava eklendi.')
+        toastr.success('Sepetinizdeki tüm uygun sorular teste eklendi.')
       }
     });
   }
@@ -442,7 +442,7 @@ Template.soruEkleKart.events({
       if (err) {
         toastr.error(M.E.BilinmeyenHataMessage);
       } else if (res) {
-        toastr.success('Soru sınava eklendi.');
+        toastr.success('Soru teste eklendi.');
       }
     });
   }

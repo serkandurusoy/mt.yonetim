@@ -17,32 +17,32 @@
             {{#if ogretmenCanEdit}}
               {{#if $or sinavStatusGuncellenebilir ($or ($or (kilitlenebilir) (taslakDegisebilir)) ($or ($and ($not muhur) ($not kilitli)) (sinavIptalEdilebilir)))}}
                 <div class="fixed-action-btn click-to-toggle" style="bottom: 24px; right: 86px;">
-                  <a title="Sınav işlemleri" class="btn-floating btn-large grey">
+                  <a title="Test işlemleri" class="btn-floating btn-large grey">
                     <i class="large material-icons">more_vert</i>
                   </a>
                   <ul>
                     {{#if sinavStatusGuncellenebilir}}
                       {{#if $in canliStatus 'pending' 'paused'}}
-                        <li><a class="btn-floating green" title="Sınavı {{#if $eq canliStatus 'pending'}}başlat{{else}}devam ettir{{/if}}" data-trigger="baslat"><i class="material-icons">play_arrow</i></a></li>
+                        <li><a class="btn-floating green" title="Testi {{#if $eq canliStatus 'pending'}}başlat{{else}}devam ettir{{/if}}" data-trigger="baslat"><i class="material-icons">play_arrow</i></a></li>
                       {{/if}}
                       {{#if $eq canliStatus 'running'}}
-                        <li><a class="btn-floating blue" title="Sınavı beklemeye al" data-trigger="durdur"><i class="material-icons">pause</i></a></li>
+                        <li><a class="btn-floating blue" title="Testi beklemeye al" data-trigger="durdur"><i class="material-icons">pause</i></a></li>
                       {{/if}}
                       {{#if $in canliStatus 'paused' 'running'}}
-                        <li><a class="btn-floating red" title="Sınavı bitir" data-trigger="sinavBitirModal"><i class="material-icons">stop</i></a></li>
+                        <li><a class="btn-floating red" title="Testi bitir" data-trigger="sinavBitirModal"><i class="material-icons">stop</i></a></li>
                       {{/if}}
                     {{/if}}
                     {{#if sinavIptalEdilebilir}}
-                      <li><a class="btn-floating red" title="Sınavı iptal et" data-trigger="sinavIptalModal"><i class="material-icons">cancel</i></a></li>
+                      <li><a class="btn-floating red" title="Testi iptal et" data-trigger="sinavIptalModal"><i class="material-icons">cancel</i></a></li>
                     {{/if}}
                     {{#if kilitlenebilir}}
-                      <li><a class="btn-floating red" title="Sınavı kilitle" data-trigger="sinavKilitleModal"><i class="material-icons">lock</i></a></li>
+                      <li><a class="btn-floating red" title="Testi kilitle" data-trigger="sinavKilitleModal"><i class="material-icons">lock</i></a></li>
                     {{/if}}
                     {{#if taslakDegisebilir}}
-                      <li><a class="btn-floating blue" title="{{#if taslak}}Sınavın taslak işaretini kaldır{{else}}Sınavı taslak olarak işaretle{{/if}}" data-trigger="sinavTaslakDegistirModal"><i class="material-icons">edit</i></a></li>
+                      <li><a class="btn-floating blue" title="{{#if taslak}}Testin taslak işaretini kaldır{{else}}Testi taslak olarak işaretle{{/if}}" data-trigger="sinavTaslakDegistirModal"><i class="material-icons">edit</i></a></li>
                     {{/if}}
                     {{#if $and ($not muhur) ($not kilitli)}}
-                      <li><a class="btn-floating green" title="Sınava soru ekle" data-trigger="soruEkleModal"><i class="material-icons">local_library</i></a></li>
+                      <li><a class="btn-floating green" title="Teste soru ekle" data-trigger="soruEkleModal"><i class="material-icons">local_library</i></a></li>
                     {{/if}}
                   </ul>
                 </div>
@@ -64,7 +64,7 @@
             <i class="material-icons large red-text">stop</i>
           </p>
           <p>
-            Bu sınavı bitirmek istediğinize emin misiniz?
+            Bu testi bitirmek istediğinize emin misiniz?
           </p>
         </div>
       </div>
@@ -85,7 +85,7 @@
               <i class="material-icons large red-text">lock</i>
             </p>
             <p>
-              Bu sınavı kilitlemek istediğinize emin misiniz?
+              Bu testi kilitlemek istediğinize emin misiniz?
             </p>
           </div>
         </div>
@@ -108,12 +108,12 @@
             <p>
               {{#if taslak}}
                 {{#if acilisZamaniGecmis}}
-                  Bu sınavın tanımlanan açılış zamanı geçmiş olduğundan taslak işaretini kaldıramazsınız. Önce sınavın açılış zamanını güncellemelisiniz.
+                  Bu testin tanımlanan açılış zamanı geçmiş olduğundan taslak işaretini kaldıramazsınız. Önce testin açılış zamanını güncellemelisiniz.
                 {{else}}
-                  Bu sınavın taslak işaretini kaldırmak istediğinize emin misiniz? Taslak işareti kaldırılan bir sınav, tanımlanan süre geldiğinde öğrencilere açılır. Sınav açıldıktan sonra üzerinde değişiklik yapılamaz.
+                  Bu testin taslak işaretini kaldırmak istediğinize emin misiniz? Taslak işareti kaldırılan bir test, tanımlanan süre geldiğinde öğrencilere açılır. Test açıldıktan sonra üzerinde değişiklik yapılamaz.
                 {{/if}}
               {{else}}
-                Bu sınavı taslak olarak işaretlemek istediğinize emin misiniz? Taslak durumdaki bir sınav, tanımlanan süre gelse dahi öğrencilere açılmaz.
+                Bu testi taslak olarak işaretlemek istediğinize emin misiniz? Taslak durumdaki bir test, tanımlanan süre gelse dahi öğrencilere açılmaz.
               {{/if}}
             </p>
           </div>
@@ -135,7 +135,7 @@
               <i class="material-icons large red-text">cancel</i>
             </p>
             <p>
-              Bu sınavı iptal etmek istediğinize emin misiniz?
+              Bu testi iptal etmek istediğinize emin misiniz?
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@
               <i class="material-icons large">add_shopping_cart</i>
             </p>
             <p>
-              Sepette sınava eklenebilme şartlarını sağlayan bir soru bulunamadı.
+              Sepette teste eklenebilme şartlarını sağlayan bir soru bulunamadı.
             </p>
           </div>
         </div>
@@ -180,7 +180,7 @@
   <li class="collection-item {{#unless aktif}}pasif{{/unless}}">
     <div>
       <a title="Detay gör" class="secondary-content" href="{{pathFor 'soruDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
-      <a data-trigger="ekle" title="Soruyu sınava ekle" class="secondary-content margin-right-6px"><i class="green-text material-icons">local_library</i></a>
+      <a data-trigger="ekle" title="Soruyu teste ekle" class="secondary-content margin-right-6px"><i class="green-text material-icons">local_library</i></a>
       {{foreignField 'Dersler' alan.ders 'isim'}}<br>
       {{alan.egitimYili}} / {{alan.konu}}<br>
       {{zorlukDerecesi}} ZD / {{enumLabel tip}}<br>
@@ -202,7 +202,7 @@
             <i class="material-icons large red-text">cancel</i>
           </p>
           <p>
-            Bu soruyu sınavdan çıkarmak istediğinize emin misiniz?
+            Bu soruyu testten çıkarmak istediğinize emin misiniz?
           </p>
         </div>
       </div>
@@ -223,7 +223,7 @@
             <i class="material-icons large red-text">cancel</i>
           </p>
           <p>
-            Soruların tümünü sınavdan çıkarmak istediğinize emin misiniz?
+            Soruların tümünü testten çıkarmak istediğinize emin misiniz?
           </p>
         </div>
       </div>
