@@ -281,7 +281,7 @@ M.C.setUpCollection({
       type: String
     },
     acilisTarihi: {
-      label: 'Sınav Açılış Tarihi',
+      label: 'Test Açılış Tarihi',
       type: Date,
       index: -1,
       autoform: {
@@ -296,7 +296,7 @@ M.C.setUpCollection({
       }
     },
     acilisSaati: {
-      label: 'S. A. Saati',
+      label: 'T. A. Saati',
       type: String,
       min: 5,
       max: 5,
@@ -337,7 +337,7 @@ M.C.setUpCollection({
       }
     },
     kapanisTarihi: {
-      label: 'Sınav Kapanış Tarihi',
+      label: 'Test Kapanış Tarihi',
       type: Date,
       index: -1,
       custom: function() {
@@ -359,7 +359,7 @@ M.C.setUpCollection({
       }
     },
     kapanisSaati: {
-      label: 'S. K. Saati',
+      label: 'T. K. Saati',
       type: String,
       min: 5,
       max: 5,
@@ -408,7 +408,7 @@ M.C.setUpCollection({
       index: 1,
       autoform: {
         class: 'browser-default',
-        firstOption: 'Sınav tipi seçin',
+        firstOption: 'Test tipi seçin',
         options: function() {
           var options = _.map(M.E.SinavTipiObjects, function(t) {
             return {
@@ -420,7 +420,7 @@ M.C.setUpCollection({
       }
     },
     sure: {
-      label: 'S. Süresi (dk)',
+      label: 'T. Süresi (dk)',
       type: Number,
       min: 5,
       max: 180,

@@ -17,7 +17,7 @@
     <li class="{{isActiveRoute regex='soruFavori'}}"><a href="{{pathFor 'soruFavori'}}"><i class="material-icons left">favorite</i>Favori Sorularım</a></li>
     <li class="{{isActiveRoute regex='soruSepeti'}}"><a href="{{pathFor 'soruSepeti'}}"><i class="material-icons left">shopping_cart</i>Soru Sepetim</a></li>
   {{/unless}}
-  <li class="{{isActiveRoute regex='sinavListe|sinavDetay|sinavDuzenle|sinavYeni|sinavTarihce'}}"><a href="{{pathFor 'sinavListe'}}"><i class="material-icons left">assignment</i>Sınavlar</a></li>
+  <li class="{{isActiveRoute regex='sinavListe|sinavDetay|sinavDuzenle|sinavYeni|sinavTarihce'}}"><a href="{{pathFor 'sinavListe'}}"><i class="material-icons left">assignment</i>Testler</a></li>
   {{#if userHasRole "mitolojix"}}
     <li class="{{isActiveRoute regex='muhurListe|muhurDetay|muhurDuzenle|muhurYeni|muhurTarihce'}}"><a href="{{pathFor 'muhurListe'}}"><i class="material-icons left">new_releases</i>Mühürler</a></li>
     <li class="{{isActiveRoute regex='karakterListe|karakterDetay|karakterDuzenle|karakterYeni|karakterTarihce'}}"><a href="{{pathFor 'karakterListe'}}"><i class="material-icons left">face</i>Karakterler</a></li>
