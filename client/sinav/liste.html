@@ -33,8 +33,8 @@
   <li class="collection-item {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'Sinavlar' _id}} lime lighten-3{{/if}}">
     <div>
       <a title="Detay gör" class="secondary-content" href="{{pathFor 'sinavDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
-      {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Sınav başlamayı bekliyor">hourglass_empty</i> {{/if}}
-      {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Sınav yayında">timer</i> {{/if}}
+      {{#if sinavBaslamayiBekliyor _id}}<i class="material-icons tiny cursorDefault" title="Test başlamayı bekliyor">hourglass_empty</i> {{/if}}
+      {{#if sinavYayinda _id}}<i class="material-icons tiny cursorDefault" title="Test yayında">timer</i> {{/if}}
       {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
       {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
       {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
