@@ -374,7 +374,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                 Email.send({
                   to: user.emails[0].address,
                   from: '"Mitolojix" <bilgi@mitolojix.com>',
-                  subject: 'Sınav yanıtları açıldı',
+                  subject: 'Test yanıtları açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.'
                   + '\n\n'
@@ -394,7 +394,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                 Email.send({
                   to: user.emails[0].address,
                   from: '"Mitolojix" <bilgi@mitolojix.com>',
-                  subject: 'Sınav yanıtları açıldı',
+                  subject: 'Test yanıtları açıldı',
                   text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.'
                   + '\n\n'
@@ -477,17 +477,17 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               Email.send({
                 to: user.emails[0].address,
                 from: '"Mitolojix" <bilgi@mitolojix.com>',
-                subject: 'Sınav öğrencilere açılamadı',
+                subject: 'Test öğrencilere açılamadı',
                 text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
-                + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve sınav öğrencilere açılamamıştır.'
+                + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve test öğrencilere açılamamıştır.'
                 + '\n\n'
-                + 'Sınavın açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.'
+                + 'Testin açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.'
                 + '\n\n'
                 + 'Saygılarımızla,\nMitolojix\n',
                 html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                 + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve sınav öğrencilere açılamamıştır.' + '</p>'
-                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sınavın açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.</p>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve test öğrencilere açılamamıştır.' + '</p>'
+                + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Testin açılabilmesi için sistem yöneticisi tarafından yeni mühür tanımlaması yapılması gerekmektedir.</p>'
                 + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                 + '</body></html>'
               });

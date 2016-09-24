@@ -36,7 +36,7 @@
 
 <template name="notification">
   {{#if $eq collection 'Sinavlar'}}
-    <li><a data-trigger="notification-sil" href="{{pathFor 'sinavDetay' _id=doc}}">{{kod}} sınavında {{count}} yeni yorum</a></li>
+    <li><a data-trigger="notification-sil" href="{{pathFor 'sinavDetay' _id=doc}}">{{kod}} testinde {{count}} yeni yorum</a></li>
   {{/if}}
   {{#if $eq collection 'Sorular'}}
     <li><a data-trigger="notification-sil" href="{{pathFor 'soruDetay' _id=doc}}">{{kod}} sorusunda {{count}} yeni yorum</a></li>
