@@ -59,7 +59,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             );
             notificationHTML = notificationHTML.concat(
               '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">',
-              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Konu:</strong> ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'sınav' : 'soru', '<br/>',
+              '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Konu:</strong> ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'test' : 'soru', '<br/>',
               '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Adet:</strong> ' , notification.count , '<br/>',
               '<strong style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: bold; color: #333333">Detay:</strong> <a style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #2196F3" target="_blank" href="' , notification.url , '">' , notification.url , '</a>',
               '</p>'
