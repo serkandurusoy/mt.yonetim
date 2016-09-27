@@ -52,7 +52,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           notifications.forEach(function(notification) {
             notification.url = Meteor.absoluteUrl(FlowRouter.path(notification.collection === 'Sinavlar' ? 'sinavDetay' : 'soruDetay', {_id: notification.doc}).substr(1));
             notificationText = notificationText.concat(
-              'Konu  : ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'sınav' : 'soru', '\n',
+              'Konu  : ' , notification.kod , ' kodlu ' , notification.collection === 'Sinavlar' ? 'test' : 'soru', '\n',
               'Adet  : ' , notification.count , '\n',
               'Detay : ' , notification.url,
               '\n\n'
