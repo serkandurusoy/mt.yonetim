@@ -111,7 +111,7 @@ Template.filterSinav.helpers({
         }
       },
       tip: {
-        label: 'Sınav Tipi',
+        label: 'Test Tipi',
         type: String,
         optional: true,
         autoform: {
@@ -128,7 +128,7 @@ Template.filterSinav.helpers({
         }
       },
       sinavSahibi: {
-        label: 'Sınav Sahibi',
+        label: 'Test Sahibi',
         type: String,
         optional: true,
         autoform: {
@@ -141,13 +141,13 @@ Template.filterSinav.helpers({
           firstOption: 'Herkes',
           options: function() {
             return [{
-              label: 'Kendi Sınavlarım', value: Meteor.userId()
+              label: 'Kendi Testlerim', value: Meteor.userId()
             }];
           }
         }
       },
       sinavDurumu: {
-        label: 'Sınav Durumu',
+        label: 'Test Durumu',
         type: String,
         optional: true,
         autoform: {
