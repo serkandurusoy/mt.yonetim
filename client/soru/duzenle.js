@@ -30,7 +30,6 @@ AutoForm.hooks({
   soruDuzenleForm: {
     onSuccess: function(operation, result, template) {
       if (result) {
-        Session.set('yeniVeyaEditSoru', FlowRouter.getParam('_id'));
         FlowRouter.go('soruDetay', {_id: FlowRouter.getParam('_id')});
       }
     }
