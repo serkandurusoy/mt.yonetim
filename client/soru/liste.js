@@ -176,7 +176,47 @@ Template.filterSoru.helpers({
             }];
           }
         }
-      }
+      },
+      konu: {
+        label: 'Konu',
+        type: String,
+        optional: true,
+        autoform: {
+          type: function() {
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            if (!kurum || !egitimYili || !ders || !sinif) {
+              return 'hidden';
+            }
+          },
+          class: 'browser-default',
+          firstOption: 'Tümü',
+          options: function(){
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            return M.C.Mufredat.findOne({
+              $and: [
+                {kurum: kurum},
+                {egitimYili: egitimYili},
+                {ders: ders},
+                {sinif: sinif}
+              ]
+            }).konular.map(function(konu){
+              return {
+                label: konu.konu,
+                value: konu.konu
+              }
+            });
+          }
+
+        }
+      },
     });
   }
 });
@@ -197,7 +237,8 @@ Template.filterSoru.onRendered(function(){
       ders  = AutoForm.getFieldValue('ders', 'filterSoruForm'),
       sinif = AutoForm.getFieldValue('sinif', 'filterSoruForm'),
       tip = AutoForm.getFieldValue('tip', 'filterSoruForm'),
-      soruSahibi = AutoForm.getFieldValue('soruSahibi', 'filterSoruForm');
+      soruSahibi = AutoForm.getFieldValue('soruSahibi', 'filterSoruForm'),
+      konu = AutoForm.getFieldValue('konu','filterSoruForm');
 
     if (kurum) {
       filters.kurum = kurum;
@@ -221,6 +262,10 @@ Template.filterSoru.onRendered(function(){
 
     if (soruSahibi) {
       filters.soruSahibi = soruSahibi;
+    }
+
+    if(konu) {
+      filters.konu = konu;
     }
 
     Session.set('filters', filters);
