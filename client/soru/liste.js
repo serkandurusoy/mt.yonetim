@@ -194,29 +194,29 @@ Template.filterSoru.helpers({
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function(){
+          options: function() {
             var formId = AutoForm.getFormId();
             var kurum = AutoForm.getFieldValue('kurum', formId);
             var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
             var ders = AutoForm.getFieldValue('ders', formId);
             var sinif = AutoForm.getFieldValue('sinif', formId);
-            return M.C.Mufredat.findOne({
+            var konular = M.C.Mufredat.findOne({
               $and: [
                 {kurum: kurum},
                 {egitimYili: egitimYili},
                 {ders: ders},
                 {sinif: sinif}
               ]
-            }).konular.map(function(konu){
+            });
+            return konular && konular.konular && konular.konular.map(function(konu) {
               return {
                 label: konu.konu,
                 value: konu.konu
               }
             });
           }
-
         }
-      },
+      }
     });
   }
 });
