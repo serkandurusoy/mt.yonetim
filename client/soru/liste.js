@@ -208,7 +208,8 @@ Template.filterSoru.helpers({
                 {sinif: sinif}
               ]
             });
-            return konular && konular.konular && konular.konular.map(function(konu) {
+            var uniqueSortedKonuListesi = konular && konular.konular && _.sortBy(_.uniq(konular.konular));
+            return uniqueSortedKonuListesi.map(function(konu) {
               return {
                 label: konu.konu,
                 value: konu.konu
