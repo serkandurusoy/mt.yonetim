@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "ilib": {
-      "version": "11.0.6"
+      "version": "11.0.6",
+      "resolved": "https://registry.npmjs.org/ilib/-/ilib-11.0.6.tgz",
+      "from": "ilib@11.0.6"
     }
   }
 }
