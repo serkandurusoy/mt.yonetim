@@ -30,7 +30,7 @@ Template.mufredatListe.helpers({
   mufredat: function(){
     var selector = Template.instance().searchResults.get();
     var mufredatCursor = M.C.Mufredat.find(selector, {sort: {kurum: 1, egitimYili: 1, ders: 1, sinif: 1}});
-    return mufredatCursor.count() && mufredatCursor;
+    return mufredatCursor.count() && {cursor: mufredatCursor, count: mufredatCursor.count()};
   }
 });
 

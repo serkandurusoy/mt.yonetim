@@ -12,8 +12,9 @@
       {{else}}
         <div class="row">
           <div class="col s12">
-            <ul class="collection">
-              {{#each dersler}}
+            <ul class="collection with-header">
+              <li class="collection-header right-align">{{dersler.count}} adet</li>
+              {{#each dersler.cursor}}
                 {{>dersKart}}
               {{/each}}
             </ul>

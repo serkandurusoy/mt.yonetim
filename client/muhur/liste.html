@@ -21,8 +21,9 @@
       {{else}}
         <div class="row">
           <div class="col s12">
-            <ul class="collection">
-              {{#each muhurler}}
+            <ul class="collection with-header">
+              <li class="collection-header right-align">{{muhurler.count}} adet</li>
+              {{#each muhurler.cursor}}
                 {{>muhurKart}}
               {{/each}}
             </ul>

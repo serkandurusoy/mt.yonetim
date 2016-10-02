@@ -30,7 +30,7 @@ Template.sinavListe.helpers({
   sinavlar: function(){
     var selector = Template.instance().searchResults.get();
     var sinavlarCursor = M.C.Sinavlar.find(selector,{sort:{kurum: 1, egitimYili: -1, ders: 1, sinif: 1, acilisZamani: -1}}); //TODO: sort by dersCollate
-    return sinavlarCursor.count() && sinavlarCursor;
+    return sinavlarCursor.count() && {cursor: sinavlarCursor, count: sinavlarCursor.count()};
   }
 });
 

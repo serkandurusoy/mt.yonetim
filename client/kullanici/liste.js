@@ -32,7 +32,7 @@ Template.kullaniciListe.helpers({
       selector.kurum = Meteor.user().kurum;
     }
     var kullanicilarCursor = M.C.Users.find(selector,{sort:{kurum: 1, nameCollate: 1, lastNameCollate: 1}});
-    return kullanicilarCursor.count() && kullanicilarCursor;
+    return kullanicilarCursor.count() && {cursor: kullanicilarCursor, count: kullanicilarCursor.count()};
   }
 });
 

@@ -23,6 +23,6 @@ Template.kurumListe.helpers({
   kurumlar: function(){
     var selector = Template.instance().searchResults.get();
     var kurumlarCursor = M.C.Kurumlar.find(selector,{sort:{isimCollate: 1}});
-    return kurumlarCursor.count() && kurumlarCursor;
+    return kurumlarCursor.count() && {cursor: kurumlarCursor, count: kurumlarCursor.count()};
   }
 });
