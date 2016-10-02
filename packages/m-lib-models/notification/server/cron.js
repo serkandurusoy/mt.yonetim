@@ -71,7 +71,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           if (userDoc) {
             Email.send({
               to: userDoc.emails[0].address,
-              from: '"Mitolojix" <bilgi@mitolojix.com>',
+              from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
               subject: 'Bekleyen yeni yorumlar var',
               text: 'Sayın ' + userDoc.name + ' ' + userDoc.lastName + ',\n\n'
               + 'Aşağıdaki konularda, belirtilen adetler kadar yeni yorum dikkatinizi bekliyor.'

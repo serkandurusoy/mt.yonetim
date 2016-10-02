@@ -9,7 +9,7 @@ Meteor.startup(function() {
           name: 'Mitolojix',
           lastName: 'Admin 1',
           cinsiyet: 'erkek',
-          dogumTarihi: moment.tz(new Date(2015,0,1),'Europe/Istanbul').toDate(),
+          dogumTarihi: moment.tz(new Date(2016,0,1),'Europe/Istanbul').toDate(),
           role: 'mitolojix',
           kurum: 'mitolojix',
           aktif: true
@@ -22,7 +22,7 @@ Meteor.startup(function() {
           name: 'Mitolojix',
           lastName: 'Admin 2',
           cinsiyet: 'erkek',
-          dogumTarihi: moment.tz(new Date(2015,0,1),'Europe/Istanbul').toDate(),
+          dogumTarihi: moment.tz(new Date(2016,0,1),'Europe/Istanbul').toDate(),
           role: 'mitolojix',
           kurum: 'mitolojix',
           aktif: true
@@ -35,7 +35,7 @@ Meteor.startup(function() {
           name: 'Mitolojix',
           lastName: 'Admin 3',
           cinsiyet: 'erkek',
-          dogumTarihi: moment.tz(new Date(2015,0,1),'Europe/Istanbul').toDate(),
+          dogumTarihi: moment.tz(new Date(2016,0,1),'Europe/Istanbul').toDate(),
           role: 'mitolojix',
           kurum: 'mitolojix',
           aktif: true

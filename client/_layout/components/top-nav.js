@@ -57,7 +57,9 @@ Template.topmenu.helpers({
       'mufredatListe',
       'muhurListe',
       'soruListe',
-      'sinavListe'
+      'sinavListe',
+      'soruSepeti',
+      'soruFavori'
     ];
     return _.contains(searchableRoutes, route);
   }

@@ -18,8 +18,9 @@
     {{else}}
       <div class="row">
         <div class="col s12">
-          <ul class="collection">
-            {{#each sinavlar}}
+          <ul class="collection with-header">
+            <li class="collection-header right-align">{{sinavlar.count}} adet</li>
+            {{#each sinavlar.cursor}}
               {{>sinavKart}}
             {{/each}}
           </ul>

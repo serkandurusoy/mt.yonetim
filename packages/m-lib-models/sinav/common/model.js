@@ -402,7 +402,7 @@ M.C.setUpCollection({
       }
     },
     tip: {
-      label: 'Sınav Tipi',
+      label: 'Test Tipi',
       type: String,
       allowedValues: M.E.SinavTipi,
       index: 1,

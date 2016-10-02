@@ -1,4 +1,5 @@
 <template name="mainLayout">
+  {{#if env}}<div class="corner-ribbon">{{env}}</div>{{/if}}
   {{#if currentUser}}
 
     {{#unless isHotReloading}}

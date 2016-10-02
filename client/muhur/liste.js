@@ -28,7 +28,7 @@ Template.muhurListe.helpers({
   muhurler: function(){
     var selector = Template.instance().searchResults.get();
     var muhurlerCursor = M.C.Muhurler.find(selector,{sort:{ders: 1, sira: 1}});
-    return muhurlerCursor.count() && muhurlerCursor;
+    return muhurlerCursor.count() && {cursor: muhurlerCursor, count: muhurlerCursor.count()};
   }
 });
 

@@ -212,8 +212,10 @@ Package.onUse(function(api) {
   api.addFiles('soru/server/hooks.js','server');
   api.addFiles('soru/server/publish.js','server');
   api.addFiles('soruFavori/common/model.js');
+  api.addFiles('soruFavori/server/search.js','server');
   api.addFiles('soruFavori/server/publish.js','server');
   api.addFiles('soruSepeti/common/model.js');
+  api.addFiles('soruSepeti/server/search.js','server');
   api.addFiles('soruSepeti/server/publish.js','server');
   api.addFiles('reports.js','server');
 

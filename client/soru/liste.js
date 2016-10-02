@@ -31,7 +31,7 @@ Template.soruListe.helpers({
   sorular: function(){
     var selector = Template.instance().searchResults.get();
     var sorularCursor = M.C.Sorular.find(selector,{sort:{kurum: 1, 'alan.ders': 1, 'alan.sinif': 1, 'alan.konu': 1, kod: 1}}); //TODO: sort by dersCollate
-    return sorularCursor.count() && sorularCursor;
+    return sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });
 
@@ -176,6 +176,47 @@ Template.filterSoru.helpers({
             }];
           }
         }
+      },
+      konu: {
+        label: 'Konu',
+        type: String,
+        optional: true,
+        autoform: {
+          type: function() {
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            if (!kurum || !egitimYili || !ders || !sinif) {
+              return 'hidden';
+            }
+          },
+          class: 'browser-default',
+          firstOption: 'Tümü',
+          options: function() {
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            var konular = M.C.Mufredat.findOne({
+              $and: [
+                {kurum: kurum},
+                {egitimYili: egitimYili},
+                {ders: ders},
+                {sinif: sinif}
+              ]
+            });
+            var uniqueSortedKonuListesi = konular && konular.konular && _.sortBy(_.uniq(konular.konular));
+            return  uniqueSortedKonuListesi && uniqueSortedKonuListesi.map(function(konu) {
+              return {
+                label: konu.konu,
+                value: konu.konu
+              }
+            });
+          }
+        }
       }
     });
   }
@@ -197,7 +238,8 @@ Template.filterSoru.onRendered(function(){
       ders  = AutoForm.getFieldValue('ders', 'filterSoruForm'),
       sinif = AutoForm.getFieldValue('sinif', 'filterSoruForm'),
       tip = AutoForm.getFieldValue('tip', 'filterSoruForm'),
-      soruSahibi = AutoForm.getFieldValue('soruSahibi', 'filterSoruForm');
+      soruSahibi = AutoForm.getFieldValue('soruSahibi', 'filterSoruForm'),
+      konu = AutoForm.getFieldValue('konu','filterSoruForm');
 
     if (kurum) {
       filters.kurum = kurum;
@@ -221,6 +263,10 @@ Template.filterSoru.onRendered(function(){
 
     if (soruSahibi) {
       filters.soruSahibi = soruSahibi;
+    }
+
+    if(konu) {
+      filters.konu = konu;
     }
 
     Session.set('filters', filters);

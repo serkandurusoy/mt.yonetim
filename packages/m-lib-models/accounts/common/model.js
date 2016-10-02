@@ -78,7 +78,7 @@ M.C.Users.Schema = new SimpleSchema({
       var tckimlik = this.value.toString();
       var ad = this.field('name').value;
       var soyad = this.field('lastName').value;
-      var dogumyili = this.field('dogumTarihi').value && this.field('dogumTarihi').value.getUTCFullYear();
+      var dogumyili = this.field('dogumTarihi').value && moment.tz(new Date(this.field('dogumTarihi').value),'Europe/Istanbul').toDate().getFullYear();
 
       if (tckimlik.indexOf('000000000') === 0 && tckimlik.length === 11) {
         return true;
@@ -667,24 +667,72 @@ Meteor.methods({
         if (userRole === 'teknik') {
           doc.kurum = userKurum;
         }
+        var proposedUser = {
+          email: doc.emails[0].address,
+          profile: {
+            tcKimlik: doc.tcKimlik,
+            name: doc.name,
+            lastName: doc.lastName,
+            cinsiyet: doc.cinsiyet,
+            dogumTarihi: doc.dogumTarihi,
+            role: doc.role,
+            kurum: doc.kurum,
+            dersleri: doc.dersleri ? doc.dersleri : [],
+            sinif: doc.sinif ? doc.sinif : '',
+            sube: doc.sube ? doc.sube : '',
+            aktif: doc.aktif
+          }
+        }
+        if (doc.role === 'ogrenci') {
+          proposedUser.password = doc.tcKimlik.substr(doc.tcKimlik.length - 6)
+        }
         try {
-          var userId = Accounts.createUser({
-            email: doc.emails[0].address,
-            profile: {
-              tcKimlik: doc.tcKimlik,
-              name: doc.name,
-              lastName: doc.lastName,
-              cinsiyet: doc.cinsiyet,
-              dogumTarihi: doc.dogumTarihi,
-              role: doc.role,
-              kurum: doc.kurum,
-              dersleri: doc.dersleri ? doc.dersleri : [],
-              sinif: doc.sinif ? doc.sinif : '',
-              sube: doc.sube ? doc.sube : '',
-              aktif: doc.aktif
+          var userId = Accounts.createUser(proposedUser);
+          if (userId) {
+            if (doc.role !== 'ogrenci') {
+              Accounts.sendEnrollmentEmail(userId);
+            } else {
+              try {
+                var kurumAdi = M.C.Kurumlar.findOne({_id: doc.kurum}).isim
+                Email.send({
+                  to: doc.emails[0].address,
+                  from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
+                  subject: 'Hesap etkinleştirme',
+                  text: 'Sevgili ' + doc.name + ',\n\n'
+                  + kurumAdi + ' senin için Mitolojix Test Uygulaması\'nda bir hesap oluşturdu. Bu konuda henüz bilgin yoksa, önce öğretmenlerine danışabilirsin.'
+                  + '\n\n'
+                  + 'Mitolojix\'e giriş yapmak için www.mitolojix.com sitesinden "Öğrenci" seçeneğine tıkla. Giriş için e-posta adresini (' + doc.emails[0].address + ') ve şifre olarak T.C. Kimlik numaranın (' + doc.tcKimlik + ') son 6 hanesini (' + proposedUser.password + ') kullanmalısın.'
+                  + '\n\n'
+                  + 'Bazı önemli hatırlatmalar:'
+                  + '\n\n'
+                  + '* Mitolojix, Google Chrome tarayıcıda çalışır. Bilgisayarında Google Chrome yoksa https://www.google.com/chrome/ adresinden indirip kurabilirsin.'
+                  + '\n\n'
+                  + '* Bilgisayarında Google Chrome varsa ve Mitolojix yüklenmezse, lütfen Google Chrome\'un en son sürümünü kurup, bilgisayarı yeniden başlat ve tekrar dene.'
+                  + '\n\n'
+                  + '* Ekran çözünürlüğün en az 1024x768 olmalı.'
+                  + '\n\n'
+                  + 'Bir sorunla karşılaştığında bilgi@mitolojix.com adresine e-posta atarak bize bildirirsen sana yardımcı olabiliriz.'
+                  + '\n\n'
+                  + 'Başarılar,\nMitolojix\n',
+                  html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + doc.name + ' ' + ',</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + kurumAdi + ' senin için Mitolojix Test Uygulaması\'nda bir hesap oluşturdu. Bu konuda henüz bilgin yoksa, önce öğretmenlerine danışabilirsin.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix\'e giriş yapmak için <a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3">www.mitolojix.com</a> sitesinden "Öğrenci" seçeneğine tıkla. Giriş için e-posta adresini (' + doc.emails[0].address + ') ve şifre olarak T.C. Kimlik numaranın (' + doc.tcKimlik + ') son 6 hanesini (' + proposedUser.password + ') kullanmalısın.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Bazı önemli hatırlatmalar:</p>'
+                  + '<ul>'
+                  + '<li style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix, Google Chrome tarayıcıda çalışır. Bilgisayarında Google Chrome yoksa <a href="https://www.google.com/chrome/" target="_blank" style="color: #2196F3">buradan</a> indirip kurabilirsin.</li>'
+                  + '<li style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Bilgisayarında Google Chrome varsa ve Mitolojix yüklenmezse, lütfen Google Chrome\'un en son sürümünü kurup, bilgisayarı yeniden başlat ve tekrar dene.</li>'
+                  + '<li style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Ekran çözünürlüğün en az 1024x768 olmalı.</li>'
+                  + '</ul>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Bir sorunla karşılaştığında <a href="mailto:bilgi@mitolojix.com" target="_blank" style="color: #2196F3">bilgi@mitolojix.com</a> adresine e-posta atarak bize bildirirsen sana yardımcı olabiliriz.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
+                  + '</body></html>'
+                });
+              } catch(error) {
+                console.log("Yeni tanimlanan " + userId + " id'li ogrenciye bilgilendirme mesaji gonderirken bilinmeyen bir hata olustu:\n", error)
+              }
             }
-          });
-          Accounts.sendEnrollmentEmail(userId);
+          }
           return userId;
         } catch (error) {
           M.L.ThrowError(error);

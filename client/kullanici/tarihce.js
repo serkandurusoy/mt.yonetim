@@ -29,7 +29,7 @@ Template.kullaniciTarihceRevertModal.events({
       if (err) {
         toastr.error('İşlem başarısız. Düzenleme ekranını deneyin.');
       }
-      if (res) {
+      if (res && revert.doc.role !== 'ogrenci') {
         Accounts.forgotPassword(
           {email: revert.email},
           function(err) {

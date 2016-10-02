@@ -4,18 +4,7 @@ var taslakDegistirView;
 Template.soruDetay.onCreated(function() {
   var template = this;
   template.autorun(function() {
-    template.subscribe('soru', FlowRouter.getParam('_id'), function() {
-      Tracker.afterFlush(function() {
-        var yeniVeyaEditSoru = Session.get('yeniVeyaEditSoru');
-        if (yeniVeyaEditSoru && yeniVeyaEditSoru === FlowRouter.getParam('_id')) {
-          var soru = M.C.Sorular.findOne({_id: yeniVeyaEditSoru});
-          if (soru) {
-            toastr.success('Sorunun güncel önizlemesini bu ekrandan yapabilirsiniz.');
-          }
-          M.L.clearSessionVariable('yeniVeyaEditSoru');
-        }
-      });
-    });
+    template.subscribe('soru', FlowRouter.getParam('_id'));
     template.subscribe('mufredatlar');
     template.subscribe('fssorugorsel');
   });

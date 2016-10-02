@@ -9,7 +9,6 @@ AutoForm.hooks({
   soruYeniForm: {
     onSuccess: function(operation, result, template) {
       if (result) {
-        Session.set('yeniVeyaEditSoru', result);
         FlowRouter.go('soruDetay', {_id: result});
       }
     }

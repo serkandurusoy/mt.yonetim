@@ -132,7 +132,8 @@ Meteor.methods({
       ders: Match.Optional(String),
       egitimYili: Match.Optional(String),
       tip: Match.Optional(String),
-      soruSahibi: Match.Optional(String)
+      soruSahibi: Match.Optional(String),
+      konu: Match.Optional(String)
     });
     var userId = this.userId;
     if (userId) {
@@ -168,6 +169,10 @@ Meteor.methods({
 
       if (filters.soruSahibi) {
         selector.createdBy = filters.soruSahibi;
+      }
+
+      if(filters.konu){
+        selector['alan.konu'] = filters.konu;
       }
 
       if (_.isEqual(selector, {})) {

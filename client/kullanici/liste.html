@@ -21,8 +21,9 @@
       {{else}}
         <div class="row">
           <div class="col s12">
-            <ul class="collection">
-              {{#each kullanicilar}}
+            <ul class="collection with-header">
+              <li class="collection-header right-align">{{kullanicilar.count}} adet</li>
+              {{#each kullanicilar.cursor}}
                 {{>kullaniciKart}}
               {{/each}}
             </ul>
@@ -44,7 +45,7 @@
         {{> initials options=initialsOptions online=status.online}}
       {{/if}}
     {{/with}}
-    <span class="title">{{#unless emails.[0].verified}}<i class="material-icons tiny cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i>{{/unless}} {{name}} {{lastName}}</span>
+    <span class="title">{{!--}}{{#unless emails.[0].verified}}<i class="material-icons tiny cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i>{{/unless}} {{!--}}{{name}} {{lastName}}</span>
     <p>{{#if userHasRole "mitolojix"}}{{#with foreignField 'Kurumlar' kurum 'isim'}}{{this}}{{else}}Mitolojix{{/with}} - {{/if}}{{enumLabel role}}</p>
     {{#if $eq role 'ogrenci'}}
       <p>
