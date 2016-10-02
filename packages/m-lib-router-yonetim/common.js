@@ -155,12 +155,14 @@ FlowRouter.route('/soru-sepetim', {
   name: 'soruSepeti',
   action: function(params) {
     BlazeLayout.render('mainLayout', { main: 'soruSepeti' });
-  }
+  },
+  triggersExit: [routeTriggers.resetSearchAndFilters]
 });
 
 FlowRouter.route('/favori-sorularim', {
   name: 'soruFavori',
   action: function(params) {
     BlazeLayout.render('mainLayout', { main: 'soruFavori' });
-  }
+  },
+  triggersExit: [routeTriggers.resetSearchAndFilters]
 });
