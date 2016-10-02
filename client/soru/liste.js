@@ -209,7 +209,7 @@ Template.filterSoru.helpers({
               ]
             });
             var uniqueSortedKonuListesi = konular && konular.konular && _.sortBy(_.uniq(konular.konular));
-            return uniqueSortedKonuListesi.map(function(konu) {
+            return  uniqueSortedKonuListesi && uniqueSortedKonuListesi.map(function(konu) {
               return {
                 label: konu.konu,
                 value: konu.konu
