@@ -15,6 +15,12 @@ Template.mainLayout.onRendered(function() {
   }
 });
 
+Template.mainLayout.helpers({
+  env: function() {
+    return Meteor.settings.public.ENV === 'PRODUCTION' ? false : Meteor.settings.public.ENV
+  }
+});
+
 Template.registerHelper('isHotReloading', function() {
   return Reload.isHotReloading;
 });
