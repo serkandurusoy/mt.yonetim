@@ -34,10 +34,8 @@ Template.soruSepeti.onCreated(function() {
 Template.soruSepeti.helpers({
   sorular: function(){
     var selector = Template.instance().searchResults.get();
-
    //TODO: sort and group by relevant fields
     var sorularCursor = M.C.Sorular.find(selector);
-    console.log(sorularCursor);
     return sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });
