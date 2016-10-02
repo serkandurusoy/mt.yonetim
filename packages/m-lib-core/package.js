@@ -25,7 +25,7 @@ Package.onUse(function(api) {
     'accounts-base',
     'accounts-password',
     'fastclick',
-    'appcache',
+    //'appcache',
     'standard-minifier-css',
     'standard-minifier-js',
     'meteorhacks:kadira@2.0.0',

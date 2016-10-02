@@ -324,7 +324,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
             Email.send({
               to: user.emails[0].address,
-              from: '"Mitolojix" <bilgi@mitolojix.com>',
+              from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
               subject: 'Test iptal edildi',
               text: 'Sevgili ' + user.name + ',\n\n'
               + 'Mitolojix mühür taşı ' + muhurGrubu + ' grubuna eklenen ' + muhur + ' mühürü öğretmenin tarafından kaldırıldı. Yeni bir mühür eklendiğinde yine bir mesajla bilgilendirileceksin.'
@@ -344,7 +344,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
             Email.send({
               to: user.emails[0].address,
-              from: '"Mitolojix" <bilgi@mitolojix.com>',
+              from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
               subject: 'Test iptal edildi',
               text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
               + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.'

@@ -476,7 +476,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             M.C.Users.find({role: 'mitolojix'}).forEach(function(user) {
               Email.send({
                 to: user.emails[0].address,
-                from: '"Mitolojix" <bilgi@mitolojix.com>',
+                from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                 subject: 'Test öğrencilere açılamadı',
                 text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                 + sorunluKurum + ' ' + sorunluSubeler + ' için ' + sorunluAcilisZamani + ' itibariyle uygulanması gereken ' + sorunluSinavKodu + ' kodlu ' + sorunluDers + ' ' + sorunluSinavTipi + ' için kullanılmak üzere ' + sorunluMuhurGrubu + ' grubunda mühür kalmamış ve test öğrencilere açılamamıştır.'
@@ -583,19 +583,13 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   from: '"Mitolojix" <bilgi@mitolojix.com>',
                   subject: 'Yeni bir test açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
-                  + 'Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.'
-                  + '\n\n'
-                  + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.'
-                  + '\n\n'
-                  + 'Oyuna gitmek için ' + Meteor.settings.public.URL.OYUN + ' bağlantısına tıklayabilirsin.'
+                  + 'Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için www.mitolojix.com adresinden giriş yap.'
                   + '\n\n'
                   + 'Başarılar,\nMitolojix\n',
                   html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix mühür taşına kazanabileceğin yeni bir mühür eklendi.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">' + ders + ' dersi mühür sorularını ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında ' + sureMetinOgrenci + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünü kazanabilirsin.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna gitmek için mühre tıklayabilirsin.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3">www.mitolojix.com</a> adresinden giriş yap.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
@@ -604,7 +598,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <bilgi@mitolojix.com>',
+                  from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                   subject: 'Yeni bir test açıldı',
                   text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + kod + ' numaralı yeni bir ' + tip + ' açıldı.'

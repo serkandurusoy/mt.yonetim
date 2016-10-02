@@ -14,7 +14,7 @@ var getSifreMesaji = function(user) {
   return ' ' + sifreZorlukAciklama.charAt(0).toLowerCase() + sifreZorlukAciklama.slice(1);
 };
 
-Accounts.emailTemplates.from = '"Mitolojix" <bilgi@mitolojix.com>';
+Accounts.emailTemplates.from = '"Mitolojix' + ( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) ) + '" <bilgi@mitolojix.com>';
 Accounts.emailTemplates.siteName = 'Mitolojix';
 
 Accounts.emailTemplates.resetPassword.subject = function(user) {
@@ -93,7 +93,7 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
     body+=('Sizin adınıza bir Mitolojix hesabı oluşturuldu. Hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifrenizi tanımlamanız gerekiyor.\n\n');
     body+=(url + '\n\n');
     body+=('Tanımlayacağınız şifre' + getSifreMesaji(user) + '\n\n');
-    body+=('Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.\n\n');
+    body+=('Yönetim arayüzüne giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.\n\n');
     body+=('Saygılarımızla,\nMitolojix\n');
   }
   return body;

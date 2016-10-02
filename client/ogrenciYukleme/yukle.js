@@ -153,7 +153,7 @@ Template.ogrenciYukleme.events({
         dogumTarihi: moment(ogrenci.DOGUMTARIHI, "YYYY-MM-DD").toDate(),
         tcKimlik: ogrenci.TCKIMLIKNO,
         cinsiyet: ogrenci.CINSIYET,
-        emails: [{address: ogrenci.EPOSTAADRESI, verified: false}],
+        emails: [{address: ogrenci.EPOSTAADRESI, verified: true}],
         role: 'ogrenci',
         sinif: ogrenci.SINIF,
         sube: ogrenci.SUBE
