@@ -171,6 +171,29 @@ M.L.ArraysEqual = function (a, b) {
   return true;
 };
 
+M.L.cyclicIterator = function (array, startAt) {
+  var index = startAt || 0;
+  var copy = array.slice(0);
+
+  return {
+    getCurrent: function () {
+      return copy[index];
+    },
+
+    getNext: function () {
+      index = ++index % copy.length;
+      return this.getCurrent();
+    },
+
+    getPrevious: function () {
+      if(--index < 0) {
+        index += copy.length;
+      }
+      return this.getCurrent();
+    }
+  };
+};
+
 String.prototype.toLocaleUpperCase = function () {
   return this.replace(/ğ/g, 'Ğ')
     .replace(/ü/g, 'Ü')
