@@ -154,6 +154,13 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
       comment.body = comment.body + ' Test kağıtları kapandı ve puanları hesaplandı.';
     }
 
+    if (doc.sinavKapanisiHatirlatmaZamani) {
+      story.operation = 'special';
+      story.specialOperation = 'Test kapanış hatırlatmaları gönderildi';
+      story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' için testi tamamlamamış öğrencilere hatırlatma gönderildi.';
+      comment.body = comment.body + ' Testi almamış öğrencilere hatırlatma gönderildi.';
+    }
+
     if (!(moment(this.previous.acilisTarihi).isSame(doc.acilisTarihi))  ||
       this.previous.acilisSaati !== doc.acilisSaati) {
       story.operation = 'special';

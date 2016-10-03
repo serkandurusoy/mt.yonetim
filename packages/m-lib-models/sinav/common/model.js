@@ -401,6 +401,20 @@ M.C.setUpCollection({
         omit: true
       }
     },
+    acilisKapanisArasindakiSureSaat: {
+      type: Number,
+      index: 1,
+      autoValue: function() {
+        var acilisZamani = this.field('acilisZamani');
+        var kapanisZamani = this.field('kapanisZamani');
+        if (acilisZamani.isSet && kapanisZamani.isSet) {
+          return Math.ceil(parseFloat(moment(kapanisZamani).diff(moment(acilisZamani), 'hours', true)));
+        }
+      },
+      autoform: {
+        omit: true
+      }
+    },
     tip: {
       label: 'Test Tipi',
       type: String,
@@ -603,6 +617,15 @@ M.C.setUpCollection({
       }
     },
     sinavKagitlariKapanmaZamani: {
+      type: Date,
+      index: -1,
+      optional: true,
+      denyInsert: true,
+      autoform: {
+        omit: true
+      }
+    },
+    sinavKapanisiHatirlatmaZamani: {
       type: Date,
       index: -1,
       optional: true,

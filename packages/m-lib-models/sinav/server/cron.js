@@ -1,6 +1,16 @@
 if (Meteor.settings.public.APP === 'YONETIM') {
 
   SyncedCron.add({
+    name: 'Kapanışı yaklaşan sınavları almamışlara hatırlat.',
+    schedule: function (parser) {
+      return parser.recur().every(1).minute();
+    },
+    job: function () {
+      Meteor.call('sinavKapanislariniHatirlat');
+    }
+  });
+
+  SyncedCron.add({
     name: 'Vakti geçen sınavları otomatik kapat.',
     schedule: function (parser) {
       return parser.recur().every(1).minute();
@@ -41,6 +51,65 @@ if (Meteor.settings.public.APP === 'YONETIM') {
   });
 
   Meteor.methods({
+
+    'sinavKapanislariniHatirlat': function() {
+      this.unblock();
+
+      M.C.Sinavlar.find({
+        taslak: false,
+        iptal: false,
+        kilitli: true,
+        muhur: {$exists: true},
+        acilisZamani: {$lt: new Date()},
+        acilisKapanisArasindakiSureSaat: {$gt: 48},
+        kapanisZamani: {$lt: moment().add(24,'hours').toDate()},
+        tip: {$in: ['alistirma','konuTarama','deneme']},
+        sinavKapanisiHatirlatmaZamani: {$exists: false}
+      }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
+
+        M.C.Users.find({
+          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(function(sinavKagidi) {return sinavKagidi.ogrenci;}))},
+          aktif: true,
+          role: 'ogrenci',
+          kurum: sinav.kurum,
+          sinif: sinav.sinif,
+          sube: {$in: sinav.subeler}
+        }).forEach(function(user) {
+
+          var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+          var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+          var muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
+
+          try {
+
+            Email.send({
+              to: user.emails[0].address,
+              from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
+              subject: 'Test kapanmak üzere',
+              text: 'Sevgili ' + user.name + ',\n\n'
+              + 'Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için www.mitolojix.com adresinden giriş yap.'
+              + '\n\n'
+              + 'Başarılar,\nMitolojix\n',
+              html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3">www.mitolojix.com</a> adresinden giriş yap.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
+              + '</body></html>'
+            });
+
+          } catch (error) {
+            console.log(sinav._id + ' id\'li sinav kapanis hatirlatma bildirimi ' + user._id + ' id\'li ogrenciye iletilirken bilinmeyen hata olustu:\n', error);
+          }
+
+        });
+
+        M.C.Sinavlar._collection.update({_id: sinav._id},{
+          $set: {sinavKapanisiHatirlatmaZamani: new Date()}
+        });
+
+      })
+    },
 
     'sinavlariKapat': function() {
       this.unblock();
@@ -203,7 +272,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                   Email.send({
                     to: user.emails[0].address,
-                    from: '"Mitolojix" <bilgi@mitolojix.com>',
+                    from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                     subject: 'Test kapandı',
                     text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                     + 'Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' şubeleri için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.'
@@ -485,7 +554,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <bilgi@mitolojix.com>',
+                  from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                   subject: 'Test yanıtları açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + ders + ' dersi ' + tip + ' yanıtları açıldı. Yanıtlara ' + muhurGrubu + ' grubuna ait ' + muhur + ' mühürünün bilgi ekranından erişebilirsin.'
@@ -505,7 +574,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <bilgi@mitolojix.com>',
+                  from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                   subject: 'Test yanıtları açıldı',
                   text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                   + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' yanıtları öğrencilere açıldı.'
@@ -692,7 +761,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
                 Email.send({
                   to: user.emails[0].address,
-                  from: '"Mitolojix" <bilgi@mitolojix.com>',
+                  from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                   subject: 'Yeni bir test açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
                   + 'Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için www.mitolojix.com adresinden giriş yap.'
