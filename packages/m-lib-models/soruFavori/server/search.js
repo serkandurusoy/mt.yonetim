@@ -1,6 +1,3 @@
-/**
- * Created by cyardimci on 02.10.2016.
- */
 Meteor.methods({
   'search.soruFavori': function(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));
