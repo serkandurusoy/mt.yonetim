@@ -91,6 +91,8 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               }
             });
           })
+        } else {
+          Meteor.call('sinavKapanisiBildir', {sinavId: sinav._id})
         }
 
         M.C.SinavKagitlari.find({
@@ -122,6 +124,116 @@ if (Meteor.settings.public.APP === 'YONETIM') {
         M.C.SinavKagitlari.update({_id: sinavKagidi._id}, {$set: {puanOrtalamayaGirdi: true}});
         Meteor.call('ortalamaGuncelle', sinavKagidi.ogrenci);
       })
+
+    },
+
+    'sinavKapanisiBildir': function(args) {
+      this.unblock();
+
+      check(args, {
+        sinavId: String
+      });
+
+      var sinav = M.C.Sinavlar.findOne(args.sinavId);
+
+      if (sinav) {
+
+        try {
+
+          var users = [];
+
+          // sinavi olusturan ve son guncelleyenini al
+          users = _.union(users, [sinav.createdBy]);
+          users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
+
+          // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
+          if (sinav._version > 1) {
+            sinav.versions().forEach(function(sinav) {
+              users = _.union(users, [sinav.createdBy]);
+              users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
+            })
+          }
+
+          // kurumda derse yetkisi olan ogretmenleri al
+          M.C.Users.find({
+            aktif: true,
+            kurum: sinav.kurum,
+            role: 'ogretmen',
+            dersleri: sinav.ders
+          }).forEach(function(user) {
+            users = _.union(users, [user._id]);
+          });
+
+          // sinava comment etmis kisilerin ogretmen olmayanlarinin kendi kurumlarindan roldaslarini al
+          M.C.Comments.find({
+            collection: 'Sinavlar',
+            doc: sinav._id
+          }).forEach(function(comment) {
+            var user = M.C.Users.findOne({_id: comment.createdBy});
+            if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
+              M.C.Users.find({
+                aktif: true,
+                kurum: user.kurum,
+                role: user.role
+              }).forEach(function(user) {
+                users = _.union(users, [user._id]);
+              });
+            }
+          });
+
+          users = _.uniq(users);
+
+          _.each(users, function(userId) {
+
+            var user = M.C.Users.findOne({_id: userId});
+
+            if (user) {
+
+              try {
+
+                var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+                var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+                var tip = M.L.enumLabel(sinav.tip);
+                var acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
+                var kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
+                var soruSayisi = sinav.sorular.length;
+                var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+
+                if (user.role !== 'ogrenci') {
+
+                  Email.send({
+                    to: user.emails[0].address,
+                    from: '"Mitolojix" <bilgi@mitolojix.com>',
+                    subject: 'Test kapandı',
+                    text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
+                    + 'Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' şubeleri için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.'
+                    + '\n\n'
+                    + 'Test raporlarına yonetim.mitolojix.com adresinden ulaşabilirsiniz.'
+                    + '\n\n'
+                    + 'Saygılarımızla,\nMitolojix\n',
+                    html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' şubeleri için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.</p>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Test raporlarına <a href="https://yonetim.mitolojix.com" target="_blank" style="color: #2196F3">buradan</a> ulaşabilirsiniz.</p>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
+                    + '</body></html>'
+                  });
+
+                }
+
+              } catch (error) {
+                console.log(sinav._id + ' id\'li sinav kapanisi icin ' + userId + ' id\'li kullaniciya email bildirimi yapilirken bilinmeyen hata oluştu:\n', error);
+              }
+
+            }
+
+          });
+
+        } catch (error) {
+          console.log(sinav._id + ' id\'li sinav kapanisi email bildirimi alicilari taranirken bilinmeyen hata oluştu:\n', error);
+        }
+
+      }
 
     },
 
