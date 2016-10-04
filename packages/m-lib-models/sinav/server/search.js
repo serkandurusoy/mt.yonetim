@@ -133,34 +133,43 @@ Meteor.methods({
       egitimYili: Match.Optional(String),
       tip: Match.Optional(String),
       sinavDurumu: Match.Optional(String),
-      sinavSahibi: Match.Optional(String)
+      sinavSahibi: Match.Optional(String),
+      konu: Match.Optional(String)
     });
     var userId = this.userId;
     if (userId) {
       var selector = {};
+      var soruSelector = {};
+
       if (!!keywords) {
         selector.$text = {$search: M.L.LatinizeLower(keywords)}
       }
       if (M.L.userHasRole(userId, 'mitolojix')) {
         if (filters.kurum) {
           selector.kurum = filters.kurum;
+          soruSelector.kurum = filters.kurum;
         }
       } else {
-        selector.kurum = M.C.Users.findOne({_id: userId}).kurum
+        selector.kurum = M.C.Users.findOne({_id: userId}).kurum;
+        soruSelector.kurum = M.C.Users.findOne({_id: userId}).kurum;
       }
 
       if (filters.ders) {
         selector.ders = filters.ders;
+        soruSelector['alan.ders'] = filters.ders;
       } else if (M.L.userHasRole(userId, 'ogretmen')) {
         selector.ders = {$in: M.C.Users.findOne({_id: userId}).dersleri};
+        soruSelector['alan.ders'] = {$in: M.C.Users.findOne({_id: userId}).dersleri};
       }
 
       if (filters.sinif) {
         selector.sinif = filters.sinif;
+        soruSelector['alan.sinif'] = filters.sinif;
       }
 
       if (filters.egitimYili) {
         selector.egitimYili = filters.egitimYili;
+        soruSelector['alan.egitimYili'] = filters.egitimYili;
       }
 
       if (filters.tip) {
@@ -202,6 +211,13 @@ Meteor.methods({
             selector.kapanisZamani = {$lte: new Date()};
             break;
         }
+      }
+
+      if(filters.konu){
+        soruSelector['alan.konu'] = filters.konu;
+        var konuyuIcerenSoruIdleri = _.pluck(M.C.Sorular.find(soruSelector).fetch(),'_id');
+        var sorulariIcerenSinavIdleri = _.pluck(M.C.Sinavlar.find({'sorular.soruId': {$in: konuyuIcerenSoruIdleri}}).fetch(),'_id');
+        selector._id = {$in: sorulariIcerenSinavIdleri};
       }
 
       if (_.isEqual(selector, {})) {

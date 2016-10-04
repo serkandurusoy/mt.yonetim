@@ -164,6 +164,48 @@ Template.filterSinav.helpers({
             ];
           }
         }
+      },
+      konu: {
+        label: 'Konu',
+        type: String,
+        optional: true,
+        autoform:{
+          type: function() {
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            if (!kurum || !egitimYili || !ders || !sinif) {
+              return 'hidden';
+            }
+          },
+          class: 'browser-default',
+          firstOption: 'Tümü',
+          options: function(){
+            var formId = AutoForm.getFormId();
+            var kurum = AutoForm.getFieldValue('kurum', formId);
+            var egitimYili = AutoForm.getFieldValue('egitimYili', formId);
+            var ders = AutoForm.getFieldValue('ders', formId);
+            var sinif = AutoForm.getFieldValue('sinif', formId);
+            var konular = M.C.Mufredat.findOne({
+              $and: [
+                {kurum: kurum},
+                {egitimYili: egitimYili},
+                {ders: ders},
+                {sinif: sinif}
+              ]
+            });
+            var uniqueSortedKonuListesi = konular && konular.konular && _.sortBy(_.uniq(konular.konular));
+            return  uniqueSortedKonuListesi && uniqueSortedKonuListesi.map(function(konu) {
+                return {
+                  label: konu.konu,
+                  value: konu.konu
+                }
+              });
+          }
+        }
+
       }
     });
   }
@@ -186,7 +228,8 @@ Template.filterSinav.onRendered(function(){
       sinif = AutoForm.getFieldValue('sinif', 'filterSinavForm'),
       tip = AutoForm.getFieldValue('tip', 'filterSinavForm'),
       sinavDurumu = AutoForm.getFieldValue('sinavDurumu', 'filterSinavForm'),
-      sinavSahibi = AutoForm.getFieldValue('sinavSahibi', 'filterSinavForm');
+      sinavSahibi = AutoForm.getFieldValue('sinavSahibi', 'filterSinavForm'),
+      konu = AutoForm.getFieldValue('konu','filterSinavForm');
 
     if (kurum) {
       filters.kurum = kurum;
@@ -214,6 +257,10 @@ Template.filterSinav.onRendered(function(){
 
     if (sinavSahibi) {
       filters.sinavSahibi = sinavSahibi;
+    }
+
+    if(konu) {
+      filters.konu = konu;
     }
 
     Session.set('filters', filters);
