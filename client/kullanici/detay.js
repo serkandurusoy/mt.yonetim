@@ -36,3 +36,27 @@ Template.kullaniciDetayKart.helpers({
     return !!M.C.UserConnectionLog.findOne({userId: this._id});
   }
 });
+
+Template.kullaniciDetayKart.events({
+  'click [data-trigger="giris-cikis"]': function(e,t) {
+    var girisCikisView = Blaze.render(Template.girisCikisModal, document.getElementsByTagName('main')[0]);
+    $('#girisCikisModal').openModal({
+      complete: function() {
+        Blaze.remove(girisCikisView);
+      }
+    });
+  }
+});
+
+Template.girisCikisModal.onCreated(function() {
+  var template = this;
+  template.autorun(function() {
+    template.subscribe('kullaniciGirisCikislari', FlowRouter.getParam('_id'));
+  });
+});
+
+Template.girisCikisModal.helpers({
+  girisCikis: function() {
+    return M.C.UserConnectionLog.find({userId: FlowRouter.getParam('_id')}, {sort: {createdAt: -1}})
+  }
+});

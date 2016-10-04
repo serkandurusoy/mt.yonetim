@@ -13,3 +13,40 @@
     {{/unless}}
   {{/unless}}
 </template>
+
+<template name="girisCikisModal">
+    <div id="girisCikisModal" class="modal modal-fixed-footer">
+        <div class="modal-content">
+          {{#each girisCikis}}
+            {{this}}
+          {{!--}}
+              <table class="striped responsive-table">
+                  <thead>
+                  <tr>
+                      <th>Öğrenci ({{sinifSube.sinif}}{{this}})</th>
+                      <th style="text-align: center; width: 160px;">Başlama</th>
+                      <th style="text-align: center; width: 160px;">Bitirme</th>
+                      <th style="text-align: right; width: 75px; padding-right: 10px">Süre</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {{#each ogrenciler this}}
+                    {{#let kagit=(sinavKagidi _id)}}
+                        <tr class="{{#unless kagit}}grey-text{{/unless}}">
+                            <td>{{name}} {{lastName}}</td>
+                            <td style="text-align: center; width: 160px;">{{#with kagit.baslamaZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
+                            <td style="text-align: center; width: 160px;">{{#with kagit.bitirmeZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
+                            <td style="text-align: right; width: 75px; padding-right: 10px">{{#if kagit.bitirmeZamani}}{{sinavSuresiDisplay kagit.baslamaZamani kagit.bitirmeZamani}}{{else}}...{{/if}}</td>
+                        </tr>
+                    {{/let}}
+                  {{/each}}
+                  </tbody>
+              </table>
+            {{--}}
+          {{/each}}
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat ">KAPAT</a>
+        </div>
+    </div>
+</template>

@@ -120,7 +120,7 @@ Meteor.publishComposite('kullaniciById', function(userId) {
     },
     children: _.union(userAuditLog, [{
         find: function(user) {
-          return M.C.UserConnectionLog.find({userId: user._id});
+          return M.C.UserConnectionLog.find({userId: user._id}, {sort: {createdAt: -1}, limit: 1});
         }
       }]
     )
@@ -210,6 +210,17 @@ Meteor.publishComposite('sinifArkadaslarim', function() {
             'searchSource.lastName': 1
           }
         });
+      }
+    }
+  };
+});
+
+Meteor.publishComposite('kullaniciGirisCikislari', function(userId) {
+  check(userId, String);
+  return {
+    find: function() {
+      if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
+        return M.C.UserConnectionLog.find({userId: userId});
       }
     }
   };

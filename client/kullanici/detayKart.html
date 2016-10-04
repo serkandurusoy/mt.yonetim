@@ -15,6 +15,13 @@
             {{/with}}
           </div>
           <div class="col s10">
+            {{#unless ref}}
+              {{#if aktif}}
+                {{#if accountActivated}}
+                  <span data-trigger="giris-cikis" title="Giriş çıkış raporu" class="right margin-right-6px"><i class="grey-text material-icons">important_devices</i></span>
+                {{/if}}
+              {{/if}}
+            {{/unless}}
             <h5>
               {{#unless ref}}{{#unless accountActivated}}<i class="material-icons cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i> {{/unless}}{{/unless}}{{name}} {{lastName}}
               {{#if $eq role 'ogrenci'}}
