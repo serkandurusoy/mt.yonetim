@@ -15,38 +15,35 @@
 </template>
 
 <template name="girisCikisModal">
-    <div id="girisCikisModal" class="modal modal-fixed-footer">
-        <div class="modal-content">
+  <div id="girisCikisModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <table class="striped responsive-table">
+        <thead>
+        <tr>
+          <th style="text-align: center;">Giriş Zamanı</th>
+          <th style="text-align: center;">IP Adresi</th>
+          <th style="text-align: center;">Tarayıcı</th>
+          <th style="text-align: center;">Derleyici</th>
+          <th style="text-align: center;">Sistem</th>
+          <th style="text-align: center;">Cihaz</th>
+        </tr>
+        </thead>
+        <tbody>
           {{#each girisCikis}}
-            {{this}}
-          {{!--}}
-              <table class="striped responsive-table">
-                  <thead>
-                  <tr>
-                      <th>Öğrenci ({{sinifSube.sinif}}{{this}})</th>
-                      <th style="text-align: center; width: 160px;">Başlama</th>
-                      <th style="text-align: center; width: 160px;">Bitirme</th>
-                      <th style="text-align: right; width: 75px; padding-right: 10px">Süre</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {{#each ogrenciler this}}
-                    {{#let kagit=(sinavKagidi _id)}}
-                        <tr class="{{#unless kagit}}grey-text{{/unless}}">
-                            <td>{{name}} {{lastName}}</td>
-                            <td style="text-align: center; width: 160px;">{{#with kagit.baslamaZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
-                            <td style="text-align: center; width: 160px;">{{#with kagit.bitirmeZamani}}{{moFormat this 'DD.MM.YYYY HH:mm:ss'}}{{else}}...{{/with}}</td>
-                            <td style="text-align: right; width: 75px; padding-right: 10px">{{#if kagit.bitirmeZamani}}{{sinavSuresiDisplay kagit.baslamaZamani kagit.bitirmeZamani}}{{else}}...{{/if}}</td>
-                        </tr>
-                    {{/let}}
-                  {{/each}}
-                  </tbody>
-              </table>
-            {{--}}
+            <tr>
+              <td style="text-align: center;" title="{{moFormat createdAt 'DD.MM.YYYY HH:mm:ss'}}">{{liveTime createdAt}}</td>
+              <td style="text-align: center;">{{httpHeaders.[x-forwarded-for]}}</td>
+              <td style="text-align: center;">{{information.browser.name}} {{information.browser.version}}</td>
+              <td style="text-align: center;">{{information.engine.name}} {{information.engine.version}}</td>
+              <td style="text-align: center;">{{information.os.name}} {{information.os.version}}</td>
+              <td style="text-align: center;">{{#if information.device.model}}{{information.device.vendor}} {{information.device.model}}{{else}}PC{{/if}}</td>
+            </tr>
           {{/each}}
-        </div>
-        <div class="modal-footer">
-            <a class="modal-action modal-close waves-effect waves-green btn-flat ">KAPAT</a>
-        </div>
+        </tbody>
+      </table>
     </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">KAPAT</a>
+    </div>
+  </div>
 </template>
