@@ -16,7 +16,7 @@
           </div>
           <div class="col s10">
             <h5>
-              {{!--}}{{#unless emails.[0].verified}}<i class="material-icons cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i>{{/unless}} {{--}}{{name}} {{lastName}}
+              {{#unless ref}}{{#unless accountActivated}}<i class="material-icons cursorDefault" title="Bu hesap henüz etkinleştirilmemiş">cached</i> {{/unless}}{{/unless}}{{name}} {{lastName}}
               {{#if $eq role 'ogrenci'}}
                 ({{enumLabel sinif}} {{sube}})
               {{/if}}

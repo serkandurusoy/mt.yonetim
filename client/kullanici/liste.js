@@ -48,6 +48,9 @@ Template.kullaniciKart.helpers({
       fontWeight: 400,
       radius: 0
     };
+  },
+  accountActivated: function() {
+    return !!M.C.UserConnectionLog.findOne({userId: this._id});
   }
 });
 

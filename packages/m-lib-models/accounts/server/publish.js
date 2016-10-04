@@ -118,7 +118,12 @@ Meteor.publishComposite('kullaniciById', function(userId) {
         }
       }
     },
-    children: userAuditLog
+    children: _.union(userAuditLog, [{
+        find: function(user) {
+          return M.C.UserConnectionLog.find({userId: user._id});
+        }
+      }]
+    )
   };
 });
 
@@ -167,6 +172,11 @@ Meteor.publishComposite('kullanicilar', function() {
       {
         find: function(user) {
           return M.C.Kurumlar.find({_id: user.kurum});
+        }
+      },
+      {
+        find: function(user) {
+          return M.C.UserConnectionLog.find({userId: user._id}, {sort: {createdAt: -1}, limit: 1});
         }
       }
     ]

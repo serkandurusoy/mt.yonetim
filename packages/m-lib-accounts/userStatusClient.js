@@ -6,6 +6,8 @@ M.E.activityEvents = 'touchstart touchend mousemove click keydown';
 
 M.L.activityDetected = false;
 
+M.C.UserConnectionLog = new Mongo.Collection('userconnectionlog');
+
 Meteor.startup(function() {
 
   //

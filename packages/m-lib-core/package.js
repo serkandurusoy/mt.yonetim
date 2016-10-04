@@ -70,6 +70,7 @@ Package.onUse(function(api) {
     'cfs:gridfs@0.0.33',
     'cfs:graphicsmagick@0.0.18',
     'cfs:ui@0.1.0',
+    'faisalman:ua-parser-js@0.7.10',
     'pascoual:pdfjs@1.1.114',
     'manuel:reactivearray@1.0.0',
     'rubaxa:sortable@1.3.0',

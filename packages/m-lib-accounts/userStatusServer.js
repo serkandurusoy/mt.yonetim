@@ -90,7 +90,8 @@ M.L.trackUserStatus = function(userId, connection) {
         createdAt: createdAt,
         connectionId: connection.id,
         ipAddress: connection.clientAddress,
-        httpHeaders: connection.httpHeaders
+        httpHeaders: connection.httpHeaders,
+        information: _.omit(UAParser(connection.httpHeaders['user-agent']), 'ua')
       })
     }
 
