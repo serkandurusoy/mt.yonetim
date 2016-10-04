@@ -17,6 +17,7 @@ Package.onUse(function(api) {
   api.use('m:lib-tckimlik@0.0.1');
 
   var assets = [
+    '_privateAssets/yardimDokumani/mitolojix-brosuru.pdf',
     '_privateAssets/karakter/erkek/1.png',
     '_privateAssets/karakter/erkek/2.png',
     '_privateAssets/karakter/erkek/3.png',
@@ -217,6 +218,10 @@ Package.onUse(function(api) {
   api.addFiles('soruSepeti/common/model.js');
   api.addFiles('soruSepeti/server/search.js','server');
   api.addFiles('soruSepeti/server/publish.js','server');
+  api.addFiles('yardimDokumani/common/model.js');
+  api.addFiles('yardimDokumani/server/fixture.js','server');
+  api.addFiles('yardimDokumani/server/hooks.js','server');
+  api.addFiles('yardimDokumani/server/publish.js','server');
   api.addFiles('reports.js','server');
 
 });

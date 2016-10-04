@@ -129,3 +129,19 @@ M.FS.Karakter = new FS.Collection("M.FS.Karakter", {
   }
 });
 
+M.FS.YardimDokumani = new FS.Collection("M.FS.YardimDokumani", {
+  stores: [new FS.Store.GridFS("yardimDokumaniStore", {})],
+  filter: {
+    maxSize: M.E.uploadMaxPDF,
+    allow: {
+      contentTypes: ['application/pdf'],
+      extensions: ['pdf']
+    },
+    onInvalid: function (message) {
+      if (Meteor.isClient) {
+        toastr.error(M.E.uploadMaxPDFMessage);
+      }
+    }
+  }
+});
+

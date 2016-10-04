@@ -73,3 +73,13 @@ M.FS.Karakter.allow({
     return true;
   }
 });
+
+Security.permit([ 'insert' ]).collections([ M.FS.YardimDokumani ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'update' ]).collections([ M.FS.YardimDokumani ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
+Security.permit([ 'remove' ]).collections([ M.FS.YardimDokumani ]).never().allowInClientCode();
+//Security.permit([ 'download' ]).collections([ M.FS.YardimDokumani ]).allowInClientCode();
+M.FS.YardimDokumani.allow({
+  download: function(userId, fileObj) {
+    return true;
+  }
+});

@@ -1,0 +1,36 @@
+<template name="yardimDokumaniListe">
+  {{#unless userHasRole "mitolojix"}}
+    {{>insufficientprivilege}}
+  {{else}}
+    {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+    {{else}}
+      {{#unless yardimDokumanlari}}
+        {{>notFound}}
+      {{else}}
+        <div class="row">
+          <div class="col s12">
+            <ul class="collection with-header">
+              <li class="collection-header right-align">{{yardimDokumanlari.count}} adet</li>
+              {{#each yardimDokumanlari.cursor}}
+                {{>yardimDokumaniKart}}
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/unless}}
+</template>
+
+<template name="yardimDokumaniKart">
+  <li class="collection-item {{#unless aktif}}pasif{{/unless}}{{#if yeniKayit 'YardimDokumanlari' _id}} lime lighten-3{{/if}}">
+    <div>
+      <a title="Detay gör" class="secondary-content" href="{{pathFor 'yardimDokumaniDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+      {{isim}}
+    </div>
+  </li>
+</template>
+

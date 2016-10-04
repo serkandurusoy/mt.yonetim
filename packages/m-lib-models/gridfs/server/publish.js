@@ -61,3 +61,13 @@ Meteor.publishComposite(null, function() {
     }
   };
 });
+
+Meteor.publishComposite(null, function() {
+  return {
+    find: function() {
+      if (this.userId) {
+        return M.FS.YardimDokumani.find();
+      }
+    }
+  };
+});

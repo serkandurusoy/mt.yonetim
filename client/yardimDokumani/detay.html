@@ -1,0 +1,15 @@
+<template name="yardimDokumaniDetay">
+  {{#unless Template.subscriptionsReady}}
+      <div class="loading padTopBlock center">
+        {{> loading}}
+      </div>
+  {{else}}
+    {{#unless yardimDokumani}}
+      {{>notFound}}
+    {{else}}
+      {{#with yardimDokumani}}
+        {{>yardimDokumaniDetayKart}}
+      {{/with}}
+    {{/unless}}
+  {{/unless}}
+</template>

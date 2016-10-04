@@ -166,3 +166,5 @@ FlowRouter.route('/favori-sorularim', {
   },
   triggersExit: [routeTriggers.resetSearchAndFilters]
 });
+
+setUpCrudRoute('yardimDokumanlariRoutes', '/yardim-dokumanlari', 'yardimDokumani');

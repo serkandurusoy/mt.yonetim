@@ -144,7 +144,8 @@ Template.registerHelper('detayPath', function(collection,doc) {
     Karakterler: 'karakterDetay',
     Dersler: 'dersDetay',
     Mufredat: 'mufredatDetay',
-    Muhurler: 'muhurDetay'
+    Muhurler: 'muhurDetay',
+    YardimDokumanlari: 'yardimDokumaniDetay'
   };
   return FlowRouter.path(pathMap[collection], {_id: doc});
 });

@@ -18,7 +18,7 @@ M.C.Stories.Schema = new SimpleSchema({
   collection: {
     type: String,
     index: 1,
-    allowedValues: ['Users','Sinavlar','Sorular','Kurumlar','Karakterler','Dersler','Mufredat','Muhurler']
+    allowedValues: ['Users','Sinavlar','Sorular','Kurumlar','Karakterler','Dersler','Mufredat','Muhurler','YardimDokumanlari']
   },
   doc: {
     type: String,

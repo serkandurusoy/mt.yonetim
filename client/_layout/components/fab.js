@@ -83,6 +83,16 @@ Template.fab.helpers({
         route: 'soruDetay',
         allowed: ['mitolojix','teknik','ogretmen'],
         collection: 'Sorular'
+      },
+      {
+        route: 'yardimDokumaniListe',
+        allowed: ['mitolojix'],
+        collection: 'YardimDokumanlari'
+      },
+      {
+        route: 'yardimDokumaniDetay',
+        allowed: ['mitolojix'],
+        collection: 'YardimDokumanlari'
       }
     ];
 

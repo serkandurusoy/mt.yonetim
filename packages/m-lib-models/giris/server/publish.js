@@ -48,7 +48,7 @@ Meteor.publishComposite('stories', function(limit) {
               $or: [
                 {
                   kurum: userKurum,
-                  collection: {$in: ['Users','Dersler','Mufredat','Muhurler']}
+                  collection: {$in: ['Users','Dersler','Mufredat','Muhurler','YardimDokumanlari']}
                 },
                 {
                   kurum: userKurum,

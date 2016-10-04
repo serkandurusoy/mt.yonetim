@@ -16,6 +16,7 @@
       <li><a data-activates="searchbox"><i class="material-icons">search</i></a></li>
     {{/if}}
     <li><a data-activates="notifications-menu"><i class="material-icons{{#if notifications}} shake shake-rotate shake-constant hover-stop orange-text text-darken-1{{/if}}">{{#if notifications}}notifications_active{{else}}notifications{{/if}}</i></a></li>
+    <li><a data-activates="yardim-menu"><i class="material-icons">help</i></a></li>
     <li><a data-activates="user-menu"><i class="material-icons">person</i></a></li>
   </ul>
   <ul id="notifications-menu" class="dropdown-content">
@@ -28,10 +29,25 @@
       <li><a>Bekleyen uyarı yok</a></li>
     {{/if}}
   </ul>
+  <ul id="yardim-menu" class="dropdown-content">
+    {{#if yardimDokumanlari}}
+      {{#each yardimDokumanlari}}
+        {{>yardimDokumani}}
+      {{/each}}
+    {{else}}
+        <li><a>Yardım dokümanı yok</a></li>
+    {{/if}}
+  </ul>
   <ul id="user-menu" class="dropdown-content">
     <li><a href="{{pathFor 'bilgilerimDetay'}}">Bilgilerim</a></li>
     <li><a data-logout>Çıkış</a></li>
   </ul>
+</template>
+
+<template name="yardimDokumani">
+  {{#with FS.GetFile "M.FS.YardimDokumani" dokuman}}
+    <li><a data-trigger="previewIcerik" title="Doküman içeriğini görüntüle" href="{{url}}">{{../isim}}</a></li>
+  {{/with}}
 </template>
 
 <template name="notification">
