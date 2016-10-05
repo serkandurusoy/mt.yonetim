@@ -23,13 +23,13 @@ Meteor.startup(function(){
 			return 'Bağlantı Sorunu';
 		},
 		'connectionLostText': function(event, template){
-			return 'Sunucu ile bağlantı koptu';
+			return 'Sunucu ile bağlantı koptu.';
 		},
 		'tryReconnectText': function(event, template){
 			return 'Tekrar bağlanmayı denemek için tıklayın';
 		},
 		'reconnectBeforeCountdownText': function(event, template){
-			return 'Bağlantıyı tekrar denemek için kalan süre ';
+			return 'Bağlantıyı tekrar denemek için kalan süre: ';
 		},
 		'reconnectAfterCountdownText': function(event, template){
 			return ' saniye';
