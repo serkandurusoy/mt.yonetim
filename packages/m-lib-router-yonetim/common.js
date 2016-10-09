@@ -147,7 +147,7 @@ FlowRouter.route('/ogrenci-yukleme', {
 
 setUpCrudRoute('mufredatlarRoutes', '/mufredat', 'mufredat');
 
-setUpCrudRoute('sinavlarRoutes', '/sinavlar', 'sinav');
+setUpCrudRoute('sinavlarRoutes', '/testler', 'sinav');
 
 setUpCrudRoute('sorularRoutes', '/sorular', 'soru');
 
@@ -167,4 +167,4 @@ FlowRouter.route('/favori-sorularim', {
   triggersExit: [routeTriggers.resetSearchAndFilters]
 });
 
-setUpCrudRoute('yardimDokumanlariRoutes', '/yardim-dokumanlari', 'yardimDokumani');
+setUpCrudRoute('yardimDokumanlariRoutes', '/yardim', 'yardimDokumani');
