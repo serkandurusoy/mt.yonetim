@@ -93,7 +93,7 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
     body+=('Sizin adınıza bir Mitolojix hesabı oluşturuldu. Hesabınızı etkinleştirmek için aşağıdaki bağlantıya tıklayarak şifrenizi tanımlamanız gerekiyor.\n\n');
     body+=(url + '\n\n');
     body+=('Tanımlayacağınız şifre' + getSifreMesaji(user) + '\n\n');
-    body+=('Yönetim arayüzüne giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.\n\n');
+    body+=('Uygulamaya giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanmalısınız.\n\n');
     body+=('Saygılarımızla,\nMitolojix\n');
   }
   return body;
@@ -122,7 +122,7 @@ Accounts.emailTemplates.enrollAccount.html = function(user, url) {
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sizin adınıza bir Mitolojix hesabı oluşturuldu. Hesabınızı etkinleştirmek için <a href="' + url + '" target="_blank" style="color: #2196F3">buraya tıklayarak</a> şifrenizi tanımlamanız gerekiyor.</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Tanımlayacağınız şifre' + getSifreMesaji(user) + '</p>');
-    body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Oyuna giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanacaksınız.</p>');
+    body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Uygulamaya giriş için kullanıcı adı olarak ' + user.emails[0].address + ' e-posta adresinizi kullanmalısınız.</p>');
     body+=('<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>');
     body+=('</body></html>');
   }
