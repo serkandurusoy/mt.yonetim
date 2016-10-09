@@ -87,13 +87,13 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
               subject: 'Test kapanmak üzere',
               text: 'Sevgili ' + user.name + ',\n\n'
-              + 'Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için www.mitolojix.com adresinden giriş yap.'
+              + 'Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için ' + Meteor.settings.public.URL.OYUN + ' adresinden giriş yap.'
               + '\n\n'
               + 'Başarılar,\nMitolojix\n',
               html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
-              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3">www.mitolojix.com</a> adresinden giriş yap.</p>'
-              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmeninin Mitolojix\'e eklediği '+ ders + ' testi kapanmak üzere. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3"> ' + Meteor.settings.public.URL.OYUN + '</a> adresinden giriş yap.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
               + '</body></html>'
             });
@@ -278,13 +278,13 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                     text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
                     + 'Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.'
                     + '\n\n'
-                    + 'Test raporlarına yonetim.mitolojix.com adresinden ulaşabilirsiniz.'
+                    + 'Test raporlarına ' + Meteor.settings.public.URL.YONETIM + ' adresinden ulaşabilirsiniz.'
                     + '\n\n'
                     + 'Saygılarımızla,\nMitolojix\n',
                     html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.</p>'
-                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Test raporlarına <a href="https://yonetim.mitolojix.com" target="_blank" style="color: #2196F3">buradan</a> ulaşabilirsiniz.</p>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Test raporlarına <a href="' + Meteor.settings.public.URL.YONETIM + '" target="_blank" style="color: #2196F3">buradan</a> ulaşabilirsiniz.</p>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                     + '</body></html>'
                   });
@@ -767,13 +767,13 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                   from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                   subject: 'Yeni bir test açıldı',
                   text: 'Sevgili ' + user.name + ',\n\n'
-                  + 'Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için www.mitolojix.com adresinden giriş yap.'
+                  + 'Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için ' + Meteor.settings.public.URL.OYUN + ' adresinden giriş yap.'
                   + '\n\n'
                   + 'Başarılar,\nMitolojix\n',
                   html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sevgili ' + user.name + ',</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3">www.mitolojix.com</a> adresinden giriş yap.</p>'
-                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="http://www.mitolojix.com" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Öğretmenin Mitolojix\'e yeni bir '+ ders + ' testi ekledi. Testi bilgisayarında çözmek için aşağıdaki ' + muhur + ' mühürüne tıkla ya da <a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3">' + Meteor.settings.public.URL.OYUN + '</a> adresinden giriş yap.</p>'
+                  + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333"><a href="' + Meteor.settings.public.URL.OYUN + '" target="_blank" style="color: #2196F3"><img src="' + Meteor.settings.public.URL.OYUN + muhurURL + '" style="border-style: none; width: 176px; height: 176px;" alt="' + muhur + '" width="176" height="176"/></a></p>'
                   + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Başarılar,<br/>Mitolojix</p>'
                   + '</body></html>'
                 });
