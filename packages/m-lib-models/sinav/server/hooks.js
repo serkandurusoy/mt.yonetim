@@ -354,12 +354,12 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
               from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
               subject: 'Test iptal edildi',
               text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
-              + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.'
+              + 'Mitolojix uygulamasında ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.'
               + '\n\n'
               + 'Saygılarımızla,\nMitolojix\n',
               html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + sinifSube + ' şubeleri için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.</p>'
+              + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + sinifSube + ' ' + subeMetin +  ' için ' + muhurGrubu + ' mühür grubu ' + ders + ' dersine ait ' + kod + ' numaralı ' + tip + ' iptal edilmiştir. Bilginize sunarız.</p>'
               + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
               + '</body></html>'
             });
