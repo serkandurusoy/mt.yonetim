@@ -323,6 +323,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
           var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
           var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
           var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+          var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
           var tip = M.L.enumLabel(sinav.tip);
           var kod = sinav.kod;
           var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';

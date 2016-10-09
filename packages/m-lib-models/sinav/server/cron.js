@@ -547,6 +547,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
               var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
               var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+              var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
               var tip = M.L.enumLabel(sinav.tip);
               var soruSayisi = sinav.sorular.length;
               var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
@@ -749,6 +750,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
               var muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
               var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+              var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
               var tip = M.L.enumLabel(sinav.tip);
               var kod = sinav.kod;
               var soruSayisi = sinav.sorular.length;
