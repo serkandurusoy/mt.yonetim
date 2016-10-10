@@ -13,6 +13,7 @@ server {
     server_name yonetim.test.mitolojix.com;
     listen 80;
     root /home/mitolojix/meteor-apps/builds/yonetim/bundle/public;
+    client_max_body_size 100M;
     passenger_enabled on;
     passenger_sticky_sessions on;
     passenger_env_var TZ Europe/Istanbul;

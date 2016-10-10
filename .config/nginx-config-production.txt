@@ -58,6 +58,7 @@ server {
     ssl_session_timeout 10m;
     keepalive_timeout 70;
     root /home/mitolojix/meteor-apps/builds/yonetim/bundle/public;
+    client_max_body_size 100M;
     passenger_enabled on;
     passenger_sticky_sessions on;
     passenger_env_var TZ Europe/Istanbul;
