@@ -28,7 +28,7 @@ Template.mufredatDetayKart.events({
     var icerik = this;
     var data = {
       fileName: icerik.name(),
-      url: icerik.url()
+      url: icerik.url({auth: false})
     };
 
     var view = Blaze.renderWithData(Template.previewIcerikModal, data, document.getElementsByTagName('main')[0]);

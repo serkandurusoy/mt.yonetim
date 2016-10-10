@@ -46,7 +46,7 @@
 
 <template name="yardimDokumani">
   {{#with FS.GetFile "M.FS.YardimDokumani" dokuman}}
-    <li><a data-trigger="previewIcerik" title="Doküman içeriğini görüntüle" href="{{url}}">{{../isim}}</a></li>
+    <li><a data-trigger="previewIcerik" title="Doküman içeriğini görüntüle" data-url="{{url}}">{{../isim}}</a></li>
   {{/with}}
 </template>
 

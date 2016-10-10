@@ -36,7 +36,7 @@ Security.permit([ 'remove' ]).collections([ M.FS.DersIcerik ]).never().allowInCl
 //Security.permit([ 'download' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().allowInClientCode();
 M.FS.DersIcerik.allow({
   download: function(userId, fileObj) {
-    return !!userId;
+    return true;
   }
 });
 

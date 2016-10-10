@@ -80,7 +80,7 @@
 <template name="previewIcerikModal">
   <div id="previewIcerikModal" class="modal modal-fixed-footer">
     <div class="modal-content">
-      <a href="{{url}}&download=true" target="_blank" class="right"><i class="material-icons">file_download</i></a>
+      <a href="{{url}}" download="{{fileName}}" target="_blank" class="right"><i class="material-icons">file_download</i></a>
       <h4 class="truncate">{{fileName}}</h4>
       <div id="pdfcontainer"><canvas id="pdfcanvas"></canvas></div>
     </div>
