@@ -103,8 +103,8 @@ M.E.SoruTipi = _.pluck(M.E.SoruTipiObjects,'name');
 M.E.SinavTipiObjects = [
   {name: 'alistirma', label: 'Alıştırma Testi'},
   {name: 'konuTarama', label: 'Konu Tarama Testi'},
-  {name: 'deneme', label: 'Deneme Testi'},
-  {name: 'canli', label: 'Canlı Test'}
+  {name: 'deneme', label: 'Deneme Sınavı'},
+  {name: 'canli', label: 'Canlı Sınav'}
 ];
 M.E.SinavTipi = _.pluck(M.E.SinavTipiObjects,'name');
 
