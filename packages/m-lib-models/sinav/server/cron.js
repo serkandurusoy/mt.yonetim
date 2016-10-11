@@ -264,6 +264,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                 var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
                 var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
                 var tip = M.L.enumLabel(sinav.tip);
+                var sinavKod = sinav.kod;
                 var acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
                 var kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
                 var soruSayisi = sinav.sorular.length;
@@ -276,14 +277,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
                     from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
                     subject: 'Test kapandı',
                     text: 'Sayın ' + user.name + ' ' + user.lastName + ',\n\n'
-                    + 'Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.'
+                    + 'Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + sinavKod + ' numaralı ' + tip + ' kapandı.'
                     + '\n\n'
                     + 'Test raporlarına ' + Meteor.settings.public.URL.YONETIM + ' adresinden ulaşabilirsiniz.'
                     + '\n\n'
                     + 'Saygılarımızla,\nMitolojix\n',
                     html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayın ' + user.name + ' ' + user.lastName + ',</p>'
-                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + tip + ' kapandı.</p>'
+                    + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix uygulamasında ' + acilisZamani + ' ile ' + kapanisZamani + ' arasında tanımlanan ' + kurum + sinifSube + ' ' + subeMetin + ' için ' + ders + ' dersine ait ' + soruSayisi + ' soruluk ' + sinavKod + ' numaralı ' + tip + ' kapandı.</p>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Test raporlarına <a href="' + Meteor.settings.public.URL.YONETIM + '" target="_blank" style="color: #2196F3">buradan</a> ulaşabilirsiniz.</p>'
                     + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla,<br/>Mitolojix</p>'
                     + '</body></html>'
