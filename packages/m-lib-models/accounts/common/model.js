@@ -93,8 +93,7 @@ M.C.Users.Schema = new SimpleSchema({
 
       return true;
     },
-    index: 1,
-    unique: true
+    index: 1
   },
   cinsiyet: {
     label: 'Cinsiyet',
@@ -195,6 +194,16 @@ M.C.Users.Schema = new SimpleSchema({
       type: function() {
         if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
           return 'hidden';
+        } else {
+          var formId = AutoForm.getFormId();
+          var kurum = AutoForm.getFieldValue('kurum', formId);
+          var formContext = AutoForm.getCurrentDataForForm(formId);
+          var formType = formContext && formContext.type;
+          if (kurum && formType === 'update') {
+            return 'selectDisabled'
+          } else {
+            return 'select';
+          }
         }
       },
       value: function() {
@@ -239,11 +248,29 @@ M.C.Users.Schema = new SimpleSchema({
       return true;
     },
     autoform: {
+      type: function() {
+        var formId = AutoForm.getFormId();
+        var role = AutoForm.getFieldValue('role', formId);
+        var formContext = AutoForm.getCurrentDataForForm(formId);
+        var formType = formContext && formContext.type;
+        if (formType !== 'update') {
+          return 'select';
+        } else {
+          if (_.contains(['ogrenci','mitolojix'], role)) {
+            return 'selectDisabled';
+          } else {
+            return 'select';
+          }
+        }
+      },
       class: 'browser-default',
       firstOption: 'Rol seçin',
       options: function() {
         var formId = AutoForm.getFormId();
         var kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
+        var role = AutoForm.getFieldValue('role', formId);
+        var formContext = AutoForm.getCurrentDataForForm(formId);
+        var formType = formContext && formContext.type;
         var options = _.map(M.E.RoleObjects, function(r) {
           return {
             label: r.label, value: r.name
@@ -257,6 +284,13 @@ M.C.Users.Schema = new SimpleSchema({
           options = _.reject(options, function(o) {
             return o.value === 'mitolojix';
           });
+        }
+        if (formType === 'update') {
+          if (_.contains(['teknik','mudur','ogretmen'], role)) {
+            options = _.reject(options, function(o) {
+              return _.contains(['ogrenci','mitolojix'], o.value);
+            });
+          }
         }
         return options;
       }
@@ -526,6 +560,10 @@ M.C.Users.attachSchema(M.C.Users.Schema);
 M.C.Users.attachSchema(M.C.Users.SchemaDecorators);
 
 if (Meteor.isServer) {
+  M.C.Users._ensureIndex({kurum: 1, tcKimlik: 1}, { unique: true });
+}
+
+if (Meteor.isServer) {
   M.C.Users.attachSchema(new SimpleSchema({
     'searchSource.language': {
       type: String,
@@ -687,6 +725,7 @@ Meteor.methods({
           proposedUser.password = doc.tcKimlik.substr(doc.tcKimlik.length - 6)
         }
         try {
+          var accountCreationError = null;
           var userId = Accounts.createUser(proposedUser);
           if (userId) {
             if (doc.role !== 'ogrenci') {
@@ -735,7 +774,14 @@ Meteor.methods({
           }
           return userId;
         } catch (error) {
-          M.L.ThrowError(error);
+          accountCreationError = error;
+        }
+        if (accountCreationError) {
+          if (accountCreationError.errorType === 'Meteor.Error') {
+            M.L.ThrowError(accountCreationError);
+          } else {
+            M.L.ThrowError({error: 'accountCreationError', reason: accountCreationError.err, details: accountCreationError});
+          }
         }
       } else {
         M.L.ThrowError({error: '403', reason: 'Yetki yok', details: 'Yetki yok'})

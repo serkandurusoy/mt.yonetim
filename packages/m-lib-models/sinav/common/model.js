@@ -408,7 +408,7 @@ M.C.setUpCollection({
         var acilisZamani = this.field('acilisZamani');
         var kapanisZamani = this.field('kapanisZamani');
         if (acilisZamani.isSet && kapanisZamani.isSet) {
-          return Math.ceil(parseFloat(moment(kapanisZamani).diff(moment(acilisZamani), 'hours', true)));
+          return Math.ceil(parseFloat(moment(kapanisZamani.value).diff(moment(acilisZamani.value), 'hours', true)));
         }
       },
       autoform: {

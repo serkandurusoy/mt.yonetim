@@ -34,6 +34,11 @@ AutoForm.hooks({
           AutoForm.validateField(form.formId, 'tcKimlik');
         }
 
+        if (error.reason && error.reason.indexOf('duplicate key error') > -1 && error.reason.indexOf('tcKimlik') > -1) {
+          form.addStickyValidationError('tcKimlik', 'notUnique');
+          AutoForm.validateField(form.formId, 'tcKimlik');
+        }
+
       }
     }
   }
