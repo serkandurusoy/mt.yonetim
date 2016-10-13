@@ -191,6 +191,7 @@ M.C.Users.Schema = new SimpleSchema({
       }
     },
     autoform: {
+      // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
       type: function() {
         if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
           return 'hidden';
@@ -248,6 +249,7 @@ M.C.Users.Schema = new SimpleSchema({
       return true;
     },
     autoform: {
+      // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
       type: function() {
         var formId = AutoForm.getFormId();
         var role = AutoForm.getFieldValue('role', formId);

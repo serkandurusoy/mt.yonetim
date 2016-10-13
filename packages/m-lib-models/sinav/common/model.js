@@ -35,6 +35,7 @@ M.C.setUpCollection({
         }
       },
       autoform: {
+        // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
         type: function() {
           if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
             return 'hidden';
@@ -174,13 +175,14 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        class: 'browser-default',
-        firstOption: 'Ders seçin',
+        // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
         type: function() {
           var formId = AutoForm.getFormId();
           var sorular = AutoForm.getFieldValue('sorular', formId);
           return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
         },
+        class: 'browser-default',
+        firstOption: 'Ders seçin',
         options: function() {
           var user = M.C.Users.findOne({_id: Meteor.userId()});
           var olasiDersler = [];
@@ -245,13 +247,14 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        class: 'browser-default',
-        firstOption: 'Sınıf seçin',
+        // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
         type: function() {
           var formId = AutoForm.getFormId();
           var sorular = AutoForm.getFieldValue('sorular', formId);
           return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
         },
+        class: 'browser-default',
+        firstOption: 'Sınıf seçin',
         options: function(){
           return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
         }
