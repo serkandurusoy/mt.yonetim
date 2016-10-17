@@ -1,9 +1,9 @@
 Meteor.startup(function () {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Karakterler.find().count() === 0) {
-    _.each(M.E.Cinsiyet, function(cinsiyet) {
-      for (var i=1; i<=10; i++) {
-        var karakterGorselId='';
-        var karakterGorsel = new FS.File();
+    M.E.Cinsiyet.forEach(function(cinsiyet) {
+      for (let i=1; i<=10; i++) {
+        let karakterGorselId='';
+        let karakterGorsel = new FS.File();
         karakterGorsel.attachData(
           FS.Utility.binaryToBuffer(Assets.getBinary('_privateAssets/' + 'karakter/' + cinsiyet + '/' + i + '.png')),
           {type: 'image/png'},
@@ -14,7 +14,7 @@ Meteor.startup(function () {
               karakterGorsel.name('karakter-' + cinsiyet + '-' + (i<10 ? '0' : '') + i + '.png');
               karakterGorsel.updatedAt(new Date());
               karakterGorsel.metadata = {};
-              var karakterGorselObj = M.FS.Karakter.insert(karakterGorsel);
+              const karakterGorselObj = M.FS.Karakter.insert(karakterGorsel);
               karakterGorselId = karakterGorselObj._id;
             }
           }

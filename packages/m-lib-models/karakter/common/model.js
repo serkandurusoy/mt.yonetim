@@ -10,13 +10,17 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Cinsiyet seçin',
-        options: function() {
-          var options = _.map(M.E.CinsiyetObjects, function(c) {
+        options() {
+          return options = M.E.CinsiyetObjects.map(cinsiyet => {
+            const {
+              label,
+              name: value,
+            } = cinsiyet;
             return {
-              label: c.label, value: c.name
+              label,
+              value,
             };
           });
-          return options;
         }
       }
     },

@@ -1,6 +1,6 @@
 AutoForm.hooks({
   karakterYeniForm: {
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('karakterListe');
       }

@@ -1,5 +1,5 @@
 Template.karakterDetay.helpers({
-  karakter: function() {
+  karakter() {
     return M.C.Karakterler.findOne({_id: FlowRouter.getParam('_id')});
   }
 });
