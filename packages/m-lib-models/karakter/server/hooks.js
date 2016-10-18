@@ -7,7 +7,7 @@ M.C.Karakterler.after.insert(function(userId,doc) {
     _id = doc._id,
   } = this;
 
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Karakterler',
     doc: _id,
@@ -28,7 +28,7 @@ M.C.Karakterler.after.update(function(userId, doc, fieldNames, modifier, options
     _id = doc._id,
   } = this;
 
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Karakterler',
     doc: _id,
