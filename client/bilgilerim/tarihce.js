@@ -1,5 +1,5 @@
 Template.bilgilerimTarihce.helpers({
-  bilgilerimTarihce: function() {
+  bilgilerimTarihce() {
     return Blaze._globalHelpers.$mapped(Meteor.user().versions());
   }
 });
