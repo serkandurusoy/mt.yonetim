@@ -7,20 +7,24 @@ M.C.setUpCollection({
       label: 'Aktif eğitim yılını seçin',
       type: String,
       index: 1,
-      custom: function() {
+      custom() {
         if (this.isSet) {
-          var value = this.value;
-          if (!_.contains(M.E.EgitimYili, value)) {
+          if (!_.contains(M.E.EgitimYili, this.value)) {
             return 'notAllowed';
           }
         }
       },
       autoform: {
         type: 'select-radio',
-        options: function(){
-          return _.map(M.E.EgitimYiliObjects, function(s) {
+        options(){
+          return M.E.EgitimYiliObjects.map(s => {
+            const {
+              label,
+              name: value,
+            } = s;
             return {
-              label: s.label, value: s.name
+              label,
+              value,
             };
           });
         }

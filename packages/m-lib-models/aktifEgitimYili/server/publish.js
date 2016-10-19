@@ -1,6 +1,6 @@
-Meteor.publishComposite(null, function() {
+Meteor.publishComposite(null, () => {
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         return M.C.AktifEgitimYili.find();
       }
