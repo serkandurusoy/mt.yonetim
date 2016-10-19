@@ -1,9 +1,9 @@
 Template.fab.helpers({
-  canViewFab: function() {
-    var route = FlowRouter.getRouteName();
-    var _id = FlowRouter.getParam('_id');
+  canViewFab() {
+    const route = FlowRouter.getRouteName();
+    const _id = FlowRouter.getParam('_id');
 
-    var fabRules = [
+    const fabRules = [
       {
         route: 'kullaniciListe',
         allowed: ['mitolojix','teknik'],
@@ -102,7 +102,7 @@ Template.fab.helpers({
 
     if (route === 'kullaniciDetay' && _id) {
       if (!M.L.userHasRole(Meteor.userId(), 'mitolojix')) {
-        if (Meteor.user().kurum !== M.C.Users.findOne({_id: _id}).kurum) {
+        if (Meteor.user().kurum !== M.C.Users.findOne({_id}).kurum) {
           return false;
         }
       }
@@ -110,7 +110,7 @@ Template.fab.helpers({
 
     if (route === 'mufredatDetay' && _id) {
       if (M.L.userHasRole(Meteor.userId(), 'teknik')) {
-        var mufredat = M.C.Mufredat.findOne({_id: _id, kurum: Meteor.user().kurum});
+        const mufredat = M.C.Mufredat.findOne({_id, kurum: Meteor.user().kurum});
         if (!mufredat) {
           return false;
         }
@@ -118,7 +118,7 @@ Template.fab.helpers({
     }
 
     if (route === 'sinavDetay' && _id) {
-      var sinav = M.C.Sinavlar.findOne({_id: _id});
+      const sinav = M.C.Sinavlar.findOne({_id});
       if (!sinav) {
         return false;
       }
@@ -132,14 +132,14 @@ Template.fab.helpers({
         return false;
       }
       if (M.L.userHasRole(Meteor.userId(), 'ogretmen')) {
-        if (!_.contains(Meteor.user().dersleri, sinav.ders)) {
+        if (!Meteor.user().dersleri.includes(sinav.ders)) {
           return false;
         }
       }
     }
 
     if (route === 'soruDetay' && _id) {
-      var soru = M.C.Sorular.findOne({_id: _id});
+      const soru = M.C.Sorular.findOne({_id});
       if (!soru) {
         return false;
       }
@@ -147,17 +147,17 @@ Template.fab.helpers({
         return false;
       }
       if (M.L.userHasRole(Meteor.userId(), 'ogretmen')) {
-        var ogretmenSoru = M.C.Sorular.findOne({_id: _id, kurum: Meteor.user().kurum, 'alan.ders': {$in: Meteor.user().dersleri}});
+        const ogretmenSoru = M.C.Sorular.findOne({_id, kurum: Meteor.user().kurum, 'alan.ders': {$in: Meteor.user().dersleri}});
         if (!ogretmenSoru) {
           return false;
         }
       }
     }
 
-    var docNotExists = _.some(fabRules, function(rule) {
+    const docNotExists = fabRules.some(rule => {
       if (rule.route === route) {
         if (rule.route.indexOf('Detay') > -1) {
-          var doc = M.C[rule.collection].findOne({_id: _id});
+          const doc = M.C[rule.collection].findOne({_id});
           return !doc;
         } else {
           return false;
@@ -170,10 +170,10 @@ Template.fab.helpers({
       return false;
     }
 
-    var docNotAktif = _.some(fabRules, function(rule) {
+    const docNotAktif = fabRules.some(rule => {
       if (rule.route === route) {
         if (rule.route.indexOf('Detay') > -1) {
-          var doc = M.C[rule.collection].findOne({_id: _id});
+          const doc = M.C[rule.collection].findOne({_id});
           if (!doc) {
             return false;
           } else {
@@ -194,9 +194,9 @@ Template.fab.helpers({
       return false;
     }
 
-    var ruleAllowed = _.some(fabRules, function(rule) {
+    const ruleAllowed = fabRules.some(rule => {
       if (rule.route === route) {
-        return _.some(rule.allowed, function(allowed) {
+        return rule.allowed.some(allowed => {
           return M.L.userHasRole(Meteor.userId(), allowed);
         })
       } else {
