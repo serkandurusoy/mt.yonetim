@@ -1,7 +1,7 @@
 M.C.Muhurler.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,
-    autoValue: function() {
+    autoValue() {
       if (this.isInsert) {
         return "turkish";
       }
@@ -10,16 +10,16 @@ M.C.Muhurler.attachSchema(new SimpleSchema({
   'searchSource.isim': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('isim');
+    autoValue() {
+      const src = this.field('isim');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.ders': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('ders');
+    autoValue() {
+      const src = this.field('ders');
       return src.isSet ? M.L.LatinizeLower(M.C.Dersler.findOne({_id: src.value}).isim) : this.unset();
     }
   }
@@ -40,9 +40,13 @@ if (Meteor.isServer) {
 
 Meteor.startup(function() {
   M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+
+    const {
+      _id = doc._id,
+    } = this;
+
     if (this.previous.isim !== doc.isim) {
-      M.C.Muhurler.find({ders: _id}).forEach(function(muhur) {
+      M.C.Muhurler.find({ders: _id}).forEach(muhur => {
         M.C.Muhurler.update(
           {_id: muhur._id},
           {$set: {'searchSource.ders': M.L.LatinizeLower(doc.isim)}},
@@ -54,14 +58,13 @@ Meteor.startup(function() {
 });
 
 Meteor.methods({
-  'search.muhur': function(keywords, filters) {
+  'search.muhur'(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));
     check(filters, {
       ders: Match.Optional(String)
     });
-    var userId = this.userId;
-    if (userId) {
-      var selector = {};
+    if (this.userId) {
+      let selector = {};
       if (!!keywords) {
         selector.$text = {$search: M.L.LatinizeLower(keywords)}
       }
@@ -84,9 +87,7 @@ Meteor.methods({
             },
             limit: 100
           }
-        ).map(function(doc) {
-          return doc._id;
-        });
+        ).map(doc => doc._id );
       }
 
     } else {

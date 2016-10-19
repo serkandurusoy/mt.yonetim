@@ -1,28 +1,27 @@
 Template.muhurDuzenle.helpers({
-  muhur: function() {
-    var muhur = M.C.Muhurler.findOne({_id: FlowRouter.getParam('_id'), aktif: true});
-    return muhur;
+  muhur() {
+    return M.C.Muhurler.findOne({_id: FlowRouter.getParam('_id'), aktif: true});
   }
 });
 
 AutoForm.hooks({
   muhurDuzenleForm: {
     before: {
-      method: function(doc) {
-        var form = this;
+      method(doc) {
+        const form = this;
         form.removeStickyValidationError('isim');
         form.removeStickyValidationError('sira');
         form.removeStickyValidationError('gorsel');
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('muhurDetay', {_id: FlowRouter.getParam('_id')});
       }
     },
-    onError: function(operation, error) {
-      var form = this;
+    onError(operation, error) {
+      const form = this;
       if (error) {
 
         if (error.reason && error.reason.indexOf('duplicate key error') > -1 && error.reason.indexOf('isim') > -1) {

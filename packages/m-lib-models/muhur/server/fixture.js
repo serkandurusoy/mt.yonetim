@@ -1,6 +1,6 @@
 Meteor.startup(function () {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Dersler.find().count() === 0 && M.C.Muhurler.find().count() === 0 && M.C.Mufredat.find().count() === 0) {
-    var dersler = [
+    const dersler = [
       {
         ders: 'Matematik',
         isim: 'Şaman',
@@ -2942,11 +2942,11 @@ Meteor.startup(function () {
       }
     ];
 
-    _.each(dersler, function(ders) {
-      var gorselId='';
-      var butonAktifId='';
-      var butonPasifId='';
-      var gorsel = new FS.File();
+    dersler.forEach(function(ders) {
+      let gorselId='';
+      let butonAktifId='';
+      let butonPasifId='';
+      let gorsel = new FS.File();
       gorsel.attachData(
         FS.Utility.binaryToBuffer(Assets.getBinary('_privateAssets/' + 'muhur/grup/' + ders.slug + '-gorsel.png')),
         {type: 'image/png'},
@@ -2957,13 +2957,13 @@ Meteor.startup(function () {
             gorsel.name(ders.slug + '-gorsel.png');
             gorsel.updatedAt(new Date());
             gorsel.metadata = {};
-            var gorselObj = M.FS.Muhur.insert(gorsel);
+            const gorselObj = M.FS.Muhur.insert(gorsel);
             gorselId = gorselObj._id;
           }
 
         }
       );
-      var butonAktif = new FS.File();
+      const butonAktif = new FS.File();
       butonAktif.attachData(
         FS.Utility.binaryToBuffer(Assets.getBinary('_privateAssets/' + 'muhur/grup/' + ders.slug + '-aktif.png')),
         {type: 'image/png'},
@@ -2974,13 +2974,13 @@ Meteor.startup(function () {
             butonAktif.name(ders.slug + '-aktif.png');
             butonAktif.updatedAt(new Date());
             butonAktif.metadata = {};
-            var butonAktifObj = M.FS.Muhur.insert(butonAktif);
+            const butonAktifObj = M.FS.Muhur.insert(butonAktif);
             butonAktifId = butonAktifObj._id;
           }
 
         }
       );
-      var butonPasif = new FS.File();
+      const butonPasif = new FS.File();
       butonPasif.attachData(
         FS.Utility.binaryToBuffer(Assets.getBinary('_privateAssets/' + 'muhur/grup/' + ders.slug + '-pasif.png')),
         {type: 'image/png'},
@@ -2991,14 +2991,14 @@ Meteor.startup(function () {
             butonPasif.name(ders.slug + '-pasif.png');
             butonPasif.updatedAt(new Date());
             butonPasif.metadata = {};
-            var butonPasifObj = M.FS.Muhur.insert(butonPasif);
+            const butonPasifObj = M.FS.Muhur.insert(butonPasif);
             butonPasifId = butonPasifObj._id;
           }
 
         }
       );
 
-      var dersId = M.C.Dersler.insert({
+      const dersId = M.C.Dersler.insert({
         isim: ders.ders,
         muhurGrubu: {
           isim: ders.isim,
@@ -3008,20 +3008,24 @@ Meteor.startup(function () {
         }
       });
 
-      _.each(ders.mufredat, function(mufredat) {
+      ders.mufredat.forEach(mufredat => {
+        const {
+          sinif,
+          konular,
+        } = mufredat;
         M.C.Mufredat.insert({
           kurum: 'mitolojix',
           egitimYili: M.E.EgitimYili[0],
           ders: dersId,
-          sinif: mufredat.sinif,
-          konular: mufredat.konular
+          sinif,
+          konular,
         });
       });
 
-      var sira = 1;
-      _.each(ders.muhurler, function(muhur) {
-        var muhurGorselId='';
-        var muhurGorsel = new FS.File();
+      let sira = 1;
+      ders.muhurler.forEach(function(muhur) {
+        let muhurGorselId='';
+        const muhurGorsel = new FS.File();
         muhurGorsel.attachData(
           FS.Utility.binaryToBuffer(Assets.getBinary('_privateAssets/' + 'muhur/' + muhur.seviye + '/' + ders.slug + '/' + muhur.slug + '.png')),
           {type: 'image/png'},
@@ -3032,7 +3036,7 @@ Meteor.startup(function () {
               muhurGorsel.name(ders.slug + '-'+ muhur.slugYeni + '.png');
               muhurGorsel.updatedAt(new Date());
               muhurGorsel.metadata = {};
-              var muhurGorselObj = M.FS.Muhur.insert(muhurGorsel);
+              const muhurGorselObj = M.FS.Muhur.insert(muhurGorsel);
               muhurGorselId = muhurGorselObj._id;
             }
           }
@@ -3040,7 +3044,7 @@ Meteor.startup(function () {
         M.C.Muhurler.insert({
           ders: dersId,
           isim: muhur.isim,
-          sira: sira,
+          sira,
           gorsel: muhurGorselId
         });
         sira++;

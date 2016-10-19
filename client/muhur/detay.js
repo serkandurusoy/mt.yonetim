@@ -1,5 +1,5 @@
 Template.muhurDetay.helpers({
-  muhur: function() {
+  muhur() {
     return M.C.Muhurler.findOne({_id: FlowRouter.getParam('_id')});
   }
 });

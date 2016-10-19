@@ -1,12 +1,12 @@
 Template.muhurTarihce.events({
-  'click [data-trigger="revert"]': function(e,t) {
-    var _id = this.ref;
-    var doc = _.pick(this, 'ders','isim','sira','gorsel');
-    var coll = 'Muhurler';
-    Session.set('revert', {_id: _id, doc: doc, coll: coll});
+  'click [data-trigger="revert"]'(e,t) {
+    const {ref: _id} = this;
+    const doc = _.pick(this, 'ders','isim','sira','gorsel');
+    const coll = 'Muhurler';
+    Session.set('revert', {_id, doc, coll});
     tarihceRevertModalView = Blaze.render(Template.tarihceRevertModal, document.getElementsByTagName('main')[0]);
     $('#tarihceRevertModal').openModal({
-      complete: function() {
+      complete() {
         Blaze.remove(tarihceRevertModalView);
       }
     });

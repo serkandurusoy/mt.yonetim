@@ -3,9 +3,11 @@ M.C.Muhurler.after.insert(function(userId,doc) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
 
-  var _id = this._id ? this._id : doc._id;
+  const {
+    _id = doc._id,
+  } = this;
 
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Muhurler',
     doc: _id,
@@ -21,9 +23,12 @@ M.C.Muhurler.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
-  var _id = this._id ? this._id : doc._id;
 
-  var story = {
+  const {
+    _id = doc._id,
+  } = this;
+
+  const story = {
     kurum: 'mitolojix',
     collection: 'Muhurler',
     doc: _id,

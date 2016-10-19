@@ -6,9 +6,9 @@ M.C.setUpCollection({
       label: 'Dersi',
       type: String,
       index: 1,
-      custom: function() {
-        var ders = this;
-        var tumu = M.C.Dersler.find({},{fields: {_id: 1}}).map(function(ders) {return ders._id;});
+      custom() {
+        const ders = this;
+        const tumu = M.C.Dersler.find({},{fields: {_id: 1}}).map(ders => ders._id);
         if (ders.isSet && !_.contains(tumu,ders.value)) {
           return 'notAllowed';
         }
@@ -17,8 +17,20 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Ders seçin',
-        options: function() {
-          return M.C.Dersler.find({}, {sort: {isim: 1}}).map(function(ders) {return {label: ders.isim + ' / ' + ders.muhurGrubu.isim, value: ders._id};});
+        options() {
+          return M.C.Dersler.find({}, {sort: {isim: 1}}).map(ders => {
+            const {
+              isim: dersIsmi,
+              muhurGrubu: {
+                isim: muhurIsmi,
+              },
+              _id: value,
+            } = ders;
+            return {
+              label: `${dersIsmi} / ${muhurIsmi}`,
+              value,
+            };
+          });
         }
       }
     },
@@ -27,10 +39,9 @@ M.C.setUpCollection({
       type: String,
       min: 2,
       max:256,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -41,10 +52,10 @@ M.C.setUpCollection({
       type: Number,
       index: 1,
       min: 1,
-      custom: function() {
-        var sira = this;
-        var ders = this.field('ders');
-        var count = ders.isSet && M.C.Muhurler.find({ders: ders.value}).count();
+      custom() {
+        const sira = this;
+        const ders = this.field('ders');
+        const count = ders.isSet && M.C.Muhurler.find({ders: ders.value}).count();
 
         if (ders.isSet && sira.isSet && sira.value > count+1){
           return 'maxNumber';
@@ -55,17 +66,16 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Sıra seçin',
-        options: function() {
-          var formId = AutoForm.getFormId();
-          var ders = AutoForm.getFieldValue('ders', formId);
-          var count = M.C.Muhurler.find({ders: ders}).count();
-          var sira = _.range(1, count+1+1);
-          var options = _.map(sira, function(s) {
+        options() {
+          const formId = AutoForm.getFormId();
+          const ders = AutoForm.getFieldValue('ders', formId);
+          const count = M.C.Muhurler.find({ders: ders}).count();
+          const sira = _.range(1, count+1+1);
+          return options = sira.map(sira => {
             return {
-              label: s, value: s
+              label: sira, value: sira,
             };
           });
-          return options;
         }
       }
     },
