@@ -1,6 +1,6 @@
 Meteor.publishComposite(null, function() {
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         return M.C.Dersler.find();
       }

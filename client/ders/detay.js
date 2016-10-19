@@ -1,5 +1,5 @@
 Template.dersDetay.helpers({
-  ders: function() {
+  ders() {
     return M.C.Dersler.findOne({_id: FlowRouter.getParam('_id')});
   }
 });

@@ -9,10 +9,9 @@ M.C.setUpCollection({
       max: 128,
       index: 1,
       unique: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -20,9 +19,9 @@ M.C.setUpCollection({
     },
     isimCollate: {
       type: String,
-      autoValue: function() {
-        var isim = this.field('isim');
-        var sortCode='0';
+      autoValue() {
+        const isim = this.field('isim');
+        let sortCode='0';
         if (isim.isSet) {
           if (Meteor.isServer) {
             sortCode = Collate(isim.value);
@@ -48,10 +47,9 @@ M.C.setUpCollection({
       max:256,
       index: 1,
       unique: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -59,9 +57,9 @@ M.C.setUpCollection({
     },
     'muhurGrubu.isimCollate': {
       type: String,
-      autoValue: function() {
-        var isim = this.field('muhurGrubu.isim');
-        var sortCode='0';
+      autoValue() {
+        const isim = this.field('muhurGrubu.isim');
+        let sortCode='0';
         if (isim.isSet) {
           if (Meteor.isServer) {
             sortCode = Collate(isim.value);

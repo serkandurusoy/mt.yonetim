@@ -2,10 +2,11 @@ M.C.Dersler.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
+  const{
+    _id = doc._id,
+  } = this;
 
-  var _id = this._id ? this._id : doc._id;
-
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Dersler',
     doc: _id,
@@ -21,9 +22,11 @@ M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
-  var _id = this._id ? this._id : doc._id;
+  const {
+    _id = doc._id,
+  } = this;
 
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Dersler',
     doc: _id,
@@ -31,8 +34,19 @@ M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
     createdBy: userId
   };
 
-  var onceMuhurGrup = this.previous.muhurGrubu.isim;
-  var yeniMuhurGrup = doc.muhurGrubu.isim;
+  const {
+    previous: {
+      muhurGrubu: {
+        isim: onceMuhurGrup,
+      }
+    }
+  }= this;
+
+  const {
+    muhurGrubu: {
+      isim: yeniMuhurGrup,
+    }
+  }= doc;
 
   if (onceMuhurGrup !== yeniMuhurGrup) {
     story.operation = 'special';
