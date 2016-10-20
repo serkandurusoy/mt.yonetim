@@ -7,7 +7,7 @@ Meteor.publish(null, function() {
       Counts.publish(this, 'soru', M.C.Sorular.find());
       Counts.publish(this, 'story', M.C.Stories.find());
     } else {
-      var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+      const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
       Counts.publish(this, 'ogretmen', M.C.Users.find({kurum: userKurum, role: 'ogretmen'}));
       Counts.publish(this, 'ogrenci', M.C.Users.find({kurum: userKurum, role: 'ogrenci'}));
       Counts.publish(this, 'sinav', M.C.Sinavlar.find({kurum: userKurum}));
@@ -26,7 +26,7 @@ Meteor.publishComposite('stories', function(limit) {
     limit = 10;
   }
   return {
-    find: function() {
+    find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Stories.find({}, {
@@ -34,7 +34,7 @@ Meteor.publishComposite('stories', function(limit) {
             limit: limit
           });
         } else {
-          var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+          const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
           if (!M.L.userHasRole(this.userId, 'ogretmen')) {
             return M.C.Stories.find({
               kurum: userKurum
@@ -43,7 +43,7 @@ Meteor.publishComposite('stories', function(limit) {
               limit: limit
             });
           } else {
-            var dersler = M.C.Users.findOne({_id: this.userId}).dersleri;
+            const dersler = M.C.Users.findOne({_id: this.userId}).dersleri;
             return M.C.Stories.find({
               $or: [
                 {
@@ -66,7 +66,7 @@ Meteor.publishComposite('stories', function(limit) {
     },
     children: [
       {
-        find: function(story) {
+        find(story) {
           return M.C.Users.find({_id: story.createdBy}, {fields: {kurum: 1, name: 1, lastName: 1}});
         }
       }

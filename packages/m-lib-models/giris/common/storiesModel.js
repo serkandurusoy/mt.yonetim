@@ -4,13 +4,13 @@ M.C.Stories.Schema = new SimpleSchema({
   kurum: {
     type: String,
     index: 1,
-    custom: function() {
-      var kurum = this;
+    custom() {
+      const kurum = this;
       if (kurum.isSet) {
         if (kurum.value === 'mitolojix') {
           return true;
         }
-        var hit = M.C.Kurumlar.findOne({_id: kurum.value});
+        const hit = M.C.Kurumlar.findOne({_id: kurum.value});
         return hit ? true : 'notAllowed';
       }
     }
@@ -23,11 +23,11 @@ M.C.Stories.Schema = new SimpleSchema({
   doc: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    custom: function() {
-      var collection = this.field('collection');
-      var item = this;
+    custom() {
+      const collection = this.field('collection');
+      const item = this;
       if (collection.isSet && item.isSet) {
-        var hit = M.C[collection.value].findOne({_id: item.value});
+        const hit = M.C[collection.value].findOne({_id: item.value});
         return hit ? true : 'notAllowed';
       }
     }
@@ -36,8 +36,8 @@ M.C.Stories.Schema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     optional: true,
-    allowedValues: function() {
-      return M.C.Dersler.find({},{fields: {_id: 1}}).map(function(ders) {return ders._id;});
+    allowedValues() {
+      return M.C.Dersler.find({},{fields: {_id: 1}}).map(ders => ders._id);
     }
   },
   operation: {
@@ -61,7 +61,7 @@ M.C.Stories.Schema = new SimpleSchema({
   createdAt: {
     type: Date,
     index: -1,
-    autoValue: function() {
+    autoValue() {
       return new Date();
     }
   }
