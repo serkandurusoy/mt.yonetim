@@ -1,41 +1,41 @@
-var userCursor = function(userId) {
+const userCursor = userId => {
   return M.C.Users.find({_id: userId}, {fields: {name: 1, lastName: 1}})
 };
 
-var userAuditLog = [
+const userAuditLog = [
   {
-    find: function(user) {
+    find(user) {
       return M.C.Kurumlar.find({_id: user.kurum});
     }
   },
   {
-    find: function (doc) {
+    find(doc) {
       if (!M.L.userHasRole(this.userId, 'ogrenci')) {
         return userCursor(doc.createdBy);
       }
     }
   },
   {
-    find: function (doc) {
+    find(doc) {
       if (!M.L.userHasRole(this.userId, 'ogrenci')) {
         return userCursor(doc.crudBy);
       }
     }
   },
   {
-    find: function(doc) {
+    find(doc) {
       if (!M.L.userHasRole(this.userId, 'ogrenci')) {
         return doc.versions();
       }
     },
     children: [
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.createdBy);
         }
       },
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.crudBy);
         }
       }
@@ -45,7 +45,7 @@ var userAuditLog = [
 
 Meteor.publishComposite(null, function() {
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         return M.C.Users.find({_id: this.userId}, {
           fields: {
@@ -81,9 +81,9 @@ Meteor.publishComposite(null, function() {
 Meteor.publishComposite('kullaniciById', function(userId) {
   check(userId, String);
   return {
-    find: function() {
+    find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
-        var fields = {
+        const fields = {
           emails: 1,
           tcKimlik: 1,
           name: 1,
@@ -111,7 +111,7 @@ Meteor.publishComposite('kullaniciById', function(userId) {
             fields: fields
           });
         } else {
-          var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+          const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
           return M.C.Users.find({_id: userId, kurum: userKurum}, {
             fields: fields
           });
@@ -119,7 +119,7 @@ Meteor.publishComposite('kullaniciById', function(userId) {
       }
     },
     children: _.union(userAuditLog, [{
-        find: function(user) {
+        find(user) {
           return M.C.UserConnectionLog.find({userId: user._id}, {sort: {createdAt: -1}, limit: 1});
         }
       }]
@@ -129,9 +129,9 @@ Meteor.publishComposite('kullaniciById', function(userId) {
 
 Meteor.publishComposite('kullanicilar', function() {
   return {
-    find: function() {
+    find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
-        var fields = {
+        const fields = {
           emails: 1,
           tcKimlik: 1,
           name: 1,
@@ -161,7 +161,7 @@ Meteor.publishComposite('kullanicilar', function() {
             fields: fields
           });
         } else {
-          var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+          const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
           return M.C.Users.find({kurum: userKurum}, {
             fields: fields
           });
@@ -170,12 +170,12 @@ Meteor.publishComposite('kullanicilar', function() {
     },
     children: [
       {
-        find: function(user) {
+        find(user) {
           return M.C.Kurumlar.find({_id: user.kurum});
         }
       },
       {
-        find: function(user) {
+        find(user) {
           return M.C.UserConnectionLog.find({userId: user._id}, {sort: {createdAt: -1}, limit: 1});
         }
       }
@@ -185,9 +185,9 @@ Meteor.publishComposite('kullanicilar', function() {
 
 Meteor.publishComposite('sinifArkadaslarim', function() {
   return {
-    find: function() {
+    find() {
       if (this.userId && M.L.userHasRole(this.userId, 'ogrenci')) {
-        var user = M.C.Users.findOne({_id: this.userId});
+        const user = M.C.Users.findOne({_id: this.userId});
         return M.C.Users.find({
           aktif: true,
           kurum: user.kurum,
@@ -218,7 +218,7 @@ Meteor.publishComposite('sinifArkadaslarim', function() {
 Meteor.publishComposite('kullaniciGirisCikislari', function(userId) {
   check(userId, String);
   return {
-    find: function() {
+    find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
         return M.C.UserConnectionLog.find({userId: userId});
       }

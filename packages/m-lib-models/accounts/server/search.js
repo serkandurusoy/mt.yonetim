@@ -21,9 +21,11 @@ if (Meteor.isServer) {
 
 Meteor.startup(function() {
   M.C.Kurumlar.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+    const {
+      _id = doc._id,
+    } = this;
     if (this.previous.isim !== doc.isim) {
-      M.C.Users.find({kurum: _id}).forEach(function(user) {
+      M.C.Users.find({kurum: _id}).forEach(user => {
         M.C.Users.update(
           {_id: user._id},
           {$set: {'searchSource.kurum': M.L.LatinizeLower(doc.isim)}},
@@ -34,12 +36,14 @@ Meteor.startup(function() {
   });
 
   M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+    const {
+      _id = doc._id,
+    } = this;
     if (this.previous.isim !== doc.isim) {
-      M.C.Users.find({dersleri: _id}).forEach(function(user) {
+      M.C.Users.find({dersleri: _id}).forEach(user => {
         M.C.Users.update(
           {_id: user._id},
-          {$set: {'searchSource.dersleri': _.map(user.dersleri, function(ders) {
+          {$set: {'searchSource.dersleri': user.dersleri.map(ders => {
             return M.L.LatinizeLower(M.C.Dersler.findOne({_id: ders}).isim);
           }).join(' ')}},
           {bypassCollection2: true}
@@ -58,9 +62,9 @@ Meteor.methods({
       sinif: Match.Optional(String),
       sube: Match.Optional(String)
     });
-    var userId = this.userId;
+    const userId = this.userId;
     if (userId) {
-      var selector = {};
+      let selector = {};
       if (!!keywords) {
         selector.$text = {$search: M.L.LatinizeLower(keywords)}
       }
@@ -93,9 +97,7 @@ Meteor.methods({
             },
             limit: 100
           }
-        ).map(function(doc) {
-          return doc._id;
-        });
+        ).map(doc => doc._id);
       }
     } else {
       return [];

@@ -1,7 +1,7 @@
-Meteor.startup(function() {
+Meteor.startup(() => {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Users.find().count() === 0) {
 
-    var userArray = [
+    const userArray = [
       {
         email : 'admin@mitolojix.com',
         profile: {
@@ -43,10 +43,14 @@ Meteor.startup(function() {
       }
     ];
 
-    _.each(userArray, function (user) {
-      var userId = Accounts.createUser({
-        email: user.email,
-        profile: user.profile
+    userArray.forEach(user => {
+      const {
+        email,
+        profile,
+      } = user;
+      const userId = Accounts.createUser({
+        email,
+        profile,
       });
 
       Accounts.sendEnrollmentEmail(userId);

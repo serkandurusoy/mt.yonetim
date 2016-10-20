@@ -7,10 +7,9 @@ M.C.Users.Schema = new SimpleSchema({
     index: 1,
     min: 2,
     max:32,
-    autoValue: function() {
+    autoValue() {
       if (this.isSet) {
-        var value = this.value;
-        return M.L.Trim(value).localeTitleize();
+        return M.L.Trim(this.value).localeTitleize();
       } else {
         this.unset();
       }
@@ -22,10 +21,9 @@ M.C.Users.Schema = new SimpleSchema({
     index: 1,
     min: 2,
     max:32,
-    autoValue: function() {
+    autoValue() {
       if (this.isSet) {
-        var value = this.value;
-        return M.L.Trim(value).localeTitleize();
+        return M.L.Trim(this.value).localeTitleize();
       } else {
         this.unset();
       }
@@ -34,20 +32,20 @@ M.C.Users.Schema = new SimpleSchema({
   dogumTarihi: {
     label: 'Doğum Tarihi',
     type: Date,
-    autoValue: function() {
-      var self = this;
+    autoValue() {
+      const self = this;
       if (self.isSet) {
         return moment.tz(new Date(self.value.getFullYear(),self.value.getMonth(),self.value.getDate()),'Europe/Istanbul').toDate();
       }
     },
-    custom: function() {
-      var tcKimlik = this.field('tcKimlik');
-      var dg = this.value;
-      if (_.contains(['00000000001','00000000002','00000000003'], tcKimlik.value)) {
+    custom() {
+      const tcKimlik = this.field('tcKimlik');
+      const dg = this.value;
+      if (_.contains(['00000000001','00000000002','00000000003'],tcKimlik.value)) {
         return true;
       } else {
-        var min = moment.tz(new Date(new Date().getFullYear() - 80,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate();
-        var max = moment.tz(new Date(new Date().getFullYear() - 5,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate();
+        const min = moment.tz(new Date(new Date().getFullYear() - 80,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate();
+        const max = moment.tz(new Date(new Date().getFullYear() - 5,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate();
         if (dg < min) {
           return 'minDate';
         }
@@ -60,7 +58,7 @@ M.C.Users.Schema = new SimpleSchema({
     index: 1,
     autoform: {
       type: 'pickadate',
-      pickadateOptions: function() {
+      pickadateOptions() {
         return _.extend(
           M.E.PickadateOptions,
           {min: moment.tz(new Date(new Date().getFullYear() - 80,new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate()},
@@ -74,11 +72,11 @@ M.C.Users.Schema = new SimpleSchema({
     type: String,
     min: 11,
     max: 11,
-    custom: function() {
-      var tckimlik = this.value.toString();
-      var ad = this.field('name').value;
-      var soyad = this.field('lastName').value;
-      var dogumyili = this.field('dogumTarihi').value && moment.tz(new Date(this.field('dogumTarihi').value),'Europe/Istanbul').toDate().getFullYear();
+    custom() {
+      const tckimlik = this.value.toString();
+      const ad = this.field('name').value;
+      const soyad = this.field('lastName').value;
+      const dogumyili = this.field('dogumTarihi').value && moment.tz(new Date(this.field('dogumTarihi').value),'Europe/Istanbul').toDate().getFullYear();
 
       if (tckimlik.indexOf('000000000') === 0 && tckimlik.length === 11) {
         return true;
@@ -103,13 +101,17 @@ M.C.Users.Schema = new SimpleSchema({
     autoform: {
       class: 'browser-default',
       firstOption: 'Cinsiyet seçin',
-      options: function() {
-        var options = _.map(M.E.CinsiyetObjects, function(c) {
+      options() {
+        return M.E.CinsiyetObjects.map(c => {
+          const {
+            label,
+            name: value,
+          } = c;
           return {
-            label: c.label, value: c.name
+            label,
+            value,
           };
         });
-        return options;
       }
     }
   },
@@ -125,18 +127,16 @@ M.C.Users.Schema = new SimpleSchema({
     min: 10,
     max: 128,
     regEx: SimpleSchema.RegEx.Email,
-    custom: function() {
-      var value = this.value;
-      var testFormat = M.L.TestEmail(M.L.Trim(value).toLowerCase());
+    custom() {
+      const testFormat = M.L.TestEmail(M.L.Trim(this.value).toLowerCase());
       if (!testFormat) {
         return 'emailHatali';
       }
       return true;
     },
-    autoValue: function() {
-      var value = this.value;
+    autoValue() {
       if (this.isSet) {
-        return M.L.Trim(value).toLowerCase();
+        return M.L.Trim(this.value).toLowerCase();
       } else {
         this.unSet();
       }
@@ -144,10 +144,9 @@ M.C.Users.Schema = new SimpleSchema({
   },
   "emails.$.verified": {
     type: Boolean,
-    autoValue: function() {
-      var value = this.value;
+    autoValue() {
       if (this.isSet) {
-        return !!value;
+        return !!this.value;
       } else {
         return false;
       }
@@ -160,13 +159,13 @@ M.C.Users.Schema = new SimpleSchema({
     label: 'Kurum',
     type: String,
     index: 1,
-    custom: function() {
-      var kurum = this;
-      var role = this.field('role');
-      var user = M.C.Users.findOne({_id: this.userId});
-      var userRole = !user ? 'mitolojix' : user.role;
-      var kurumlar = M.C.Kurumlar.find().map(function(kurum) {return kurum._id;});
-      var tumu = _.union('mitolojix',kurumlar);
+    custom() {
+      const kurum = this;
+      const role = this.field('role');
+      const user = M.C.Users.findOne({_id: this.userId});
+      const userRole = !user ? 'mitolojix' : user.role;
+      const kurumlar = M.C.Kurumlar.find().map(kurum => kurum._id);
+      const tumu = _.union('mitolojix',kurumlar);
       if (kurum.isSet && !_.contains(tumu,kurum.value)) {
         return 'notAllowed';
       }
@@ -178,9 +177,9 @@ M.C.Users.Schema = new SimpleSchema({
       }
       return true;
     },
-    autoValue: function() {
-      var kurum = this;
-      var user = M.C.Users.findOne({_id: this.userId});
+    autoValue() {
+      const kurum = this;
+      const user = M.C.Users.findOne({_id: this.userId});
       if (user && user.role !== 'mitolojix') {
         if (kurum.isInsert) {
           return user.kurum;
@@ -192,14 +191,14 @@ M.C.Users.Schema = new SimpleSchema({
     },
     autoform: {
       // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
-      type: function() {
+      type() {
         if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
           return 'hidden';
         } else {
-          var formId = AutoForm.getFormId();
-          var kurum = AutoForm.getFieldValue('kurum', formId);
-          var formContext = AutoForm.getCurrentDataForForm(formId);
-          var formType = formContext && formContext.type;
+          const formId = AutoForm.getFormId();
+          const kurum = AutoForm.getFieldValue('kurum', formId);
+          const formContext = AutoForm.getCurrentDataForForm(formId);
+          const formType = formContext && formContext.type;
           if (kurum && formType === 'update') {
             return 'selectDisabled'
           } else {
@@ -207,19 +206,25 @@ M.C.Users.Schema = new SimpleSchema({
           }
         }
       },
-      value: function() {
+      value() {
         if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
           return Meteor.user().kurum;
         }
       },
       class: 'browser-default',
       firstOption: 'Kurum seçin',
-      options: function() {
-        var kurumlar = [];
+      options() {
+        let kurumlar = [];
         if (Meteor.user().role === 'mitolojix') {
-          kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};}));
+          kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(kurum =>  {
+              return {
+                label: kurum.isim,
+                value: kurum._id,
+              };
+            })
+          );
         } else {
-          var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+          const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
           kurumlar.push({label: userKurum.isim, value: userKurum._id});
         }
         return kurumlar;
@@ -231,12 +236,12 @@ M.C.Users.Schema = new SimpleSchema({
     label: 'Rol',
     type: String,
     index: 1,
-    custom: function() {
-      var role = this;
-      var user = M.C.Users.findOne({_id: this.userId});
-      var userRole = !user ? 'mitolojix' : user.role;
-      var kurum = this.field('kurum');
-      var roles = M.E.Roles;
+    custom() {
+      const role = this;
+      const user = M.C.Users.findOne({_id: this.userId});
+      const userRole = !user ? 'mitolojix' : user.role;
+      const kurum = this.field('kurum');
+      const roles = M.E.Roles;
       if (role.isSet && !_.contains(roles,role.value)) {
         return 'notAllowed';
       }
@@ -250,15 +255,15 @@ M.C.Users.Schema = new SimpleSchema({
     },
     autoform: {
       // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
-      type: function() {
-        var formId = AutoForm.getFormId();
-        var role = AutoForm.getFieldValue('role', formId);
-        var formContext = AutoForm.getCurrentDataForForm(formId);
-        var formType = formContext && formContext.type;
+      type() {
+        const formId = AutoForm.getFormId();
+        const role = AutoForm.getFieldValue('role', formId);
+        const formContext = AutoForm.getCurrentDataForForm(formId);
+        const formType = formContext && formContext.type;
         if (formType !== 'update') {
           return 'select';
         } else {
-          if (_.contains(['ogrenci','mitolojix'], role)) {
+          if (['ogrenci','mitolojix'].includes(role)) {
             return 'selectDisabled';
           } else {
             return 'select';
@@ -267,15 +272,20 @@ M.C.Users.Schema = new SimpleSchema({
       },
       class: 'browser-default',
       firstOption: 'Rol seçin',
-      options: function() {
-        var formId = AutoForm.getFormId();
-        var kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
-        var role = AutoForm.getFieldValue('role', formId);
-        var formContext = AutoForm.getCurrentDataForForm(formId);
-        var formType = formContext && formContext.type;
-        var options = _.map(M.E.RoleObjects, function(r) {
+      options() {
+        const formId = AutoForm.getFormId();
+        const kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
+        const role = AutoForm.getFieldValue('role', formId);
+        const formContext = AutoForm.getCurrentDataForForm(formId);
+        const formType = formContext && formContext.type;
+        let options = M.E.RoleObjects.map(r => {
+          const {
+            label,
+            name: value,
+          } = r;
           return {
-            label: r.label, value: r.name
+            label,
+            value,
           };
         });
         if (!kurum) {
@@ -283,13 +293,13 @@ M.C.Users.Schema = new SimpleSchema({
         } else if (kurum === 'mitolojix') {
           options = [_.findWhere(options, {value : 'mitolojix'})];
         } else {
-          options = _.reject(options, function(o) {
+          options = _.reject(options, o => {
             return o.value === 'mitolojix';
           });
         }
         if (formType === 'update') {
           if (_.contains(['teknik','mudur','ogretmen'], role)) {
-            options = _.reject(options, function(o) {
+            options = _.reject(options, o => {
               return _.contains(['ogrenci','mitolojix'], o.value);
             });
           }
@@ -303,26 +313,35 @@ M.C.Users.Schema = new SimpleSchema({
     type: [String],
     index: 1,
     optional: true,
-    custom: function() {
-      var dersler = this.value;
+    custom() {
+      const dersler = this.value;
       return !dersler ? true : _.uniq(dersler).length === dersler.length ? true : 'notUnique';
     },
     autoform: {
-      type: function() {
-        var formId = AutoForm.getFormId();
-        var role = AutoForm.getFieldValue('role', formId);
+      type() {
+        const formId = AutoForm.getFormId();
+        const role = AutoForm.getFieldValue('role', formId);
         return role === 'ogretmen' ? 'select-checkbox' : 'hidden';
       },
-      options: function() {
-        return M.C.Dersler.find().map(function(ders) {return {label: ders.isim, value: ders._id};});
+      options() {
+        return M.C.Dersler.find().map(ders => {
+          const {
+            isim: label,
+            _id: value,
+          } = ders;
+          return {
+            label,
+            value,
+          };
+        });
       }
     }
   },
   'dersleri.$': {
     label: 'Ders',
     type: String,
-    allowedValues: function() {
-      return M.C.Dersler.find({},{fields: {_id: 1}}).map(function(ders) {return ders._id;});
+    allowedValues() {
+      return M.C.Dersler.find({},{fields: {_id: 1}}).map(ders => ders._id);
     }
   },
   // TODO: this MUST be placed into an array containing egitimYili information
@@ -331,20 +350,20 @@ M.C.Users.Schema = new SimpleSchema({
     type: String,
     index: 1,
     optional: true,
-    custom: function() {
-      var role = this.field('role');
-      var sinif = this;
+    custom() {
+      const role = this.field('role');
+      const sinif = this;
       if (role.isSet && role.value === 'ogrenci' && !sinif.isSet) {
         return 'required';
-      } else if (role.isSet && role.value === 'ogrenci' && sinif.isSet && !_.contains(M.E.Sinif, sinif.value)) {
+      } else if (role.isSet && role.value === 'ogrenci' && sinif.isSet && !_.contains(M.E.Sinif,sinif.value)) {
         return 'notAllowed';
       } else {
         return true;
       }
     },
-    autoValue: function() {
-      var role = this.field('role');
-      var sinif = this;
+    autoValue() {
+      const role = this.field('role');
+      const sinif = this;
       if (role.isSet && role.value === 'ogrenci') {
         return sinif.value;
       } else {
@@ -352,15 +371,20 @@ M.C.Users.Schema = new SimpleSchema({
       }
     },
     autoform: {
-      type: function() {
-        var formId = AutoForm.getFormId();
-        var role = AutoForm.getFieldValue('role', formId);
+      type() {
+        const formId = AutoForm.getFormId();
+        const role = AutoForm.getFieldValue('role', formId);
         return role === 'ogrenci' ? 'select' : 'hidden';
       },
       class: 'browser-default',
       firstOption: 'Sınıf seçin',
-      options: function() {
-        return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+      options() {
+        return M.E.Sinif.map(sinif => {
+          return {
+            label: M.L.enumLabel(sinif),
+            value: sinif,
+          };
+        });
       }
     }
   },
@@ -370,21 +394,21 @@ M.C.Users.Schema = new SimpleSchema({
     type: String,
     index: 1,
     optional: true,
-    custom: function() {
-      var role = this.field('role');
-      var sube = this;
-      var sinif = this.field('sinif');
+    custom() {
+      const role = this.field('role');
+      const sube = this;
+      const sinif = this.field('sinif');
       if (role.isSet && role.value === 'ogrenci' && !sube.isSet) {
         return 'required';
-      } else if (role.isSet && role.value === 'ogrenci' && sinif.isSet && sube.isSet && !_.contains(M.E.Sube, sube.value)) {
+      } else if (role.isSet && role.value === 'ogrenci' && sinif.isSet && sube.isSet && !_.contains(M.E.Sube,sube.value)) {
         return 'notAllowed';
       } else {
         return true;
       }
     },
-    autoValue: function() {
-      var role = this.field('role');
-      var sube = this;
+    autoValue() {
+      const role = this.field('role');
+      const sube = this;
       if (role.isSet && role.value === 'ogrenci') {
         return sube.value;
       } else {
@@ -392,15 +416,20 @@ M.C.Users.Schema = new SimpleSchema({
       }
     },
     autoform: {
-      type: function() {
-        var formId = AutoForm.getFormId();
-        var role = AutoForm.getFieldValue('role', formId);
+      type() {
+        const formId = AutoForm.getFormId();
+        const role = AutoForm.getFieldValue('role', formId);
         return role === 'ogrenci' ? 'select' : 'hidden';
       },
       class: 'browser-default',
       firstOption: 'Şube seçin',
-      options: function() {
-        return M.E.Sube.map(function(sube) {return {label: sube, value: sube};});
+      options() {
+        return M.E.Sube.map(sube => {
+          return {
+            label: sube,
+            value: sube,
+          };
+        });
       }
     }
   }
@@ -433,9 +462,9 @@ M.C.Users.SchemaDecorators = new SimpleSchema({
   puan: {
     type: Number,
     optional: true,
-    autoValue: function() {
-      var role = this.field('role');
-      var puan = this;
+    autoValue() {
+      const role = this.field('role');
+      const puan = this;
       if (role.isSet && role.value === 'ogrenci') {
         return puan.value;
       } else {
@@ -520,9 +549,9 @@ M.C.Users.SchemaDecorators = new SimpleSchema({
   },
   nameCollate: {
     type: String,
-    autoValue: function() {
-      var name = this.field('name');
-      var sortCode='0';
+    autoValue() {
+      const name = this.field('name');
+      let sortCode='0';
       if (name.isSet) {
         if (Meteor.isServer) {
           sortCode = Collate(name.value);
@@ -539,9 +568,9 @@ M.C.Users.SchemaDecorators = new SimpleSchema({
   },
   lastNameCollate: {
     type: String,
-    autoValue: function() {
-      var lastName = this.field('lastName');
-      var sortCode='0';
+    autoValue() {
+      const lastName = this.field('lastName');
+      let sortCode='0';
       if (lastName.isSet) {
         if (Meteor.isServer) {
           sortCode = Collate(lastName.value);
@@ -569,7 +598,7 @@ if (Meteor.isServer) {
   M.C.Users.attachSchema(new SimpleSchema({
     'searchSource.language': {
       type: String,
-      autoValue: function() {
+      autoValue() {
         if (this.isInsert) {
           return "turkish";
         }
@@ -578,44 +607,44 @@ if (Meteor.isServer) {
     'searchSource.name': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('name');
+      autoValue() {
+        const src = this.field('name');
         return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
       }
     },
     'searchSource.lastName': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('lastName');
+      autoValue() {
+        const src = this.field('lastName');
         return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
       }
     },
     'searchSource.kurum': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('kurum');
+      autoValue() {
+        const src = this.field('kurum');
         return this.isSet ? this.value : src.isSet ? M.L.LatinizeLower(src.value === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: src.value}).isim) : this.unset();
       }
     },
     'searchSource.role': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('role');
+      autoValue() {
+        const src = this.field('role');
         return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
       }
     },
     'searchSource.dersleri': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('dersleri');
+      autoValue() {
+        const src = this.field('dersleri');
         if (!src.isSet) {
           this.unset();
         } else {
-          return _.map(src.value, function(ders) {
+          return src.value.map(ders => {
             return M.L.LatinizeLower(M.C.Dersler.findOne({_id: ders}).isim);
           }).join(' ');
         }
@@ -624,16 +653,16 @@ if (Meteor.isServer) {
     'searchSource.sinif': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('sinif');
+      autoValue() {
+        const src = this.field('sinif');
         return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
       }
     },
     'searchSource.sube': {
       type: String,
       optional: true,
-      autoValue: function() {
-        var src = this.field('sube');
+      autoValue() {
+        const src = this.field('sube');
         return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
       }
     }
@@ -642,8 +671,8 @@ if (Meteor.isServer) {
 
 M.C.Users.attachBehaviour('timestampable',{createdAt: false, updatedAt: false, updatedBy: false});
 
-M.C.Users.before.insert(function (userId, doc) {
-  var role = doc.role;
+M.C.Users.before.insert( (userId, doc) => {
+  const role = doc.role;
 
   if (role && role !== 'ogretmen') {
     doc.dersleri = [];
@@ -659,8 +688,8 @@ M.C.Users.before.insert(function (userId, doc) {
 
 });
 
-M.C.Users.before.update(function (userId, doc, fields, modifier, options) {
-  var role = modifier.$set && modifier.$set.role;
+M.C.Users.before.update((userId, doc, fields, modifier, options) => {
+  const role = modifier.$set && modifier.$set.role;
 
   if (role && role !== 'ogrenci') {
     delete modifier.$set.sinif;
@@ -697,17 +726,17 @@ M.C.Users.before.update(function (userId, doc, fields, modifier, options) {
 M.C.Users.vermongo({timestamps: true, userId: 'crudBy', ignoredFields: ['heartbeat','status','services','avatar','karakter','puan','searchSource']});
 
 Meteor.methods({
-  'kullaniciYeniMethod': function(doc) {
+  'kullaniciYeniMethod'(doc) {
     check(doc, M.C.Users.Schema);
     M.C.Users.Schema.clean(doc);
     if (Meteor.isServer) {
-      var userRole = this.userId && M.C.Users.findOne({_id: this.userId}).role;
-      var userKurum = this.userId && M.C.Users.findOne({_id: this.userId}).kurum;
-      if (userRole && _.contains(['mitolojix','teknik'], userRole)) {
+      const userRole = this.userId && M.C.Users.findOne({_id: this.userId}).role;
+      const userKurum = this.userId && M.C.Users.findOne({_id: this.userId}).kurum;
+      if (userRole && _.contains(['mitolojix','teknik'],userRole)) {
         if (userRole === 'teknik') {
           doc.kurum = userKurum;
         }
-        var proposedUser = {
+        const proposedUser = {
           email: doc.emails[0].address,
           profile: {
             tcKimlik: doc.tcKimlik,
@@ -727,14 +756,14 @@ Meteor.methods({
           proposedUser.password = doc.tcKimlik.substr(doc.tcKimlik.length - 6)
         }
         try {
-          var accountCreationError = null;
-          var userId = Accounts.createUser(proposedUser);
+          let accountCreationError = null;
+          const userId = Accounts.createUser(proposedUser);
           if (userId) {
             if (doc.role !== 'ogrenci') {
               Accounts.sendEnrollmentEmail(userId);
             } else {
               try {
-                var kurumAdi = M.C.Kurumlar.findOne({_id: doc.kurum}).isim
+                const kurumAdi = M.C.Kurumlar.findOne({_id: doc.kurum}).isim
                 Email.send({
                   to: doc.emails[0].address,
                   from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
@@ -801,7 +830,7 @@ if (Meteor.isServer) {
   Security.defineMethod('userHasRole', {
     //fetch: [],
     //transform: null,
-    allow: function (type, role, userId, doc, fields, modifier) {
+    allow(type, role, userId, doc, fields, modifier) {
       return M.L.userHasRole(userId,role);
     }
   });
@@ -809,7 +838,7 @@ if (Meteor.isServer) {
   Security.defineMethod('userInDocKurum', {
     //fetch: [],
     //transform: null,
-    allow: function (type, arg, userId, doc, fields, modifier) {
+    allow(type, arg, userId, doc, fields, modifier) {
       return M.L.userInKurum(userId,doc.kurum);
     }
   });
@@ -817,7 +846,7 @@ if (Meteor.isServer) {
   Security.defineMethod('userOwnsDoc', {
     //fetch: [],
     //transform: null,
-    allow: function (type, arg, userId, doc, fields, modifier) {
+    allow(type, arg, userId, doc, fields, modifier) {
       return userId === doc.createdBy;
     }
   });
@@ -828,26 +857,24 @@ if (Meteor.isServer) {
   Security.permit([ 'remove' ]).collections([ Meteor.users ]).never().allowInClientCode();
 
   Meteor.methods({
-    'setAvatar': function(avatarId) {
+    'setAvatar'(avatarId) {
       check(avatarId, String);
-      var userId = this.userId;
+      const userId = this.userId;
 
       if (userId) {
-        var result = M.C.Users.update({_id: userId}, {$set: {avatar: avatarId}});
-        return result;
+        return M.C.Users.update({_id: userId}, {$set: {avatar: avatarId}});
       } else {
         throw new Meteor.Error('403', 'Unable to set avatar ID for the user');
       }
     },
-    'setKarakter': function(karakterId) {
+    'setKarakter'(karakterId) {
       check(karakterId, String);
-      var userId = this.userId;
-      var karakter = M.C.Karakterler.findOne({_id: karakterId});
+      const userId = this.userId;
+      const karakter = M.C.Karakterler.findOne({_id: karakterId});
 
       if (karakter) {
         if (userId) {
-          var result = M.C.Users.update({_id: userId}, {$set: {karakter: karakterId}});
-          return result;
+          return M.C.Users.update({_id: userId}, {$set: {karakter: karakterId}});;
         } else {
           M.L.ThrowError({error: '403', reason: 'Unable to set karakter ID for the user', details: 'Unable to set karakter ID for the user'})
         }
@@ -855,34 +882,34 @@ if (Meteor.isServer) {
         M.L.ThrowError({error: '403', reason: 'Unable to set karakter ID for the user', details: 'Unable to set karakter ID for the user'})
       }
     },
-    'getSifreZorlukFromToken': function(token) {
+    'getSifreZorlukFromToken'(token) {
       check(token, String);
 
-      var user = M.C.Users.findOne({'services.password.reset.token': token});
+      const user = M.C.Users.findOne({'services.password.reset.token': token});
       if (!user) {
         throw new Meteor.Error(403, 'Token expired');
       }
 
-      var userId = user._id;
+      const userId = user._id;
 
-      var userKurum = user.kurum;
-      var kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
-      var sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
+      const userKurum = user.kurum;
+      const kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
+      const sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
 
       return {
-        userId: userId,
-        sifreZorluk: sifreZorluk
+        userId,
+        sifreZorluk,
       };
 
     },
-    'checkPassword': function(digest) {
+    'checkPassword'(digest) {
       check(digest, String);
-      var userId = this.userId;
+      const userId = this.userId;
 
       if (userId) {
-        var user = M.C.Users.findOne({_id: userId});
-        var password = {digest: digest, algorithm: 'sha-256'};
-        var result = Accounts._checkPassword(user, password);
+        const user = M.C.Users.findOne({_id: userId});
+        const password = {digest: digest, algorithm: 'sha-256'};
+        const result = Accounts._checkPassword(user, password);
         return result.error == null;
       } else {
         return false;
