@@ -1,6 +1,6 @@
-Meteor.startup(function () {
+Meteor.startup(() => {
   if (Meteor.settings.public.APP === 'YONETIM' && (M.C.Iller.find().count() === 0 || M.C.Ilceler.find().count() === 0) ) {
-    var ilArray = [
+    const ilArray = [
         {il: 'Adana'},
         {il: 'Adıyaman'},
         {il: 'Afyonkarahisar'},
@@ -1053,12 +1053,12 @@ Meteor.startup(function () {
         {il: 'Zonguldak', ilce: 'Merkez'}
       ];
 
-    _.each(ilArray, function (il) {
+    ilArray.forEach(il => {
       il.ilCollate = Collate(il.il);
       M.C.Iller.insert(il);
     });
 
-    _.each(ilceArray, function (ilce) {
+    ilceArray.forEach(ilce => {
       ilce.ilCollate = Collate(ilce.il);
       ilce.ilceCollate = Collate(ilce.ilce);
       M.C.Ilceler.insert(ilce);
