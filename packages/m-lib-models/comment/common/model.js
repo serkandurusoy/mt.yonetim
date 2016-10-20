@@ -13,11 +13,11 @@ M.C.Comments.Schema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     index: 1,
-    custom: function() {
-      var collection = this.field('collection');
-      var item = this;
+    custom() {
+      const collection = this.field('collection');
+      const item = this;
       if (collection.isSet && item.isSet) {
-        var hit = M.C[collection.value].findOne({_id: item.value});
+        const hit = M.C[collection.value].findOne({_id: item.value});
         return hit ? true : 'notAllowed';
       }
     },
@@ -29,10 +29,9 @@ M.C.Comments.Schema = new SimpleSchema({
     label: 'Yorum',
     type: String,
     max: 2000,
-    autoValue: function() {
+    autoValue() {
       if (this.isSet) {
-        var value = this.value;
-        return M.L.TrimButKeepParagraphs(value);
+        return M.L.TrimButKeepParagraphs(this.value);
       } else {
         this.unset();
       }

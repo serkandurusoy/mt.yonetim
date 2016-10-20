@@ -1,8 +1,8 @@
 Template.comments.onCreated(function(){
-  var routeName = FlowRouter.getRouteName();
-  var doc = FlowRouter.getParam('_id');
-  var collection;
-  var commentMeta;
+  const routeName = FlowRouter.getRouteName();
+  const doc = FlowRouter.getParam('_id');
+  let collection;
+  let commentMeta;
   if (routeName === 'sinavDetay') {
     collection = 'Sinavlar';
   }
@@ -16,11 +16,11 @@ Template.comments.onCreated(function(){
 });
 
 Template.comments.helpers({
-  comments: function() {
-    var commentsCursor = M.C.Comments.find(Template.instance().commentMeta.get(), {sort: {createdAt: 1}, fields: {_id: 1, createdBy:1, createdAt: 1, body: 1}});
+  comments() {
+    const commentsCursor = M.C.Comments.find(Template.instance().commentMeta.get(), {sort: {createdAt: 1}, fields: {_id: 1, createdBy:1, createdAt: 1, body: 1}});
     return commentsCursor.count() && commentsCursor;
   },
-  commentMeta: function() {
+  commentMeta() {
     return Template.instance().commentMeta.get();
   }
 });
@@ -34,20 +34,20 @@ Template.comment.onDestroyed(function(){
   this.$('[data-tooltip]').tooltip('remove');
 });
 
-Template.comments.onDestroyed(function(){
+Template.comments.onDestroyed(() => {
   $('.material-tooltip').remove();
 });
 
 
 Template.comment.helpers({
-  createdByUser: function() {
-    return M.C.Users.find({_id: this.createdBy}).map(function(user) {
+  createdByUser() {
+    return M.C.Users.find({_id: this.createdBy}).map(user => {
       user.tooltip = user.name + ' ' + user.lastName + '\n' + (!user.kurum || user.kurum === 'mitolojix' ? 'Mitolojix' : M.C.Kurumlar.findOne({_id: user.kurum}).isim) + '\n' + M.L.enumLabel(user.role)
       return user;
     })[0];
   },
-  initialsOptions: function() {
-    var user = M.C.Users.findOne({_id: this._id});
+  initialsOptions() {
+    const user = M.C.Users.findOne({_id: this._id});
     return user && {
       name: user.name + ' ' + user.lastName,
       height: 250,

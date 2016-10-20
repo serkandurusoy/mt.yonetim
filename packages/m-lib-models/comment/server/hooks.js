@@ -1,17 +1,21 @@
-M.C.Comments.after.insert(function (userId, doc) {
+M.C.Comments.after.insert((userId, document) => {
   // TODO: there is some duplication of this code in sinav/server/cron.js
-  var collaborators = [];
+  let collaborators = [];
 
   // Tum commentlerin commentorlarini al
+  const {
+    collection,
+    doc,
+  } = document;
   M.C.Comments.find({
-    collection: doc.collection,
-    doc: doc.doc
-  }).forEach(function(comment) {
+    collection,
+    doc,
+  }).forEach(comment => {
     collaborators = _.union(collaborators, [comment.createdBy]);
   });
 
-  var item = M.C[doc.collection].findOne({
-    _id: doc.doc
+  const item = M.C[collection].findOne({
+    _id: doc,
   });
 
   // Itemin olusturan ve son guncelleyenini al
@@ -20,14 +24,14 @@ M.C.Comments.after.insert(function (userId, doc) {
 
   // Itemin varsa versiyonlarinin olusturan ve son guncelleyenlerini al
   if (item._version > 1) {
-    item.versions().forEach(function(item) {
+    item.versions().forEach(item => {
       collaborators = _.union(collaborators, [item.createdBy]);
       collaborators = !!item.updatedBy ? _.union(collaborators, [item.updatedBy]) : collaborators;
     })
   }
 
-  var user = M.C.Users.findOne({_id: doc.createdBy});
-  var ders = item.ders || item.alan.ders;
+  const user = M.C.Users.findOne({_id: document.createdBy});
+  const ders = item.ders || item.alan.ders;
 
   // Item ile ayni kurum ve dersteki ogretmenleri al
   M.C.Users.find({
@@ -35,7 +39,7 @@ M.C.Comments.after.insert(function (userId, doc) {
     kurum: item.kurum,
     role: 'ogretmen',
     dersleri: ders
-  }).forEach(function(user) {
+  }).forEach(user => {
     collaborators = _.union(collaborators, [user._id]);
   });
 
@@ -45,7 +49,7 @@ M.C.Comments.after.insert(function (userId, doc) {
       aktif: true,
       kurum: user.kurum,
       role: user.role
-    }).forEach(function(user) {
+    }).forEach(user => {
       collaborators = _.union(collaborators, [user._id]);
     });
   }
@@ -54,26 +58,26 @@ M.C.Comments.after.insert(function (userId, doc) {
   collaborators = _.uniq(collaborators);
 
   // collaboratorlar arasindan kendini cikart
-  collaborators = _.compact(_.without(collaborators, doc.createdBy));
+  collaborators = _.compact(_.without(collaborators, document.createdBy));
 
-  _.each(collaborators, function(to) {
+  collaborators.forEach(to => {
     // bu kisi bu item icin notification aldiysa count 1 arttir
-    var updated = M.C.Notifications.update({
-      collection: doc.collection,
-      doc: doc.doc,
-      to: to
+    const updated = M.C.Notifications.update({
+      collection,
+      doc,
+      to,
     },{
       $inc: {count: 1}
     });
     // safeguard against nonexistent user id information
-    var userId = M.C.Users.findOne({_id: to});
+    const userId = M.C.Users.findOne({_id: to});
     if (userId) {
       // bu kisi bu item icin notification almadiyse yeni olustur
       if (!updated) {
         M.C.Notifications.insert({
-          collection: doc.collection,
-          doc: doc.doc,
-          to: to
+          collection,
+          doc,
+          to,
         })
       }
     }
