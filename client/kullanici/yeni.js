@@ -1,20 +1,20 @@
 AutoForm.hooks({
   kullaniciYeniForm: {
     before: {
-      method: function(doc) {
-        var form = this;
+      method(doc) {
+        const form = this;
         form.removeStickyValidationError('emails.0.address');
         form.removeStickyValidationError('tcKimlik');
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('kullaniciListe');
       }
     },
-    onError: function(operation, error) {
-      var form = this;
+    onError(operation, error) {
+      const form = this;
       if (error) {
 
         if (error.reason && error.reason === 'Email already exists.') {

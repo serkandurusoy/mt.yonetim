@@ -1,13 +1,13 @@
 Template.kullaniciDuzenle.onCreated(function() {
-  template = this;
-  template.autorun(function() {
+  const template = this;
+  template.autorun(() => {
     template.subscribe('kullaniciById', FlowRouter.getParam('_id'));
   });
 });
 
 Template.kullaniciDuzenle.helpers({
-  kullanici: function() {
-    var selector = {_id: FlowRouter.getParam('_id'), aktif: true};
+  kullanici() {
+    let selector = {_id: FlowRouter.getParam('_id'), aktif: true};
     if (Meteor.user().kurum !== 'mitolojix') {
       selector.kurum = Meteor.user().kurum;
     }
@@ -18,20 +18,20 @@ Template.kullaniciDuzenle.helpers({
 AutoForm.hooks({
   kullaniciDuzenleForm: {
     before: {
-      method: function(doc) {
-        var form = this;
+      method(doc) {
+        const form = this;
         form.removeStickyValidationError('emails.0.address');
         form.removeStickyValidationError('tcKimlik');
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('kullaniciDetay', {_id: FlowRouter.getParam('_id')});
       }
     },
-    onError: function(operation, error) {
-      var form = this;
+    onError(operation, error) {
+      const form = this;
       if (error) {
 
         if (error.reason && error.reason.indexOf('duplicate key error') > -1 && error.reason.indexOf('email') > -1) {

@@ -1,21 +1,21 @@
 Template.kullaniciTarihce.onCreated(function() {
-  var template = this;
-  template.autorun(function() {
+  const template = this;
+  template.autorun(() => {
     template.subscribe('kullaniciById', FlowRouter.getParam('_id'));
   });
 });
 
-var kullaniciTarihceRevertModalView=null;
+let kullaniciTarihceRevertModalView=null;
 
 Template.kullaniciTarihce.events({
-  'click [data-trigger="revert"]': function(e,t) {
-    var _id = this.ref;
-    var doc = _.pick(this, 'name','lastName','tcKimlik','dogumTarihi','cinsiyet','emails','role','kurum','dersleri','sinif','sube');
-    var email = doc.emails[0].address;
-    Session.set('revert', {_id: _id, doc: doc, email: email});
+  'click [data-trigger="revert"]'(e,t) {
+    const _id = this.ref;
+    const doc = _.pick(this, 'name','lastName','tcKimlik','dogumTarihi','cinsiyet','emails','role','kurum','dersleri','sinif','sube');
+    const email = doc.emails[0].address;
+    Session.set('revert', {_id, doc, email});
     kullaniciTarihceRevertModalView = Blaze.render(Template.kullaniciTarihceRevertModal, document.getElementsByTagName('main')[0]);
     $('#kullaniciTarihceRevertModal').openModal({
-      complete: function() {
+      complete() {
         Blaze.remove(kullaniciTarihceRevertModalView);
       }
     });
@@ -23,16 +23,16 @@ Template.kullaniciTarihce.events({
 });
 
 Template.kullaniciTarihceRevertModal.events({
-  'click [data-trigger="revert"]': function(e,t) {
-    var revert = Session.get('revert');
-    M.C.Users.update({_id: revert._id}, {$set: revert.doc}, function(err,res) {
+  'click [data-trigger="revert"]'(e,t) {
+    const revert = Session.get('revert');
+    M.C.Users.update({_id: revert._id}, {$set: revert.doc}, (err,res) => {
       if (err) {
         toastr.error('İşlem başarısız. Düzenleme ekranını deneyin.');
       }
       if (res && revert.doc.role !== 'ogrenci') {
         Accounts.forgotPassword(
           {email: revert.email},
-          function(err) {
+          (err) => {
             toastr.success('Kullanıcıya şifre yenileme mesajı iletildi.');
           }
         )
@@ -40,7 +40,7 @@ Template.kullaniciTarihceRevertModal.events({
     });
     M.L.clearSessionVariable('revert');
     $('#kullaniciTarihceRevertModal').closeModal({
-      complete: function() {
+      complete() {
         Blaze.remove(kullaniciTarihceRevertModalView);
       }
     });

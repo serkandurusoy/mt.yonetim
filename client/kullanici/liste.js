@@ -1,12 +1,12 @@
 Template.kullaniciListe.onCreated(function() {
-  var template = this;
+  const template = this;
   template.subscribe('kullanicilar');
   template.searchResults = new ReactiveVar({});
-  template.autorun(function() {
-    var keywords = Session.get('keywords');
-    var filters = Session.get('filters');
+  template.autorun(() => {
+    const keywords = Session.get('keywords');
+    const filters = Session.get('filters');
     if (_.isString(keywords) || _.isObject(filters)) {
-      Meteor.call('search.kullanici',keywords, filters, function(err,res) {
+      Meteor.call('search.kullanici',keywords, filters, (err,res) => {
         if (err) {
           toastr.error(M.E.BilinmeyenHataMessage);
           template.searchResults.set({});
@@ -26,21 +26,24 @@ Template.kullaniciListe.onCreated(function() {
 });
 
 Template.kullaniciListe.helpers({
-  kullanicilar: function(){
-    var selector = Template.instance().searchResults.get();
+  kullanicilar(){
+    let selector = Template.instance().searchResults.get();
     if (Meteor.user().kurum !== 'mitolojix') {
       selector.kurum = Meteor.user().kurum;
     }
-    var kullanicilarCursor = M.C.Users.find(selector,{sort:{kurum: 1, nameCollate: 1, lastNameCollate: 1}});
+    const kullanicilarCursor = M.C.Users.find(selector,{sort:{kurum: 1, nameCollate: 1, lastNameCollate: 1}});
     return kullanicilarCursor.count() && {cursor: kullanicilarCursor, count: kullanicilarCursor.count()};
   }
 });
 
 Template.kullaniciKart.helpers({
-  initialsOptions: function() {
-    var doc = this;
+  initialsOptions() {
+    const {
+      name,
+      lastName,
+    } = this;
     return {
-      name: doc.name + ' ' + doc.lastName,
+      name:`${name} ${lastName}`,
       height: 250,
       width: 250,
       textColor: '#ffffff',
@@ -49,37 +52,49 @@ Template.kullaniciKart.helpers({
       radius: 0
     };
   },
-  accountActivated: function() {
+  accountActivated() {
     return !!M.C.UserConnectionLog.findOne({userId: this._id});
   }
 });
 
 Template.filterKullanici.helpers({
-  filterKullaniciForm: function() {
+  filterKullaniciForm() {
     return new SimpleSchema({
       kurum: {
         label: 'Kurum',
         type: String,
         optional: true,
         autoform: {
-          type: function() {
+          type() {
             if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
               return 'hidden';
             }
           },
-          value: function() {
+          value() {
             if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
               return Meteor.user().kurum;
             }
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            var kurumlar = [];
+          options() {
+            let kurumlar = [];
             if (Meteor.user().role === 'mitolojix') {
-              kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};}));
+              kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'},
+                M.C.Kurumlar.find({}, {sort: {isimCollate: 1}})
+                .map(kurum => {
+                  const {
+                    isim: label,
+                    _id: value,
+                  } = kurum;
+                  return {
+                    label,
+                    value,
+                  };
+                })
+              );
             } else {
-              var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+              const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
               kurumlar.push({label: userKurum.isim, value: userKurum._id});
             }
             return kurumlar;
@@ -91,9 +106,9 @@ Template.filterKullanici.helpers({
         type: String,
         optional: true,
         autoform: {
-          type: function() {
-            var formId = AutoForm.getFormId();
-            var kurum = AutoForm.getFieldValue('kurum', formId);
+          type() {
+            const formId = AutoForm.getFormId();
+            const kurum = AutoForm.getFieldValue('kurum', formId);
 
             if (!kurum) {
               return 'hidden';
@@ -106,21 +121,24 @@ Template.filterKullanici.helpers({
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            var formId = AutoForm.getFormId();
-            var kurum = AutoForm.getFieldValue('kurum', formId);
-            var options = _.map(M.E.RoleObjects, function(r) {
+          options() {
+            const formId = AutoForm.getFormId();
+            const kurum = AutoForm.getFieldValue('kurum', formId);
+            let options = M.E.RoleObjects.map(r => {
+              const {
+                label,
+                name: value,
+              } = r;
               return {
-                label: r.label, value: r.name
+                label,
+                value,
               };
             });
             if (kurum) {
               if (kurum === 'mitolojix') {
                 options = [_.findWhere(options, {value : 'mitolojix'})];
               } else {
-                options = _.reject(options, function(o) {
-                  return o.value === 'mitolojix';
-                });
+                options = _.reject(options, o => o.value === 'mitolojix');
               }
             }
             return options;
@@ -132,15 +150,20 @@ Template.filterKullanici.helpers({
         type: String,
         optional: true,
         autoform: {
-          type: function() {
-            var formId = AutoForm.getFormId();
-            var role = AutoForm.getFieldValue('role', formId);
+          type() {
+            const formId = AutoForm.getFormId();
+            const role = AutoForm.getFieldValue('role', formId);
             return role === 'ogrenci' ? 'select' : 'hidden';
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+          options() {
+            return M.E.Sinif.map(sinif => {
+              return {
+                label: M.L.enumLabel(sinif),
+                value: sinif,
+              };
+            });
           }
         }
       },
@@ -149,15 +172,20 @@ Template.filterKullanici.helpers({
         type: String,
         optional: true,
         autoform: {
-          type: function() {
-            var formId = AutoForm.getFormId();
-            var sinif = AutoForm.getFieldValue('sinif', formId);
+          type() {
+            const formId = AutoForm.getFormId();
+            const sinif = AutoForm.getFieldValue('sinif', formId);
             return !!sinif ? 'select' : 'hidden';
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            return M.E.Sube.map(function(sube) {return {label: sube, value: sube};});
+          options() {
+            return M.E.Sube.map(sube => {
+              return {
+                label: sube,
+                value: sube
+              };
+            });
           }
         }
       }
@@ -167,16 +195,16 @@ Template.filterKullanici.helpers({
 
 AutoForm.hooks({
   filterKullaniciForm: {
-    onSubmit: function() {
+    onSubmit() {
       return false;
     }
   }
 });
 
 Template.filterKullanici.onRendered(function(){
-  this.autorun(function() {
-    var filters = {};
-    var kurum = AutoForm.getFieldValue('kurum', 'filterKullaniciForm'),
+  this.autorun(() => {
+    let filters = {};
+    const kurum = AutoForm.getFieldValue('kurum', 'filterKullaniciForm'),
         role  = AutoForm.getFieldValue('role', 'filterKullaniciForm'),
         sinif = AutoForm.getFieldValue('sinif', 'filterKullaniciForm'),
         sube = AutoForm.getFieldValue('sube', 'filterKullaniciForm');

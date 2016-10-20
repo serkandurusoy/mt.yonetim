@@ -1,13 +1,13 @@
 Template.kullaniciDetay.onCreated(function() {
-  template = this;
-  template.autorun(function() {
+  const template = this;
+  template.autorun(() => {
     template.subscribe('kullaniciById', FlowRouter.getParam('_id'));
   });
 });
 
 Template.kullaniciDetay.helpers({
-  kullanici: function() {
-    var selector = {_id: FlowRouter.getParam('_id')};
+  kullanici() {
+    let selector = {_id: FlowRouter.getParam('_id')};
     if (Meteor.user().kurum !== 'mitolojix') {
       selector.kurum = Meteor.user().kurum;
     }
@@ -20,10 +20,13 @@ Template.kullaniciDetayKart.onRendered(function(){
 });
 
 Template.kullaniciDetayKart.helpers({
-  initialsOptions: function() {
-    var doc = this;
+  initialsOptions() {
+    const {
+      name,
+      lastName,
+    } = this;
     return {
-      name: doc.name + ' ' + doc.lastName,
+      name: `${name} ${lastName}`,
       height: 250,
       width: 250,
       textColor: '#ffffff',
@@ -32,16 +35,16 @@ Template.kullaniciDetayKart.helpers({
       radius: 0
     };
   },
-  accountActivated: function() {
+  accountActivated() {
     return !!M.C.UserConnectionLog.findOne({userId: this._id});
   }
 });
 
 Template.kullaniciDetayKart.events({
-  'click [data-trigger="giris-cikis"]': function(e,t) {
-    var girisCikisView = Blaze.render(Template.girisCikisModal, document.getElementsByTagName('main')[0]);
+  'click [data-trigger="giris-cikis"]'(e,t) {
+    const girisCikisView = Blaze.render(Template.girisCikisModal, document.getElementsByTagName('main')[0]);
     $('#girisCikisModal').openModal({
-      complete: function() {
+      complete() {
         Blaze.remove(girisCikisView);
       }
     });
@@ -49,14 +52,14 @@ Template.kullaniciDetayKart.events({
 });
 
 Template.girisCikisModal.onCreated(function() {
-  var template = this;
-  template.autorun(function() {
+  const template = this;
+  template.autorun(() => {
     template.subscribe('kullaniciGirisCikislari', FlowRouter.getParam('_id'));
   });
 });
 
 Template.girisCikisModal.helpers({
-  girisCikis: function() {
+  girisCikis() {
     return M.C.UserConnectionLog.find({userId: FlowRouter.getParam('_id')}, {sort: {createdAt: -1}})
   }
 });
