@@ -3,7 +3,7 @@ Security.permit([ 'update' ]).collections([ M.FS.KurumLogo ]).ifLoggedIn().userH
 Security.permit([ 'remove' ]).collections([ M.FS.KurumLogo ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.KurumLogo ]).allowInClientCode();
 M.FS.KurumLogo.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
@@ -20,7 +20,7 @@ Security.permit([ 'update' ]).collections([ M.FS.Avatar ]).ifLoggedIn().userHasR
 Security.permit([ 'remove' ]).collections([ M.FS.Avatar ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.Avatar ]).ifLoggedIn().allowInClientCode();
 M.FS.Avatar.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
@@ -35,7 +35,7 @@ Security.permit([ 'update' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().user
 Security.permit([ 'remove' ]).collections([ M.FS.DersIcerik ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.DersIcerik ]).ifLoggedIn().allowInClientCode();
 M.FS.DersIcerik.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
@@ -49,7 +49,7 @@ Security.permit([ 'update' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().user
 Security.permit([ 'remove' ]).collections([ M.FS.SoruGorsel ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.SoruGorsel ]).ifLoggedIn().allowInClientCode();
 M.FS.SoruGorsel.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return !!userId;
   }
 });
@@ -59,7 +59,7 @@ Security.permit([ 'update' ]).collections([ M.FS.Muhur ]).ifLoggedIn().userHasRo
 Security.permit([ 'remove' ]).collections([ M.FS.Muhur ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.Muhur ]).allowInClientCode();
 M.FS.Muhur.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
@@ -69,7 +69,7 @@ Security.permit([ 'update' ]).collections([ M.FS.Karakter ]).ifLoggedIn().userHa
 Security.permit([ 'remove' ]).collections([ M.FS.Karakter ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.Karakter ]).allowInClientCode();
 M.FS.Karakter.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
@@ -79,7 +79,7 @@ Security.permit([ 'update' ]).collections([ M.FS.YardimDokumani ]).ifLoggedIn().
 Security.permit([ 'remove' ]).collections([ M.FS.YardimDokumani ]).never().allowInClientCode();
 //Security.permit([ 'download' ]).collections([ M.FS.YardimDokumani ]).allowInClientCode();
 M.FS.YardimDokumani.allow({
-  download: function(userId, fileObj) {
+  download(userId, fileObj) {
     return true;
   }
 });
