@@ -1,7 +1,7 @@
 Meteor.publishComposite(null, function() {
   // TODO: explore using this.unblock() and see if it helps with performance. watch out for gotchas!!!
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Kurumlar.find();

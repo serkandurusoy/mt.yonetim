@@ -2,10 +2,11 @@ M.C.Kurumlar.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
+  const {
+    _id = doc._id,
+  } = this;
 
-  var _id = this._id ? this._id : doc._id;
-
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Kurumlar',
     doc: _id,
@@ -21,9 +22,11 @@ M.C.Kurumlar.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
-  var _id = this._id ? this._id : doc._id;
+  const {
+    _id = doc._id,
+  } = this;
 
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'Kurumlar',
     doc: _id,

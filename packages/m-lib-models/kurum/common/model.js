@@ -27,10 +27,9 @@ M.C.setUpCollection({
       max: 128,
       index: 1,
       unique: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -38,9 +37,9 @@ M.C.setUpCollection({
     },
     isimCollate: {
       type: String,
-      autoValue: function() {
-        var isim = this.field('isim');
-        var sortCode='0';
+      autoValue() {
+        const isim = this.field('isim');
+        let sortCode='0';
         if (isim.isSet) {
           if (Meteor.isServer) {
             sortCode = Collate(isim.value);
@@ -64,10 +63,9 @@ M.C.setUpCollection({
       type: String,
       min: 5,
       max: 64,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -78,10 +76,9 @@ M.C.setUpCollection({
       type: String,
       min: 3,
       max: 64,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -93,18 +90,16 @@ M.C.setUpCollection({
       min: 10,
       max: 128,
       regEx: SimpleSchema.RegEx.Email,
-      custom: function() {
-        var value = this.value;
-        var testFormat = M.L.TestEmail(M.L.Trim(value).toLowerCase());
+      custom() {
+        const testFormat = M.L.TestEmail(M.L.Trim(this.value).toLowerCase());
         if (!testFormat) {
           return 'emailHatali';
         }
         return true;
       },
-      autoValue: function() {
-        var value = this.value;
+      autoValue() {
         if (this.isSet) {
-          return M.L.Trim(value).toLowerCase();
+          return M.L.Trim(this.value).toLowerCase();
         } else {
           this.unset();
         }
@@ -115,9 +110,8 @@ M.C.setUpCollection({
       type: String,
       min: 10,
       max: 10,
-      custom: function() {
-        var value = this.value;
-        var testFormat = M.L.TestTel(value);
+      custom() {
+        const testFormat = M.L.TestTel(this.value);
         if (!testFormat) {
           return 'telHatali';
         }
@@ -133,10 +127,9 @@ M.C.setUpCollection({
       type: String,
       min: 3,
       max: 256,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }
@@ -146,30 +139,40 @@ M.C.setUpCollection({
       label: 'İl',
       type: String,
       optional:true,
-      autoValue: function() {
+      autoValue() {
         this.unset();
       },
       autoform: {
         class: 'browser-default',
         firstOption: 'İl seçin',
-        options: function() {
-          return M.C.Iller.find({},{sort: {ilCollate: 1}, fields: {il: 1}}).map(function(il){return {label: il.il, value: il.il};});
+        options() {
+          return M.C.Iller.find({},{sort: {ilCollate: 1}, fields: {il: 1}}).map(il => {
+            return {
+              label: il.il,
+              value: il.il,
+            };
+          });
         }
       }
     },
     'adres.ilce': {
       label: 'İlçe',
       type: String,
-      allowedValues: function() {
-        return M.C.Ilceler.find({},{fields: {ilce: 1}}).map(function(ilce){return ilce._id;});
+      allowedValues() {
+        return M.C.Ilceler.find({},{fields: {ilce: 1}}).map(ilce => ilce._id);
       },
       autoform: {
         class: 'browser-default',
         firstOption: 'İlçe seçin',
-        options: function() {
-          var formId = AutoForm.getFormId();
-          var il = AutoForm.getFieldValue('adres.il', formId);
-          return M.C.Ilceler.find({il: il},{sort: {ilceCollate: 1}, fields: {ilce: 1}}).map(function(ilce){return {label: ilce.ilce, value: ilce._id};});
+        options() {
+          const formId = AutoForm.getFormId();
+          const il = AutoForm.getFieldValue('adres.il', formId);
+          return M.C.Ilceler.find({il},{sort: {ilceCollate: 1}, fields: {ilce: 1}}).map(ilce => {
+            return {
+              label: ilce.ilce,
+              value: ilce._id,
+            };
+          });
         }
       }
     },
@@ -180,13 +183,18 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Derece seçin',
-        options: function() {
-          var options = _.map(M.E.SifreObjects, function(s) {
+        options() {
+          return M.E.SifreObjects.map(s => {
+            const {
+              label,
+              name: value,
+            } = s;
             return {
-              label: s.label, value: s.name
+              label,
+              value,
             };
           });
-          return options;
+
         }
       }
     }

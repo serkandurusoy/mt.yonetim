@@ -1,7 +1,7 @@
 M.C.Kurumlar.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,
-    autoValue: function() {
+    autoValue() {
       //TODO: ileride multilingual bir sey yaparsak bunu da dinamik olusturmak gerekir
       if (this.isInsert) {
         return "turkish";
@@ -11,56 +11,56 @@ M.C.Kurumlar.attachSchema(new SimpleSchema({
   'searchSource.isim': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('isim');
+    autoValue() {
+      const src = this.field('isim');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.yetkili.isim': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('yetkili.isim');
+    autoValue() {
+      const src = this.field('yetkili.isim');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.yetkili.unvan': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('yetkili.unvan');
+    autoValue() {
+      const src = this.field('yetkili.unvan');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.yetkili.email': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('yetkili.email');
+    autoValue() {
+      const src = this.field('yetkili.email');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.yetkili.telefon': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('yetkili.telefon');
+    autoValue() {
+      const src = this.field('yetkili.telefon');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.adres.il': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('adres.ilce');
+    autoValue() {
+      const src = this.field('adres.ilce');
       return src.isSet ? M.L.LatinizeLower(M.C.Ilceler.findOne({_id: src.value}).il) : this.unset();
     }
   },
   'searchSource.adres.ilce': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('adres.ilce');
+    autoValue() {
+      const src = this.field('adres.ilce');
       return src.isSet ? M.L.LatinizeLower(M.C.Ilceler.findOne({_id: src.value}).ilce) : this.unset();
     }
   }
@@ -85,7 +85,7 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'search.kurum': function(keywords) {
+  'search.kurum'(keywords) {
     check(keywords, String);
     if (this.userId && M.L.userHasRole(this.userId, 'mitolojix')) {
       return M.C.Kurumlar.find(
@@ -102,9 +102,7 @@ Meteor.methods({
           // TODO: make this configurable or perhaps a part of the search, or better yet create a separate advanced search section
           limit: 100
         }
-      ).map(function(doc) {
-        return doc._id;
-      });
+      ).map(doc => doc._id);
     } else {
       return [];
     }

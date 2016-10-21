@@ -1,5 +1,5 @@
 Template.kurumDetay.helpers({
-  kurum: function() {
+  kurum() {
     return M.C.Kurumlar.findOne({_id: FlowRouter.getParam('_id')});
   }
 });
