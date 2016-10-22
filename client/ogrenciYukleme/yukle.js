@@ -5,54 +5,54 @@ Template.ogrenciYukleme.onCreated(function() {
 });
 
 Template.ogrenciYukleme.helpers({
-  kurumlar: function() {
-    var kurumlarCursor = M.C.Kurumlar.find({}, {fields: {_id:1, isim: 1, isimCollate: 1}, sort: {isimCollate: 1}});
+  kurumlar() {
+    const kurumlarCursor = M.C.Kurumlar.find({}, {fields: {_id:1, isim: 1, isimCollate: 1}, sort: {isimCollate: 1}});
     return kurumlarCursor.count() && kurumlarCursor;
   },
-  disabled: function(){
+  disabled(){
     return Template.instance().disabled.get();
   },
-  ogrenciListesi: function() {
+  ogrenciListesi() {
     return Template.instance().ogrenciListesi.get();
   },
-  checkStatus: function(sira) {
-    var status = Template.instance().status.get(sira);
+  checkStatus(sira) {
+    const status = Template.instance().status.get(sira);
     return status ? status : 'new';
   }
 });
 
 Template.ogrenciYukleme.events({
-  'change #kurum': function(e,t) {
+  'change #kurum'(e,t) {
     t.$('#ogrenciler,#ogrencilerpath').val("");
     t.ogrenciListesi.set(null);
-    var kurum = t.$('#kurum').val();
+    const kurum = t.$('#kurum').val();
     t.disabled.set(!!kurum ? "": "disabled");
     if (!kurum) {
       toastr.error('Öğrencilerin yükleneceği kurum seçilmeli.');
     }
   },
-  'change #ogrenciler': function(e,t) {
-    var fixdata = function(data) {
-      var o = "", l = 0, w = 10240;
+  'change #ogrenciler'(e,t) {
+    const fixdata = (data) => {
+      let o = "", l = 0, w = 10240;
       for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
       o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
       return o;
     };
-    var file = e.target.files[0];
+    const file = e.target.files[0];
     if (file && s.endsWith(file.name,'.xls') && file.type === 'application/vnd.ms-excel') {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var data = e.target.result;
-        var workbook = data && XLSX.read(btoa(fixdata(data)), {type: 'base64'});
-        var first_sheet_name = workbook && workbook.SheetNames[0];
-        var worksheet = first_sheet_name && workbook.Sheets[first_sheet_name];
-        var ogrenciler = worksheet && XLSX.utils.sheet_to_json(worksheet);
+      let reader = new FileReader();
+      reader.onload = e => {
+        const data = e.target.result;
+        const workbook = data && XLSX.read(btoa(fixdata(data)), {type: 'base64'});
+        const first_sheet_name = workbook && workbook.SheetNames[0];
+        const worksheet = first_sheet_name && workbook.Sheets[first_sheet_name];
+        let ogrenciler = worksheet && XLSX.utils.sheet_to_json(worksheet);
         if (ogrenciler) {
           t.$('#ogrenciler,#ogrencilerpath').val("");
           t.ogrenciListesi.set(null);
           t.status.clear();
-          toastr.success('Dosya okunuyor. Lütfen bekleyin.', null, {onHidden: function() {
-            ogrenciler = _.filter(ogrenciler, function (ogrenci) {
+          toastr.success('Dosya okunuyor. Lütfen bekleyin.', null, {onHidden() {
+            ogrenciler = _.filter(ogrenciler, ogrenci => {
               return Match.test(ogrenci, new SimpleSchema({
                 __rowNum__: {
                   type: Number,
@@ -76,8 +76,8 @@ Template.ogrenciYukleme.events({
                   type: String,
                   min: 11,
                   max: 11,
-                  custom: function () {
-                    var tckimlik = this.value.toString();
+                  custom() {
+                    const tckimlik = this.value.toString();
                     if (tckimlik.indexOf('000000000') === 0 && tckimlik.length === 11) {
                       return true;
                     }
@@ -91,8 +91,8 @@ Template.ogrenciYukleme.events({
                   type: String,
                   min: 10,
                   max: 10,
-                  custom: function () {
-                    var dogumTarihi = this.value.toString();
+                  custom() {
+                    const dogumTarihi = this.value.toString();
                     return moment(dogumTarihi, "YYYY-MM-DD").isValid() ? true : 'notAllowed'
                   }
                 },
@@ -101,9 +101,9 @@ Template.ogrenciYukleme.events({
                   min: 10,
                   max: 128,
                   regEx: SimpleSchema.RegEx.Email,
-                  custom: function () {
-                    var value = this.value;
-                    var testFormat = M.L.TestEmail(M.L.Trim(value).toLowerCase());
+                  custom() {
+                    const value = this.value;
+                    const testFormat = M.L.TestEmail(M.L.Trim(value).toLowerCase());
                     if (!testFormat) {
                       return 'notAllowed';
                     }
@@ -141,11 +141,11 @@ Template.ogrenciYukleme.events({
       toastr.error('XLS uzantılı ve geçerli bir Excel dosyası seçilmeli.');
     }
   },
-  'click [data-trigger="yukle"]': function(e,t) {
+  'click [data-trigger="yukle"]'(e,t) {
     e.preventDefault();
     t.$('[data-trigger="yukle"]').css('visibility','hidden');
-    var ogrenciler = t.ogrenciListesi.get();
-    _.each(ogrenciler, function(ogrenci) {
+    const ogrenciler = t.ogrenciListesi.get();
+    ogrenciler.forEach(ogrenci => {
       Meteor.call('kullaniciYeniMethod', {
         kurum: t.$('#kurum').val(),
         name: ogrenci.AD,
@@ -157,7 +157,7 @@ Template.ogrenciYukleme.events({
         role: 'ogrenci',
         sinif: ogrenci.SINIF,
         sube: ogrenci.SUBE
-      }, function(err,res) {
+      }, (err,res) => {
         if (res) {
           t.status.set(ogrenci.__rowNum__,'success')
         }
