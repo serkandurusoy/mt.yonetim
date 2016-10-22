@@ -9,11 +9,11 @@ M.C.Notifications.Schema = new SimpleSchema({
   doc: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    custom: function() {
-      var collection = this.field('collection');
-      var item = this;
+    custom() {
+      const collection = this.field('collection');
+      const item = this;
       if (collection.isSet && item.isSet) {
-        var hit = M.C[collection.value].findOne({_id: item.value});
+        const hit = M.C[collection.value].findOne({_id: item.value});
         return hit ? true : 'notAllowed';
       }
     }
@@ -22,11 +22,11 @@ M.C.Notifications.Schema = new SimpleSchema({
     type: String,
     min: 8,
     max: 8,
-    autoValue: function() {
-      var collection = this.field('collection');
-      var doc = this.field('doc');
+    autoValue() {
+      const collection = this.field('collection');
+      const doc = this.field('doc');
       if (collection.isSet && doc.isSet) {
-        var item = M.C[collection.value].findOne({_id: doc.value});
+        const item = M.C[collection.value].findOne({_id: doc.value});
         return item && item.kod;
       } else {
         this.unset();
@@ -36,7 +36,7 @@ M.C.Notifications.Schema = new SimpleSchema({
   at: {
     type: Date,
     index: -1,
-    autoValue: function() {
+    autoValue() {
       return new Date();
     }
   },
@@ -62,7 +62,7 @@ if (Meteor.isServer) {
   Security.defineMethod('notificationOwner', {
     //fetch: [],
     //transform: null,
-    allow: function (type, role, userId, doc, fields, modifier) {
+    allow(type, role, userId, doc, fields, modifier) {
       return doc.to === userId;
     }
   });
