@@ -1,23 +1,21 @@
 Template.mufredatDuzenle.onCreated(function() {
-  template = this;
-  template.autorun(function() {
-    template.subscribe('mufredat', FlowRouter.getParam('_id'));
-    template.subscribe('fsdersicerik');
+  this.autorun(() => {
+    this.subscribe('mufredat', FlowRouter.getParam('_id'));
+    this.subscribe('fsdersicerik');
   });
 });
 
 Template.mufredatDuzenle.helpers({
-  mufredat: function() {
-    var mufredat = M.C.Mufredat.findOne({_id: FlowRouter.getParam('_id'), aktif: true});
-    return mufredat;
+  mufredat() {
+    return M.C.Mufredat.findOne({_id: FlowRouter.getParam('_id'), aktif: true});
   },
-  mufredatDuzenleyebilir: function() {
+  mufredatDuzenleyebilir() {
     if (Meteor.user()) {
-      var kurum = Meteor.user().kurum;
+      const kurum = Meteor.user().kurum;
       if (kurum === 'mitolojix') {
         return true;
       } else {
-        var rol = Meteor.user().role;
+        const rol = Meteor.user().role;
         if (rol === 'teknik') {
           return M.C.Mufredat.findOne({_id: FlowRouter.getParam('_id'), aktif: true, kurum: Meteor.user().kurum});
         } else {
@@ -33,26 +31,24 @@ Template.mufredatDuzenle.helpers({
 AutoForm.hooks({
   mufredatDuzenleForm: {
     before: {
-      method: function(doc) {
-        var form = this;
+      method(doc) {
+        const form = this;
         form.removeStickyValidationError('ders');
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('mufredatDetay', {_id: FlowRouter.getParam('_id')});
       }
     },
-    onError: function(operation, error) {
-      var form = this;
+    onError(operation, error) {
+      const form = this;
       if (error) {
-
         if (error.reason && error.reason.indexOf('duplicate key error')) {
           form.addStickyValidationError('ders', 'notUnique');
           AutoForm.validateField(form.formId, 'ders');
         }
-
       }
     }
   }

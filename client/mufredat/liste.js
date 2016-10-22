@@ -1,64 +1,74 @@
 Template.mufredatListe.onCreated(function() {
-  var template = this;
-  template.subscribe('mufredatlar');
-  template.subscribe('fsdersicerik');
-  template.searchResults = new ReactiveVar({});
-  template.autorun(function() {
-    var keywords = Session.get('keywords');
-    var filters = Session.get('filters');
+  this.subscribe('mufredatlar');
+  this.subscribe('fsdersicerik');
+  this.searchResults = new ReactiveVar({});
+  this.autorun(() => {
+    const keywords = Session.get('keywords');
+    const filters = Session.get('filters');
     if (_.isString(keywords) || _.isObject(filters)) {
-      Meteor.call('search.mufredat',keywords, filters, function(err,res) {
+      Meteor.call('search.mufredat',keywords, filters, (err,res) => {
         if (err) {
           toastr.error(M.E.BilinmeyenHataMessage);
-          template.searchResults.set({});
+          this.searchResults.set({});
         }
         if (res) {
           if (res==='all') {
-            template.searchResults.set({});
+            this.searchResults.set({});
           } else {
-            template.searchResults.set({_id: {$in: res}});
+            this.searchResults.set({_id: {$in: res}});
           }
         }
       })
     } else {
-      template.searchResults.set({});
+      this.searchResults.set({});
     }
   });
 });
 
 Template.mufredatListe.helpers({
-  mufredat: function(){
-    var selector = Template.instance().searchResults.get();
-    var mufredatCursor = M.C.Mufredat.find(selector, {sort: {kurum: 1, egitimYili: 1, ders: 1, sinif: 1}});
+  mufredat(){
+    const selector = Template.instance().searchResults.get();
+    const mufredatCursor = M.C.Mufredat.find(selector, {sort: {kurum: 1, egitimYili: 1, ders: 1, sinif: 1}});
     return mufredatCursor.count() && {cursor: mufredatCursor, count: mufredatCursor.count()};
   }
 });
 
 Template.filterMufredat.helpers({
-  filterMufredatForm: function() {
+  filterMufredatForm() {
     return new SimpleSchema({
       kurum: {
         label: 'Kurum',
         type: String,
         optional: true,
         autoform: {
-          type: function() {
-            if (Meteor.user() && !_.contains(['mitolojix','teknik'], Meteor.user().role)) {
+          type() {
+            if (Meteor.user() && !['mitolojix','teknik'].includes(Meteor.user().role)) {
               return 'hidden';
             }
           },
-          value: function() {
-            if (Meteor.user() && !_.contains(['mitolojix','teknik'], Meteor.user().role)) {
+          value() {
+            if (Meteor.user() && !['mitolojix','teknik'].includes(Meteor.user().role)) {
               return Meteor.user().kurum;
             }
           },
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            var kurumlar = [];
-            var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+          options() {
+            let kurumlar = [];
+            const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
             if (Meteor.user().role === 'mitolojix') {
-              kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};}));
+              kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}})
+                          .map(kurum => {
+                            const {
+                              isim: label,
+                              _id: value,
+                            } = kurum;
+                            return {
+                              label,
+                              value,
+                            };
+                          })
+              );
             } else {
               kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, {label: userKurum.isim, value: userKurum._id});
             }
@@ -73,10 +83,15 @@ Template.filterMufredat.helpers({
         autoform: {
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function(){
-            return _.map(M.E.EgitimYiliObjects, function(s) {
+          options(){
+            return M.E.EgitimYiliObjects.map(s => {
+              const {
+                label,
+                name: value,
+              } = s;
               return {
-                label: s.label, value: s.name
+                label,
+                value,
               };
             });
           }
@@ -89,11 +104,30 @@ Template.filterMufredat.helpers({
         autoform: {
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
+          options() {
             if (M.L.userHasRole(Meteor.userId(), 'ogretmen')) {
-              return M.C.Dersler.find({_id: {$in: Meteor.user().dersleri}}).map(function(ders) {return {label: ders.isim, value: ders._id};});
+              return M.C.Dersler.find({_id: {$in: Meteor.user().dersleri}})
+                                .map(ders => {
+                                    const {
+                                      isim: label,
+                                      _id: value,
+                                    } = ders;
+                                    return {
+                                      label,
+                                      value,
+                                    };
+                                  });
             } else {
-              return M.C.Dersler.find().map(function(ders) {return {label: ders.isim, value: ders._id};});
+              return M.C.Dersler.find().map(ders => {
+                    const {
+                      isim: label,
+                      _id: value,
+                    } = ders;
+                    return {
+                      label,
+                      value,
+                };
+              });
             }
           }
         }
@@ -105,8 +139,13 @@ Template.filterMufredat.helpers({
         autoform: {
           class: 'browser-default',
           firstOption: 'Tümü',
-          options: function() {
-            return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+          options() {
+            return M.E.Sinif.map(sinif => {
+              return {
+                label: M.L.enumLabel(sinif),
+                value: sinif,
+              };
+            });
           }
         }
       }
@@ -116,16 +155,16 @@ Template.filterMufredat.helpers({
 
 AutoForm.hooks({
   filterMufredatForm: {
-    onSubmit: function() {
+    onSubmit() {
       return false;
     }
   }
 });
 
 Template.filterMufredat.onRendered(function(){
-  this.autorun(function() {
-    var filters = {};
-    var kurum = AutoForm.getFieldValue('kurum', 'filterMufredatForm'),
+  this.autorun(() => {
+    let filters = {};
+    const kurum = AutoForm.getFieldValue('kurum', 'filterMufredatForm'),
       egitimYili  = AutoForm.getFieldValue('egitimYili', 'filterMufredatForm'),
       ders  = AutoForm.getFieldValue('ders', 'filterMufredatForm'),
       sinif = AutoForm.getFieldValue('sinif', 'filterMufredatForm');

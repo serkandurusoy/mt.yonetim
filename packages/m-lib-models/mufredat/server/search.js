@@ -1,7 +1,7 @@
 M.C.Mufredat.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,
-    autoValue: function() {
+    autoValue() {
       if (this.isInsert) {
         return "turkish";
       }
@@ -10,32 +10,32 @@ M.C.Mufredat.attachSchema(new SimpleSchema({
   'searchSource.kurum': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('kurum');
+    autoValue() {
+      const src = this.field('kurum');
       return this.isSet ? this.value : src.isSet ? M.L.LatinizeLower(src.value === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: src.value}).isim) : this.unset();
     }
   },
   'searchSource.egitimYili': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('egitimYili');
+    autoValue() {
+      const src = this.field('egitimYili');
       return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
     }
   },
   'searchSource.ders': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('ders');
+    autoValue() {
+      const src = this.field('ders');
       return src.isSet ? M.L.LatinizeLower(M.C.Dersler.findOne({_id: src.value}).isim) : this.unset();
     }
   },
   'searchSource.sinif': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('sinif');
+    autoValue() {
+      const src = this.field('sinif');
       return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
     }
   }
@@ -56,11 +56,13 @@ if (Meteor.isServer) {
   });
 }
 
-Meteor.startup(function() {
+Meteor.startup(() => {
   M.C.Kurumlar.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+    const {
+      _id = doc._id,
+    } = this;
     if (this.previous.isim !== doc.isim) {
-      M.C.Mufredat.find({kurum: _id}).forEach(function(mufredat) {
+      M.C.Mufredat.find({kurum: _id}).forEach(mufredat => {
         M.C.Mufredat.update(
           {_id: mufredat._id},
           {$set: {'searchSource.kurum': M.L.LatinizeLower(doc.isim)}},
@@ -71,9 +73,11 @@ Meteor.startup(function() {
   });
 
   M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+    const {
+      _id = doc._id,
+    } = this;
     if (this.previous.isim !== doc.isim) {
-      M.C.Mufredat.find({ders: _id}).forEach(function(mufredat) {
+      M.C.Mufredat.find({ders: _id}).forEach(mufredat => {
         M.C.Mufredat.update(
           {_id: mufredat._id},
           {$set: {'searchSource.ders': M.L.LatinizeLower(doc.isim)}},
@@ -85,7 +89,7 @@ Meteor.startup(function() {
 });
 
 Meteor.methods({
-  'search.mufredat': function(keywords, filters) {
+  'search.mufredat'(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));
     check(filters, {
       kurum: Match.Optional(String),
@@ -93,9 +97,9 @@ Meteor.methods({
       ders: Match.Optional(String),
       egitimYili: Match.Optional(String)
     });
-    var userId = this.userId;
+    const userId = this.userId;
     if (userId) {
-      var selector = {};
+      let selector = {};
       if (!!keywords) {
         selector.$text = {$search: M.L.LatinizeLower(keywords)}
       }
@@ -105,7 +109,7 @@ Meteor.methods({
           selector.kurum = filters.kurum;
         }
       } else if (M.L.userHasRole(userId, 'teknik')) {
-        if (filters.kurum && _.contains([M.C.Users.findOne({_id: userId}).kurum, 'mitolojix'], filters.kurum)) {
+        if (filters.kurum && _.contains([M.C.Users.findOne({_id: userId}).kurum, 'mitolojix'],filters.kurum)) {
           selector.kurum = filters.kurum;
         } else {
           selector.kurum = {$in: [M.C.Users.findOne({_id: userId}).kurum, 'mitolojix']};
@@ -142,11 +146,8 @@ Meteor.methods({
             },
             limit: 100
           }
-        ).map(function(doc) {
-          return doc._id;
-        });
+        ).map(doc => doc._id);
       }
-
     } else {
       return [];
     }

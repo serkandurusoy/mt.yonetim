@@ -2,10 +2,11 @@ M.C.Mufredat.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
+  const {
+    _id = doc._id,
+  } = this;
 
-  var _id = this._id ? this._id : doc._id;
-
-  var story = {
+  const story = {
     kurum: doc.kurum,
     collection: 'Mufredat',
     doc: _id,
@@ -23,9 +24,12 @@ M.C.Mufredat.after.update(function(userId, doc, fieldNames, modifier, options) {
     if (!userId) {
       userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
     }
-    var _id = this._id ? this._id : doc._id;
 
-    var story = {
+    const {
+      _id = doc._id,
+    } = this;
+
+    const story = {
       kurum: doc.kurum,
       collection: 'Mufredat',
       doc: _id,

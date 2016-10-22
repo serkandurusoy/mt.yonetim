@@ -1,13 +1,12 @@
 Template.mufredatDetay.onCreated(function() {
-  template = this;
-  template.autorun(function() {
-    template.subscribe('mufredat', FlowRouter.getParam('_id'));
-    template.subscribe('fsdersicerik');
+  this.autorun(()=> {
+    this.subscribe('mufredat', FlowRouter.getParam('_id'));
+    this.subscribe('fsdersicerik');
   });
 });
 
 Template.mufredatDetay.helpers({
-  mufredat: function() {
+  mufredat() {
     return M.C.Mufredat.findOne({_id: FlowRouter.getParam('_id')});
   }
 });
@@ -17,30 +16,30 @@ Template.mufredatDetayKart.onRendered(function(){
 });
 
 Template.mufredatDetayKart.events({
-  'click [data-trigger="clone"]': function(e,t) {
-    var doc = t.data;
+  'click [data-trigger="clone"]'(e,t) {
+    let doc = t.data;
     doc = _.extend(_.pick(doc, 'kurum', 'egitimYili', 'ders', 'sinif', 'konular', 'aktif'), {_clonedFrom: {_id: doc._id, _version: doc._version}});
     Session.set('mufredatClone',doc);
     FlowRouter.go('mufredatYeni');
   },
-  'click [data-trigger="previewIcerik"]' : function(e,t) {
+  'click [data-trigger="previewIcerik"]'(e,t) {
     e.preventDefault();
-    var icerik = this;
-    var data = {
+    const icerik = this;
+    const data = {
       fileName: icerik.name(),
       url: icerik.url({auth: false})
     };
 
-    var view = Blaze.renderWithData(Template.previewIcerikModal, data, document.getElementsByTagName('main')[0]);
+    const view = Blaze.renderWithData(Template.previewIcerikModal, data, document.getElementsByTagName('main')[0]);
 
     $('#previewIcerikModal').openModal({
-      ready: function() {
+      ready() {
         PDFJS.workerSrc = '/packages/pascoual_pdfjs/build/pdf.worker.js';
-        var modalWidth = $('#pdfcontainer').width();
-        var modalHeight = $('.modal-content').height() - $('.modal-content h4').height() - $('.modal-content a').height();
+        const modalWidth = $('#pdfcontainer').width();
+        const modalHeight = $('.modal-content').height() - $('.modal-content h4').height() - $('.modal-content a').height();
 
-        var url = data.url;
-        var pdfDoc = null,
+        const url = data.url;
+        let pdfDoc = null,
           pageNum = 1,
           pageRendering = false,
           pageNumPending = null,
@@ -50,19 +49,19 @@ Template.mufredatDetayKart.events({
 
         function renderPage(num) {
           pageRendering = true;
-          pdfDoc.getPage(num).then(function(page) {
-            var viewport = page.getViewport(1);
-            var ws = modalWidth / viewport.width;
-            var hs = modalHeight / viewport.height;
+          pdfDoc.getPage(num).then(page => {
+            let viewport = page.getViewport(1);
+            const ws = modalWidth / viewport.width;
+            const hs = modalHeight / viewport.height;
             scale = hs < ws ? hs : ws;
             viewport = page.getViewport(scale);
 
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
-            var renderTask = page.render({canvasContext: ctx, viewport: viewport});
+            const renderTask = page.render({canvasContext: ctx, viewport: viewport});
 
-            renderTask.promise.then(function () {
+            renderTask.promise.then(() => {
               pageRendering = false;
               if (pageNumPending !== null) {
                 renderPage(pageNumPending);
@@ -100,14 +99,14 @@ Template.mufredatDetayKart.events({
         }
         document.getElementById('next').addEventListener('click', onNextPage);
 
-        PDFJS.getDocument(url).then(function (pdfDoc_) {
+        PDFJS.getDocument(url).then( pdfDoc_ => {
           pdfDoc = pdfDoc_;
           document.getElementById('page_count').textContent = pdfDoc.numPages;
           renderPage(pageNum);
         });
 
       },
-      complete: function() {
+      complete() {
         Blaze.remove(view);
       }
     });

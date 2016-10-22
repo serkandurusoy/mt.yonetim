@@ -6,15 +6,15 @@ M.C.setUpCollection({
       label: 'Kurum',
       type: String,
       index: 1,
-      custom: function() {
+      custom() {
         if (!this.userId && this.value === 'mitolojix') {
           return true;
         }
-        var kurum = this;
-        var user = M.C.Users.findOne({_id: this.userId});
-        var userRole = user && user.role;
-        var kurumlar = M.C.Kurumlar.find().map(function(kurum) {return kurum._id;});
-        var tumu = _.union('mitolojix',kurumlar);
+        const kurum = this;
+        const user = M.C.Users.findOne({_id: this.userId});
+        const userRole = user && user.role;
+        const kurumlar = M.C.Kurumlar.find().map(kurum =>kurum._id);
+        const tumu = _.union('mitolojix',kurumlar);
         if (kurum.isSet && !_.contains(tumu,kurum.value)) {
           return 'notAllowed';
         }
@@ -23,9 +23,9 @@ M.C.setUpCollection({
         }
         return true;
       },
-      autoValue: function() {
-        var kurum = this;
-        var user = M.C.Users.findOne({_id: this.userId});
+      autoValue() {
+        const kurum = this;
+        const user = M.C.Users.findOne({_id: this.userId});
         if (user && user.role !== 'mitolojix') {
           if (kurum.isInsert) {
             return user.kurum;
@@ -39,19 +39,30 @@ M.C.setUpCollection({
         }
       },
       autoform: {
-        type: function() {
+        type() {
           if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
             return 'hidden';
           }
         },
         class: 'browser-default',
         firstOption: 'Kurum seçin',
-        options: function() {
-          var kurumlar = [];
+        options() {
+          let kurumlar = [];
           if (Meteor.user().role === 'mitolojix') {
-            kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};}));
+            kurumlar = _.union({label: 'Mitolojix', value: 'mitolojix'}, M.C.Kurumlar.find({}, {sort: {isimCollate: 1}})
+                        .map(kurum => {
+                          const {
+                            isim: label,
+                            _id: value,
+                          } = kurum;
+                          return {
+                            label,
+                            value,
+                          };
+                        })
+            );
           } else {
-            var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+            const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
             kurumlar.push({label: userKurum.isim, value: userKurum._id});
           }
           return kurumlar;
@@ -66,10 +77,15 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Eğitim yılı seçin',
-        options: function(){
-          return _.map(M.E.EgitimYiliObjects, function(s) {
+        options(){
+          return M.E.EgitimYiliObjects.map(s => {
+            const {
+              label,
+              name: value,
+            } = s;
             return {
-              label: s.label, value: s.name
+              label,
+              value,
             };
           });
         }
@@ -78,10 +94,10 @@ M.C.setUpCollection({
     ders: {
       label: 'Ders',
       type: String,
-      custom: function() {
-        var ders = this;
+      custom() {
+        const ders = this;
         if (ders.isSet) {
-          var tumDersler = M.C.Dersler.find().map(function(ders) {return ders._id;});
+          const tumDersler = M.C.Dersler.find().map(ders => ders._id);
           if (!_.contains(tumDersler,ders.value)) {
             return 'notAllowed';
           }
@@ -91,16 +107,25 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Ders seçin',
-        options: function() {
-          return M.C.Dersler.find().map(function(ders) {return {label: ders.isim, value: ders._id};});
+        options() {
+          return M.C.Dersler.find().map(ders => {
+            const {
+              isim: label,
+              _id: value,
+            } = ders;
+            return {
+              label,
+              value,
+            };
+          });
         }
       }
     },
     sinif: {
       label: 'Sınıf',
       type: String,
-      custom: function() {
-        var sinif = this;
+      custom() {
+        const sinif = this;
         if (sinif.isSet && !_.contains(M.E.Sinif, sinif.value)) {
           return 'notAllowed';
         }
@@ -109,8 +134,13 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Sınıf seçin',
-        options: function(){
-          return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+        options(){
+          return M.E.Sinif.map(sinif => {
+            return {
+              label: M.L.enumLabel(sinif),
+              value: sinif,
+            };
+          });
         }
       }
     },
@@ -119,8 +149,8 @@ M.C.setUpCollection({
       type: [Object],
       minCount: 1,
       maxCount: 48,
-      autoValue: function() {
-        var konular = this;
+      autoValue() {
+        let konular = this;
         konular.value = _.compact(konular.value);
         if (konular.isSet) {
           if (Meteor.isServer) {
@@ -163,19 +193,17 @@ M.C.setUpCollection({
 
              */
           }
-          return konular.value.sort(function(a, b) {
-            return a.konu.localeCompare(b.konu);
-          });
+          return konular.value.sort((a, b) => a.konu.localeCompare(b.konu));
         } else {
           this.unset();
         }
       },
-      custom: function() {
-        var konuObjects = this.value;
+      custom() {
+        let konuObjects = this.value;
         konuObjects = _.compact(konuObjects);
-        var konular = _.pluck(konuObjects, 'konu');
-        var sag = konular.length;
-        var sol = _.uniq(konular).length;
+        const konular = _.pluck(konuObjects, 'konu');
+        const sag = konular.length;
+        const sol = _.uniq(konular).length;
         return sol === sag ? true : 'notUnique'
       }
     },
@@ -184,12 +212,11 @@ M.C.setUpCollection({
       type: String,
       min: 2,
       max: 256,
-      autoValue: function() {
-        var konu = this;
-        if (konu.isSet) {
-          return M.L.Trim(konu.value);
+      autoValue() {
+        if (this.isSet) {
+          return M.L.Trim(this.value);
         } else {
-          konu.unset();
+          this.unset();
         }
       }
     },
@@ -198,7 +225,7 @@ M.C.setUpCollection({
       type: [String],
       optional: true,
       defaultValue: [],
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return _.compact(this.value);
         } else {
@@ -229,31 +256,27 @@ M.C.setUpCollection({
       type: [String],
       minCount: 1,
       maxCount: 48,
-      autoValue: function() {
-        var kazanimlar = this;
+      autoValue() {
+        const kazanimlar = this;
         if (kazanimlar.isSet) {
-          var value = kazanimlar.value;
+          let value = kazanimlar.value;
           value = _.compact(value);
-          value = _.map(value, function(v) {
-            return M.L.Trim(v);
-          });
+          value = value.map(v => M.L.Trim(v));
           if (Meteor.isServer) {
             /*
              TODO: use ilib sort for this
              */
           }
-          return value.sort(function(a, b) {
-            return a.localeCompare(b);
-          });
+          return value.sort((a, b) => a.localeCompare(b));
         } else {
           kazanimlar.unset();
         }
       },
-      custom: function() {
-        var kazanimlar = this.value;
+      custom() {
+        let kazanimlar = this.value;
         kazanimlar = _.compact(kazanimlar);
-        var sag = kazanimlar.length;
-        var sol = _.uniq(kazanimlar).length;
+        const sag = kazanimlar.length;
+        const sol = _.uniq(kazanimlar).length;
         return sol === sag ? true : 'notUnique'
       }
     },

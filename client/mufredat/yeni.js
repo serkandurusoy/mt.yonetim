@@ -8,19 +8,19 @@ Template.mufredatYeni.onCreated(function() {
 AutoForm.hooks({
   mufredatYeniForm: {
     before: {
-      method: function(doc) {
-        var form = this;
+      method(doc) {
+        const form = this;
         form.removeStickyValidationError('ders');
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('mufredatListe');
       }
     },
-    onError: function(operation, error) {
-      var form = this;
+    onError(operation, error) {
+      const form = this;
       if (error) {
 
         if (error.reason && error.reason.indexOf('duplicate key error')) {

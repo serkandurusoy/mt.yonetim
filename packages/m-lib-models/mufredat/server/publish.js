@@ -1,15 +1,15 @@
 Meteor.publishComposite('mufredatlar', function() {
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Mufredat.find();
         } else {
-          var kurumlar = [M.C.Users.findOne({_id: this.userId}).kurum];
+          let kurumlar = [M.C.Users.findOne({_id: this.userId}).kurum];
           if (M.L.userHasRole(this.userId, 'teknik')) {
             kurumlar.push('mitolojix');
           }
-          var selector = {kurum: {$in: kurumlar}};
+          let selector = {kurum: {$in: kurumlar}};
           if (M.L.userHasRole(this.userId, 'ogretmen')) {
             selector.ders = {
               $in: M.C.Users.findOne({_id: this.userId}).dersleri
@@ -25,12 +25,12 @@ Meteor.publishComposite('mufredatlar', function() {
 Meteor.publishComposite('mufredat', function(mufredatId) {
   check(mufredatId, String);
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Mufredat.find({_id: mufredatId});
         } else {
-          var kurumlar = [M.C.Users.findOne({_id: this.userId}).kurum];
+          let kurumlar = [M.C.Users.findOne({_id: this.userId}).kurum];
           if (!M.L.userHasRole(this.userId, 'ogrenci')) {
             kurumlar.push('mitolojix');
           }
