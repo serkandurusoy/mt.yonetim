@@ -3,19 +3,36 @@ Accounts.config({
   forbidClientAccountCreation: true
 });
 
-Accounts.onCreateUser(function(options,user){
+Accounts.onCreateUser((options,user) =>{
+
+  const {
+    profile: {
+      tcKimlik,
+      name,
+      lastName,
+      cinsiyet,
+      dogumTarihi,
+      role,
+      kurum,
+      dersleri = [],
+      sinif = '',
+      sube = '',
+      aktif,
+    },
+  } = options;
+
   _.extend(user, {
-    tcKimlik: options.profile.tcKimlik,
-    name: options.profile.name,
-    lastName: options.profile.lastName,
-    cinsiyet: options.profile.cinsiyet,
-    dogumTarihi: options.profile.dogumTarihi,
-    role: options.profile.role,
-    kurum: options.profile.kurum,
-    dersleri: options.profile.dersleri ? options.profile.dersleri : [],
-    sinif: options.profile.sinif ? options.profile.sinif : '',
-    sube: options.profile.sube ? options.profile.sube : '',
-    aktif: options.profile.aktif
+    tcKimlik,
+    name,
+    lastName,
+    cinsiyet,
+    dogumTarihi,
+    role,
+    kurum,
+    dersleri,
+    sinif,
+    sube,
+    aktif,
   });
 
   delete user.profile;
@@ -23,19 +40,19 @@ Accounts.onCreateUser(function(options,user){
   return user;
 });
 
-Accounts.validateLoginAttempt(function(attempt) {
+Accounts.validateLoginAttempt(attempt =>{
   if (!attempt.allowed) {
     return false;
   }
 
-  var user = attempt.user;
+  const user = attempt.user;
 
   if (!user.aktif) {
     throw new Meteor.Error(403, 'User is not marked active');
   }
 
   if (user.kurum !== 'mitolojix') {
-    var kurum = M.C.Kurumlar.findOne({_id: user.kurum});
+    const kurum = M.C.Kurumlar.findOne({_id: user.kurum});
     if (!(kurum && kurum.aktif)) {
       throw new Meteor.Error(403, 'User\'s kurum is not marked active');
     }

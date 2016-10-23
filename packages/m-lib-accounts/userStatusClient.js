@@ -8,7 +8,7 @@ M.L.activityDetected = false;
 
 M.C.UserConnectionLog = new Mongo.Collection('userconnectionlog');
 
-Meteor.startup(function() {
+Meteor.startup(() => {
 
   //
   // first send an initial hearbeat and then do it
@@ -17,7 +17,7 @@ Meteor.startup(function() {
   if (Meteor.userId()) {
     Meteor.call('heartbeat');
   }
-  Meteor.setInterval(function() {
+  Meteor.setInterval(() => {
     if (Meteor.userId() && M.L.activityDetected) {
       Meteor.call('heartbeat');
       M.L.activityDetected = false;
@@ -27,7 +27,7 @@ Meteor.startup(function() {
   //
   // detect activity and mark it as detected on any of the following events
   //
-  $(document).on(M.E.activityEvents, function() {
+  $(document).on(M.E.activityEvents, () => {
     M.L.activityDetected = true;
   });
 });

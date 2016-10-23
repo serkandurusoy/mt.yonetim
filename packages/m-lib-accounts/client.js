@@ -1,9 +1,9 @@
-Accounts.onEnrollmentLink(function(token, done) {
+Accounts.onEnrollmentLink((token, done) => {
   Session.set('resetToken', token);
   M.L.VerificationDoneCallback = done;
 });
 
-Accounts.onResetPasswordLink(function(token, done) {
+Accounts.onResetPasswordLink((token, done) => {
   Session.set('resetToken', token);
   M.L.VerificationDoneCallback = done;
 });

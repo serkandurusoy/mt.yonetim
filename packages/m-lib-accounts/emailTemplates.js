@@ -1,27 +1,27 @@
-var getOyunUrl = function(url) {
+const getOyunUrl = url => {
   return Meteor.settings.public.URL.OYUN + "/#" + url.split('#')[1];
 };
 
-var getYonetimUrl = function(url) {
+const getYonetimUrl = url => {
   return Meteor.settings.public.URL.YONETIM + "/#" + url.split('#')[1];
 };
 
-var getSifreMesaji = function(user) {
-  var userKurum = user.kurum;
-  var kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
-  var sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
-  var sifreZorlukAciklama = _.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail;
+const getSifreMesaji = user => {
+  const userKurum = user.kurum;
+  const kurum = userKurum === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: userKurum});
+  const sifreZorluk = kurum === 'mitolojix' ? 'kolay' : kurum.sifre;
+  const sifreZorlukAciklama = _.findWhere(M.E.SifreObjects, {name: sifreZorluk}).detail;
   return ' ' + sifreZorlukAciklama.charAt(0).toLowerCase() + sifreZorlukAciklama.slice(1);
 };
 
 Accounts.emailTemplates.from = '"Mitolojix' + ( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) ) + '" <bilgi@mitolojix.com>';
 Accounts.emailTemplates.siteName = 'Mitolojix';
 
-Accounts.emailTemplates.resetPassword.subject = function(user) {
+Accounts.emailTemplates.resetPassword.subject = user => {
   return 'Yeni şifre oluşturma talebi';
 };
-Accounts.emailTemplates.resetPassword.text = function(user, url) {
-  var body = '';
+Accounts.emailTemplates.resetPassword.text = (user, url) => {
+  let body = '';
   if (user.role === 'ogrenci') {
     url = getOyunUrl(url);
     body+=('Sevgili ' + user.name + ',\n\n');
@@ -43,8 +43,8 @@ Accounts.emailTemplates.resetPassword.text = function(user, url) {
   }
   return body;
 };
-Accounts.emailTemplates.resetPassword.html = function(user, url) {
-  var body = '';
+Accounts.emailTemplates.resetPassword.html = (user, url) => {
+  let body = '';
   if (user.role === 'ogrenci') {
     url = getOyunUrl(url);
     body+=('<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>');
@@ -69,11 +69,11 @@ Accounts.emailTemplates.resetPassword.html = function(user, url) {
   return body;
 };
 
-Accounts.emailTemplates.enrollAccount.subject = function(user) {
+Accounts.emailTemplates.enrollAccount.subject = user => {
   return 'Hesap etkinleştirme';
 };
-Accounts.emailTemplates.enrollAccount.text = function(user, url) {
-  var body = '';
+Accounts.emailTemplates.enrollAccount.text = (user, url) => {
+  let body = '';
   if (user.role === 'ogrenci') {
     url = getOyunUrl(url);
     body+=('Sevgili ' + user.name + ',\n\n');
@@ -98,8 +98,8 @@ Accounts.emailTemplates.enrollAccount.text = function(user, url) {
   }
   return body;
 };
-Accounts.emailTemplates.enrollAccount.html = function(user, url) {
-  var body = '';
+Accounts.emailTemplates.enrollAccount.html = (user, url) => {
+  let body = '';
   if (user.role === 'ogrenci') {
     url = getOyunUrl(url);
     body+=('<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>');

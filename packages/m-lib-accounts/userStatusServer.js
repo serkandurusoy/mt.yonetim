@@ -17,25 +17,29 @@ M.C.UserPresenceServers._ensureIndex({serverId: 1});
 
 
 // keep track of which servers are online
-Meteor.setInterval(function() {
-  var ping = new Date();
+Meteor.setInterval(() => {
+  const ping = new Date();
   ping.setSeconds(0,0);
-  var find = {serverId: M.E.serverId};
-  var modifier = {$set: {ping: ping}};
+  const find = {serverId: M.E.serverId};
+  const modifier = {$set: {ping}};
   M.C.UserPresenceServers.upsert(find, modifier);
 }, 1000 * 30);
 
 
 // remove old servers and sessions
 // update status of users connected to that server
-Meteor.setInterval(function() {
-  var cutoff = new Date();
+Meteor.setInterval(() => {
+  const cutoff = new Date();
   cutoff.setSeconds(0,0);
   cutoff.setMinutes(new Date().getMinutes() - 5);
-  M.C.UserPresenceServers.find({ping: {$lt: cutoff}}).forEach(function(server) {
-    M.C.UserPresenceServers.remove({_id: server._id});
-    M.C.UserPresenceSessions.remove({serverId: server.serverId});
-    M.C.Users.find({'status.serverId': server.serverId}).forEach(function(user) {
+  M.C.UserPresenceServers.find({ping: {$lt: cutoff}}).forEach(server => {
+    const {
+      _id,
+      serverId,
+    } = server;
+    M.C.UserPresenceServers.remove({_id});
+    M.C.UserPresenceSessions.remove({serverId});
+    M.C.Users.find({'status.serverId': serverId}).forEach(user => {
       M.L.trackUserStatus(user._id);
     })
   })
@@ -44,54 +48,58 @@ Meteor.setInterval(function() {
 
 // track user connection and disconnection
 Meteor.publish(null, function(){
-  var self = this;
 
-  if(self.userId && self.connection && self.connection.id){
-    M.L.userConnected(self.userId, self.connection);
+  if(this.userId && this.connection && this.connection.id){
+    M.L.userConnected(this.userId, this.connection);
 
-    self.onStop(function(){
-      M.L.userDisconnected(self.userId, self.connection);
+    this.onStop(() => {
+      M.L.userDisconnected(this.userId, this.connection);
     });
   }
 
-  self.ready();
+  this.ready();
 });
 
 
-M.L.userConnected = function(userId, connection) {
-  var createdAt = new Date();
+M.L.userConnected = (userId, connection) => {
+  const createdAt = new Date();
   createdAt.setSeconds(0,0);
-  M.C.UserPresenceSessions.insert({serverId: M.E.serverId, userId: userId, connectionId: connection.id, createdAt: createdAt});
+  M.C.UserPresenceSessions.insert({serverId: M.E.serverId, userId, connectionId: connection.id, createdAt});
   M.L.trackUserStatus(userId, connection);
 };
 
 
-M.L.userDisconnected = function(userId, connection) {
-  M.C.UserPresenceSessions.remove({userId:userId, connectionId:connection.id});
+M.L.userDisconnected = (userId, connection) => {
+  M.C.UserPresenceSessions.remove({userId, connectionId:connection.id});
   M.L.trackUserStatus(userId, connection);
 };
 
 
-M.L.trackUserStatus = function(userId, connection) {
-  var status = {
+M.L.trackUserStatus = (userId, connection) => {
+  let status = {
     serverId: M.E.serverId
   };
 
-  var isOnline = M.C.UserPresenceSessions.find({userId: userId}).count();
+  const isOnline = M.C.UserPresenceSessions.find({userId}).count();
 
   if (isOnline) {
     status.online = true;
 
     if (connection) {
-      var createdAt = new Date();
+      const {
+        id: connectionId,
+        clientAdress: ipAddress,
+        httpHeaders,
+      } = connection;
+      const createdAt = new Date();
       createdAt.setSeconds(0,0);
       M.C.UserConnectionLog.insert({
-        userId: userId,
-        createdAt: createdAt,
-        connectionId: connection.id,
-        ipAddress: connection.clientAddress,
-        httpHeaders: connection.httpHeaders,
-        information: _.omit(UAParser(connection.httpHeaders['user-agent']), 'ua')
+        userId,
+        createdAt,
+        connectionId,
+        ipAddress,
+        httpHeaders,
+        information: _.omit(UAParser(httpHeaders['user-agent']), 'ua')
       })
     }
 
@@ -99,7 +107,7 @@ M.L.trackUserStatus = function(userId, connection) {
     status.online = false;
   }
 
-  M.C.Users.update({_id: userId}, {$set: {status: status}});
+  M.C.Users.update({_id: userId}, {$set: {status}});
 
 };
 
@@ -114,13 +122,13 @@ M.E.inactivityTimeout = 30*60*1000; // 30mins
 // received activity heartbeat.
 //
 Meteor.methods({
-  heartbeat: function() {
+  heartbeat() {
     if (!this.userId) { return; }
-    var user = M.C.Users.findOne(this.userId);
+    const user = M.C.Users.findOne(this.userId);
     if (user) {
-      var heartbeat = new Date();
+      const heartbeat = new Date();
       heartbeat.setSeconds(0,0);
-      M.C.Users.update(user._id, {$set: {heartbeat: heartbeat}});
+      M.C.Users.update(user._id, {$set: {heartbeat}});
     }
   }
 });
@@ -129,13 +137,13 @@ Meteor.methods({
 //
 // periodically purge any stale sessions, removing their login tokens and clearing out the stale heartbeat.
 //
-Meteor.setInterval(function() {
-  var now = new Date(), overdueTimestamp = new Date(now- M.E.inactivityTimeout);
+Meteor.setInterval(() => {
+  const now = new Date(), overdueTimestamp = new Date(now- M.E.inactivityTimeout);
   Meteor.users.find({
     heartbeat: {$lt: overdueTimestamp}
   }, {
     fields: {_id: 1}
-  }).forEach(function(user){
+  }).forEach(user => {
     M.C.UserPresenceSessions.remove({userId: user._id});
     M.C.Users.update(user._id, {
       $set: {'services.resume.loginTokens': [], 'status.online': false},
