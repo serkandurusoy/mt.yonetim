@@ -1,30 +1,30 @@
-var userCursor = function(userId) {
+const userCursor = userId => {
   return M.C.Users.find({_id: userId}, {fields: {name: 1, lastName: 1}})
 };
 
 M.C.AuditLog = [
   {
-    find: function (doc) {
+    find(doc) {
       return userCursor(doc.createdBy);
     }
   },
   {
-    find: function (doc) {
+    find(doc) {
       return userCursor(doc.updatedBy);
     }
   },
   {
-    find: function(doc) {
+    find(doc) {
       return doc.versions();
     },
     children: [
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.createdBy);
         }
       },
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.updatedBy);
         }
       }

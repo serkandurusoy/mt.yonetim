@@ -1,4 +1,4 @@
-M.C.setUpCollection = function(model) {
+M.C.setUpCollection = model => {
   check(model, {
     object: String,
     collection: String,
@@ -44,15 +44,15 @@ M.C.setUpCollection = function(model) {
       _clonedFrom: {
         type: Object,
         optional: true,
-        autoValue: function() {
+        autoValue() {
           if (this.isUpdate && this.isSet) {
             this.unset();
           }
         },
         autoform: {
-          class : function() {
-            var formId = AutoForm.getFormId();
-            var cf = AutoForm.getFieldValue('_clonedFrom', formId);
+          class () {
+            const formId = AutoForm.getFormId();
+            const cf = AutoForm.getFieldValue('_clonedFrom', formId);
             $('.autoform-object-field:has([name^="_clonedFrom"])').hide();
             return '';
           }
