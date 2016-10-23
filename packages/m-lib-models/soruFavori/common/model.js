@@ -4,9 +4,8 @@ M.C.setUpCollection({
   schema: {
     'soru': {
       type: String,
-      custom: function () {
-        var soru = this;
-        var exists = M.C.Sorular.findOne({_id: soru.value});
+      custom() {
+        const exists = M.C.Sorular.findOne({_id: this.value});
         if (!exists) {
           return 'notAllowed';
         }
@@ -33,10 +32,9 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'soruFavoriBosalt': function() {
+  'soruFavoriBosalt'() {
     if (this.userId) {
-      var res = M.C.SoruFavorileri.remove({createdBy: this.userId});
-      return res;
+      return M.C.SoruFavorileri.remove({createdBy: this.userId});
     }
   }
 });

@@ -1,5 +1,5 @@
 Meteor.methods({
-  'search.soruFavori': function(keywords, filters) {
+  'search.soruFavori'(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));
     check(filters, {
       kurum: Match.Optional(String),
@@ -10,12 +10,12 @@ Meteor.methods({
       soruSahibi: Match.Optional(String),
       konu: Match.Optional(String)
     });
-    var userId = this.userId;
+    const userId = this.userId;
     if (userId) {
 
-      var selector = {};
+      let selector = {};
 
-      var favorilerdekiSoruIdleri = _.pluck(M.C.SoruFavorileri.find({createdBy: userId}).fetch(),'soru');
+      const favorilerdekiSoruIdleri = _.pluck(M.C.SoruFavorileri.find({createdBy: userId}).fetch(),'soru');
       selector._id = {$in: favorilerdekiSoruIdleri};
 
       if (!!keywords) {
@@ -69,9 +69,7 @@ Meteor.methods({
             },
             limit: 100
           }
-        ).map(function(doc) {
-          return doc._id;
-        });
+        ).map(doc => doc._id);
       }
     } else {
       return [];
