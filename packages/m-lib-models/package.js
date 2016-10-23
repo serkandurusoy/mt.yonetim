@@ -16,7 +16,7 @@ Package.onUse(function(api) {
   api.use('m:lib-collections@0.0.1');
   api.use('m:lib-tckimlik@0.0.1');
 
-  var assets = [
+  const assets = [
     '_privateAssets/yardimDokumani/mitolojix-brosuru.pdf',
     '_privateAssets/karakter/erkek/1.png',
     '_privateAssets/karakter/erkek/2.png',

@@ -1,20 +1,18 @@
-var numericSort = function(array) {
+const numericSort = array => {
   return array
     .slice()
-    .sort(function(a, b) {
-      return a - b;
-    });
+    .sort((a, b) => a - b);
 };
 
-var mode = function(x) {
+const mode = (x) => {
   if (x.length === 0) { return null; }
   else if (x.length === 1) { return x[0]; }
-  var sorted = numericSort(x);
-  var last = sorted[0],
+  const sorted = numericSort(x);
+  let last = sorted[0],
     value,
     maxSeen = 0,
     seenThis = 1;
-  for (var i = 1; i < sorted.length + 1; i++) {
+  for (let i = 1; i < sorted.length + 1; i++) {
     if (sorted[i] !== last) {
       if (seenThis > maxSeen) {
         maxSeen = seenThis;
@@ -27,19 +25,23 @@ var mode = function(x) {
   return value;
 };
 
-var statFormat = function(v) {
+const statFormat = v => {
   return math.format(v, {notation: 'fixed', precision: 2})
 };
 
 Meteor.methods({
-  'raporInit': function(sinavId) {
+  'raporInit'(sinavId) {
     check(sinavId, String);
 
-    var currentUser = M.C.Users.findOne({_id: this.userId});
-    var sinav = currentUser && M.C.Sinavlar.findOne({_id: sinavId});
-    var sinavKagitlari = sinav && M.C.SinavKagitlari.find({sinav: sinavId, ogrenciSinavaGirdi: true}, {sort: {puan: -1, dogumTarihi: -1, nameCollage: 1, lastNameCollate: 1, cinsiyet: -1}}).map(function(sinavKagidi,ix) {sinavKagidi.sira = ix + 1; return sinavKagidi;});
-    var kurum = sinav && M.C.Kurumlar.findOne({_id: sinav.kurum});
-    var tumYanitlar, kagitSayisi, soruSayisi, tumYanitlarSayisi, dogruYanitSayisi, dogruYanitSayiListesi, sortedSinavKagitlari;
+    const currentUser = M.C.Users.findOne({_id: this.userId});
+    const sinav = currentUser && M.C.Sinavlar.findOne({_id: sinavId});
+    const sinavKagitlari = sinav && M.C.SinavKagitlari.find({sinav: sinavId, ogrenciSinavaGirdi: true}, {sort: {puan: -1, dogumTarihi: -1, nameCollage: 1, lastNameCollate: 1, cinsiyet: -1}})
+                                                      .map((sinavKagidi,ix) => {
+                                                        sinavKagidi.sira = ix + 1;
+                                                        return sinavKagidi;
+                                                      });
+    const kurum = sinav && M.C.Kurumlar.findOne({_id: sinav.kurum});
+    let tumYanitlar, kagitSayisi, soruSayisi, tumYanitlarSayisi, dogruYanitSayisi, dogruYanitSayiListesi, sortedSinavKagitlari;
 
     if (!currentUser || M.L.userHasRole(currentUser._id, 'ogrenci')) {
       M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
@@ -65,14 +67,14 @@ Meteor.methods({
       M.L.ThrowError({error:'404',reason:'Sınav kağıdı bulunamadı',details:'Sınav kağıdı bulunamadı'});
     }
 
-    sortedSinavKagitlari = _.map(sinavKagitlari, function(sinavKagidi) {
-      var sorular = _.pluck(sinav.sorular, 'soruId');
-      var yanitlar = sinavKagidi.yanitlar;
+    sortedSinavKagitlari = sinavKagitlari.map(sinavKagidi => {
+      const sorular = _.pluck(sinav.sorular, 'soruId');
+      const yanitlar = sinavKagidi.yanitlar;
 
-      var yeniYanitlar = [];
+      let yeniYanitlar = [];
 
-      _.each(sorular, function(soruId) {
-        yeniYanitlar.push(_.findWhere(yanitlar, {soruId: soruId}))
+      sorular.forEach(soruId => {
+        yeniYanitlar.push(_.findWhere(yanitlar, {soruId}))
       });
 
       sinavKagidi.yanitlar = yeniYanitlar;
@@ -86,15 +88,15 @@ Meteor.methods({
     soruSayisi = sinav.sorular.length || 0;
     tumYanitlarSayisi = tumYanitlar.length || 0;
     dogruYanitSayisi = _.where(tumYanitlar, {dogru: true}).length || 0;
-    dogruYanitSayiListesi = _.map(sortedSinavKagitlari, function(sinavKagidi) {
+    dogruYanitSayiListesi = sortedSinavKagitlari.map(sinavKagidi => {
       return _.where(sinavKagidi.yanitlar, {dogru: true}).length || 0
     });
 
     return {
       data: {
-        sinav: sinav,
+        sinav,
         sinavKagitlari: sortedSinavKagitlari,
-        tumYanitlar: tumYanitlar
+        tumYanitlar,
       },
       meta: {
         raporTarihi: moment().format('DD.MM.YYYY'),
@@ -115,93 +117,97 @@ Meteor.methods({
         medyan: statFormat(math.median(dogruYanitSayiListesi)),
         ranj: statFormat(math.chain(math.max(dogruYanitSayiListesi)).subtract(math.min(dogruYanitSayiListesi)).done()),
         mode: statFormat(mode(dogruYanitSayiListesi)),
-        kagitSayisi: kagitSayisi,
-        soruSayisi: soruSayisi,
-        tumYanitlarSayisi: tumYanitlarSayisi,
-        dogruYanitSayisi: dogruYanitSayisi,
+        kagitSayisi,
+        soruSayisi,
+        tumYanitlarSayisi,
+        dogruYanitSayisi,
         ortalamaDY: statFormat(math.chain(dogruYanitSayisi).divide(tumYanitlarSayisi).multiply(soruSayisi).done()),
         zorluk: statFormat(math.chain(math.sum(_.pluck(sinav.sorular, 'zorlukDerecesi'))).divide(soruSayisi).done())
       }
     };
 
   },
-  'testCeldiriciAnalizi': function(sinavId) {
+  'testCeldiriciAnalizi'(sinavId) {
     check(sinavId, String);
     this.unblock();
 
-    var res = Meteor.call('raporInit', sinavId);
+    const {
+      data,
+      meta,
+      stats,
+    } = Meteor.call('raporInit', sinavId);
 
-    var data = res.data;
-    var meta = res.meta;
-    var stats = res.stats;
-
-    var report = _.map(_.pluck(data.sinav.sorular, 'soruId'), function(soruId) {
-      var soru = M.C.Sorular.findOne({_id: soruId});
-      var tumSayi = _.where(data.tumYanitlar, {soruId: soruId}).length || 0;
-      var dogruSayi = _.where(data.tumYanitlar, {dogru: true, soruId: soruId}).length || 0;
-      var bosSayi = _.where(data.tumYanitlar, {yanitlandi: 0, soruId: soruId}).length || 0;
-      var yanlisSayi = math.chain(tumSayi).subtract(dogruSayi).subtract(bosSayi).done();
+    const report = _.pluck(data.sinav.sorular, 'soruId').map(soruId => {
+      const soru = M.C.Sorular.findOne({_id: soruId});
+      const tumSayi = _.where(data.tumYanitlar, {soruId}).length || 0;
+      const dogruSayi = _.where(data.tumYanitlar, {dogru: true, soruId}).length || 0;
+      const bosSayi = _.where(data.tumYanitlar, {yanitlandi: 0, soruId}).length || 0;
+      const yanlisSayi = math.chain(tumSayi).subtract(dogruSayi).subtract(bosSayi).done();
       return {
         kod: soru.kod,
         tip: M.L.enumLabel(soru.tip),
-        zorlukDerecesi: _.findWhere(data.sinav.sorular, {soruId: soruId}).zorlukDerecesi,
-        puan: _.findWhere(data.sinav.sorular, {soruId: soruId}).puan,
-        dogruSayi: dogruSayi,
+        zorlukDerecesi: _.findWhere(data.sinav.sorular, {soruId}).zorlukDerecesi,
+        puan: _.findWhere(data.sinav.sorular, {soruId}).puan,
+        dogruSayi,
         dogruOran: statFormat(math.chain(dogruSayi).divide(tumSayi).multiply(100).done()),
-        yanlisSayi: yanlisSayi,
+        yanlisSayi,
         yanlisOran: statFormat(math.chain(yanlisSayi).divide(tumSayi).multiply(100).done()),
-        bosSayi: bosSayi,
+        bosSayi,
         bosOran: statFormat(math.chain(bosSayi).divide(tumSayi).multiply(100).done())
       };
     });
 
     return {
-      meta: meta,
-      stats: stats,
-      report: report
+      meta,
+      stats,
+      report,
     }
 
   },
-  'testMaddeAnalizi': function(sinavId) {
+  'testMaddeAnalizi'(sinavId) {
     check(sinavId, String);
     this.unblock();
 
-    var res = Meteor.call('raporInit', sinavId);
+    const {
+      data,
+      meta,
+      stats,
+    } = Meteor.call('raporInit', sinavId);
 
-    var data = res.data;
-    var meta = res.meta;
-    var stats = res.stats;
-
-    var report = {
-      sorular: _.map(_.pluck(data.sinav.sorular, 'soruId'), function(soruId) {
-        var soru = M.C.Sorular.findOne({_id: soruId});
-        var tumSayi = _.where(data.tumYanitlar, {soruId: soruId}).length || 0;
-        var dogruSayi = _.where(data.tumYanitlar, {dogru: true, soruId: soruId}).length || 0;
+    const report = {
+      sorular: _.pluck(data.sinav.sorular, 'soruId').map(soruId => {
+        const soru = M.C.Sorular.findOne({_id: soruId});
+        const tumSayi = _.where(data.tumYanitlar, {soruId}).length || 0;
+        const dogruSayi = _.where(data.tumYanitlar, {dogru: true, soruId}).length || 0;
         return {
           kod: soru.kod,
           dogruOran: statFormat(math.chain(dogruSayi).divide(tumSayi).multiply(100).done())
         };
       }),
-      subeler: _.compact(_.map(data.sinav.subeler, function(sube) {
-        if (_.where(data.sinavKagitlari, {sube: sube}).length > 0) {
+      subeler: _.compact(data.sinav.subeler.map(sube => {
+        if (_.where(data.sinavKagitlari, {sube}).length > 0) {
           return {
-            sube: sube,
-            sinavKagitlari: _.map(_.sortBy(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'lastNameCollate'), 'nameCollate'), function(sinavKagidi) {
-              var ogrenci = M.C.Users.findOne({_id: sinavKagidi.ogrenci});
+            sube,
+            sinavKagitlari: _.sortBy(_.sortBy(_.where(data.sinavKagitlari, {sube}), 'lastNameCollate'), 'nameCollate').map(sinavKagidi => {
+              const ogrenci = M.C.Users.findOne({_id: sinavKagidi.ogrenci});
               return {
                 ogrenci: ogrenci.name + ' ' + ogrenci.lastName,
-                yanitlar: _.map(sinavKagidi.yanitlar, function(yanit) {
+                yanitlar: sinavKagidi.yanitlar.map(yanit => {
+                  const {
+                    yanitlandi,
+                    dogru,
+                  } = yanit;
                   return {
-                    yanitlandi: yanit.yanitlandi,
-                    dogru: yanit.dogru
+                    yanitlandi,
+                    dogru,
                   };
                 })
               };
             }),
-            dogruOran: _.map(_.pluck(data.sinav.sorular, 'soruId'), function(soruId) {
-              var tumYanitlar = _.flatten(_.pluck(_.where(data.sinavKagitlari, {sube: sube}), 'yanitlar'));
-              var tumSayi = _.where(tumYanitlar, {soruId: soruId}).length || 0;
-              var dogruSayi = _.where(tumYanitlar, {dogru: true, soruId: soruId}).length || 0;
+            dogruOran: _.pluck(data.sinav.sorular, 'soruId').map(soruId => {
+              const tumYanitlar = _.flatten(_.pluck(_.where(data.sinavKagitlari, {sube}), 'yanitlar'));
+              const tumSayi = _.where(tumYanitlar, {soruId}).length || 0;
+              const dogruSayi = _.where(tumYanitlar, {dogru: true, soruId}).length || 0;
               return statFormat(math.chain(dogruSayi).divide(tumSayi).multiply(100).done());
             })
           };
@@ -210,34 +216,34 @@ Meteor.methods({
     };
 
     return {
-      meta: meta,
-      stats: stats,
-      report: report
+      meta,
+      stats,
+      report,
     }
 
   },
-  'analizRaporu': function(sinavId) {
+  'analizRaporu'(sinavId) {
     check(sinavId, String);
     this.unblock();
 
-    var res = Meteor.call('raporInit', sinavId);
+    const {
+      data,
+      meta,
+      stats,
+    } = Meteor.call('raporInit', sinavId);
 
-    var data = res.data;
-    var meta = res.meta;
-    var stats = res.stats;
+    const sinavPuanlari = _.pluck(data.sinavKagitlari, 'puan');
 
-    var sinavPuanlari = _.pluck(data.sinavKagitlari, 'puan');
-
-    var report = {
-      subeler: _.compact(_.map(data.sinav.subeler, function(sube) {
-        var subePuanlari = _.map(_.where(data.sinavKagitlari, {sube: sube}), function(sinavKagidi) {
+    const report = {
+      subeler: _.compact(data.sinav.subeler.map(sube => {
+        const subePuanlari = _.where(data.sinavKagitlari, {sube}).map(sinavKagidi => {
           return sinavKagidi.puan;
         });
 
         if (subePuanlari.length > 0) {
           return {
-            sube: sube,
-            katilan: subePuanlari.length + '/' + M.C.Users.find({kurum: data.sinav.kurum, role: 'ogrenci', sinif: data.sinav.sinif, sube: sube}).count(),
+            sube,
+            katilan: subePuanlari.length + '/' + M.C.Users.find({kurum: data.sinav.kurum, role: 'ogrenci', sinif: data.sinav.sinif, sube}).count(),
             enDusuk: statFormat(math.min(subePuanlari)),
             enYuksek: statFormat(math.max(subePuanlari)),
             ortalama: statFormat(math.mean(subePuanlari)),
@@ -260,22 +266,22 @@ Meteor.methods({
         ranj: statFormat(math.chain(math.max(sinavPuanlari)).subtract(math.min(sinavPuanlari)).done())
       },
       grafik: {
-        sinifKarsilastirmalari: _.compact(_.map(data.sinav.subeler, function(sube) {
-          var subePuanlari = _.map(_.where(data.sinavKagitlari, {sube: sube}), function(sinavKagidi) {
+        sinifKarsilastirmalari: _.compact(data.sinav.subeler.map(sube => {
+          const subePuanlari = _.where(data.sinavKagitlari, {sube}).map(sinavKagidi => {
             return sinavKagidi.puan;
           });
 
           if (subePuanlari.length > 0) {
             return {
-              sube: sube,
+              sube,
               ortalama: statFormat(math.mean(subePuanlari))
             };
           }
 
         })),
-        puanFrekanslari: _.map(_.keys(_.countBy(sinavPuanlari)), function(puan,index,list){
+        puanFrekanslari: _.keys(_.countBy(sinavPuanlari)).map((puan,index,list) => {
           return {
-            puan: puan,
+            puan,
             ogrenciSayisi: _.countBy(sinavPuanlari)[puan]
           };
         })
@@ -283,41 +289,41 @@ Meteor.methods({
     };
 
     return {
-      meta: meta,
-      stats: stats,
-      report: report
+      meta,
+      stats,
+      report,
     }
 
   },
-  'subeBazindaPuanlar': function(sinavId) {
+  'subeBazindaPuanlar'(sinavId) {
     check(sinavId, String);
     this.unblock();
 
-    var res = Meteor.call('raporInit', sinavId);
+    const {
+      data,
+      meta,
+      stats,
+    } = Meteor.call('raporInit', sinavId);
 
-    var data = res.data;
-    var meta = res.meta;
-    var stats = res.stats;
-
-    var report = {
-      subeler: _.sortBy(_.compact(_.map(data.sinav.subeler, function(sube) {
-        if (_.where(data.sinavKagitlari, {sube: sube}).length > 0) {
+    let report = {
+      subeler: _.sortBy(_.compact(data.sinav.subeler.map(sube => {
+        if (_.where(data.sinavKagitlari, {sube}).length > 0) {
           return {
-            sube: sube,
-            sinavKagitlari: _.sortBy(_.sortBy(_.map(_.sortBy(_.where(data.sinavKagitlari, {sube: sube}), 'sira'), function(sinavKagidi,ix) {
-              var counts = _.countBy(sinavKagidi.yanitlar, function(yanit) {
+            sube,
+            sinavKagitlari: _.sortBy(_.sortBy(_.sortBy(_.where(data.sinavKagitlari, {sube}), 'sira').map((sinavKagidi,ix) => {
+              const counts = _.countBy(sinavKagidi.yanitlar, yanit => {
                 return yanit.yanitlandi === 0 ? 'bosYanit' : (yanit.dogru === true ? 'dogruYanit' : 'yanlisYanit');
               });
-              var dogruYanit = counts.dogruYanit ? counts.dogruYanit : 0;
-              var yanlisYanit = counts.yanlisYanit ? counts.yanlisYanit : 0;
-              var bosYanit = counts.bosYanit ? counts.bosYanit : 0;
-              var ogrenci = M.C.Users.findOne({_id: sinavKagidi.ogrenci});
+              const dogruYanit = counts.dogruYanit ? counts.dogruYanit : 0;
+              const yanlisYanit = counts.yanlisYanit ? counts.yanlisYanit : 0;
+              const bosYanit = counts.bosYanit ? counts.bosYanit : 0;
+              const ogrenci = M.C.Users.findOne({_id: sinavKagidi.ogrenci});
               return {
                 ogrenci: ogrenci.name + ' ' + ogrenci.lastName,
-                sube: sube,
-                dogruYanit: dogruYanit,
-                yanlisYanit: yanlisYanit,
-                bosYanit: bosYanit,
+                sube,
+                dogruYanit,
+                yanlisYanit,
+                bosYanit,
                 net: statFormat(math.chain(dogruYanit).subtract(math.chain(yanlisYanit).divide(3).done()).done()),
                 yuzde: statFormat(math.chain(dogruYanit).divide(stats.soruSayisi).multiply(100).done()),
                 netYuzde: statFormat(math.chain(math.chain(dogruYanit).subtract(math.chain(yanlisYanit).divide(3).done()).done()).divide(stats.soruSayisi).multiply(100).done()),
@@ -327,7 +333,7 @@ Meteor.methods({
                 lastNameCollate: sinavKagidi.lastNameCollate,
                 nameCollate: sinavKagidi.nameCollate
               };
-            }), 'lastNameCollate'),'nameCollate').map(function(sinavKagidi) {
+            }), 'lastNameCollate'),'nameCollate').map(sinavKagidi => {
               return _.omit(sinavKagidi, ['lastNameCollate','nameCollate']);
             })
           };
@@ -335,16 +341,16 @@ Meteor.methods({
       })),'sube')
     };
 
-    report.subeler = _.map(report.subeler, function(sube) {
-      var ozet={};
-      var sinavKagitlari = sube.sinavKagitlari;
-      var dogruYanit = _.pluck(sinavKagitlari, 'dogruYanit');
-      var yanlisYanit = _.pluck(sinavKagitlari, 'yanlisYanit');
-      var bosYanit = _.pluck(sinavKagitlari, 'bosYanit');
-      var net = _.map(_.pluck(sinavKagitlari, 'net'), function(num) {return parseFloat(num)});
-      var yuzde = _.map(_.pluck(sinavKagitlari, 'yuzde'), function(num) {return parseFloat(num)});
-      var netYuzde = _.map(_.pluck(sinavKagitlari, 'netYuzde'), function(num) {return parseFloat(num)});
-      var puan = _.pluck(sinavKagitlari, 'puan');
+    report.subeler = report.subeler.map(sube => {
+      let ozet={};
+      const sinavKagitlari = sube.sinavKagitlari;
+      const dogruYanit = _.pluck(sinavKagitlari, 'dogruYanit');
+      const yanlisYanit = _.pluck(sinavKagitlari, 'yanlisYanit');
+      const bosYanit = _.pluck(sinavKagitlari, 'bosYanit');
+      const net = _.pluck(sinavKagitlari, 'net').map(num => parseFloat(num));
+      const yuzde = _.pluck(sinavKagitlari, 'yuzde').map(num => parseFloat(num));
+      const netYuzde = _.pluck(sinavKagitlari, 'netYuzde').map(num => parseFloat(num));
+      const puan = _.pluck(sinavKagitlari, 'puan');
 
       ozet.enYuksek = {
         dogruYanit: statFormat(math.max(dogruYanit)),
@@ -421,36 +427,36 @@ Meteor.methods({
 
       return {
         sube: sube.sube,
-        sinavKagitlari: sinavKagitlari,
-        ozet: ozet
+        sinavKagitlari,
+        ozet,
       }
     });
 
     return {
-      meta: meta,
-      stats: stats,
-      report: report
+      meta,
+      stats,
+      report,
     }
 
   },
-  'sinifBazindaPuanlar': function(sinavId) {
+  'sinifBazindaPuanlar'(sinavId) {
     check(sinavId, String);
     this.unblock();
 
-    var res = Meteor.call('subeBazindaPuanlar', sinavId);
+    let {
+      meta,
+      stats,
+      report,
+    } = Meteor.call('subeBazindaPuanlar', sinavId);
 
-    var meta = res.meta;
-    var stats = res.stats;
-    var report = res.report;
-
-    report = _.sortBy(_.reduce(report.subeler, function(memo, sube) {
+    report = _.sortBy(_.reduce(report.subeler, (memo, sube) => {
       return _.union(memo,sube.sinavKagitlari);
     }, []),'sira');
 
     return {
-      meta: meta,
-      stats: stats,
-      report: report
+      meta,
+      stats,
+      report,
     }
   }
 
