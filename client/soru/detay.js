@@ -1,17 +1,16 @@
-var kilitleView;
-var taslakDegistirView;
+let kilitleView;
+let taslakDegistirView;
 
 Template.soruDetay.onCreated(function() {
-  var template = this;
-  template.autorun(function() {
-    template.subscribe('soru', FlowRouter.getParam('_id'));
-    template.subscribe('mufredatlar');
-    template.subscribe('fssorugorsel');
+  this.autorun(() => {
+    this.subscribe('soru', FlowRouter.getParam('_id'));
+    this.subscribe('mufredatlar');
+    this.subscribe('fssorugorsel');
   });
 
-  template.observeHandle = M.C.Notifications.find().observe({
-    'added': function(doc) {
-      var nt = M.C.Notifications.findOne({
+  this.observeHandle = M.C.Notifications.find().observe({
+    'added'(doc) {
+      const nt = M.C.Notifications.findOne({
         collection: 'Sorular',
         doc: FlowRouter.getParam('_id'),
         to: Meteor.userId()
@@ -25,20 +24,19 @@ Template.soruDetay.onCreated(function() {
 });
 
 Template.soruDetay.onDestroyed(function() {
-  var template = this;
-  template.observeHandle.stop();
+  this.observeHandle.stop();
 });
 
 Template.soruDetay.helpers({
-  soru: function() {
+  soru() {
     return M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
   },
-  kilitlenebilir: function() {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+  kilitlenebilir() {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
     return soru.taslak === false && soru.kilitli === false;
   },
-  taslakDegisebilir: function() {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+  taslakDegisebilir() {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
     if (soru.kilitli === false) {
       if (soru.taslak === true) {
         return true;
@@ -49,7 +47,7 @@ Template.soruDetay.helpers({
       return false;
     }
   },
-  ogretmenCanEdit: function() {
+  ogretmenCanEdit() {
     if (Meteor.user()) {
       if (Meteor.user().role !== 'ogretmen') {
         return true;
@@ -63,20 +61,20 @@ Template.soruDetay.helpers({
 });
 
 Template.soruDetay.events({
-  'click [data-trigger="soruKilitleModal"]': function(e,t) {
+  'click [data-trigger="soruKilitleModal"]'(e,t) {
     t.$('.fixed-action-btn').closeFAB();
     kilitleView = Blaze.render(Template.soruKilitleModal, document.getElementsByTagName('main')[0]);
     $('#soruKilitleModal').openModal({
-      complete: function() {
+      complete() {
         Blaze.remove(kilitleView);
       }
     });
   },
-  'click [data-trigger="soruTaslakDegistirModal"]': function(e,t) {
+  'click [data-trigger="soruTaslakDegistirModal"]'(e,t) {
     t.$('.fixed-action-btn').closeFAB();
     taslakDegistirView = Blaze.render(Template.soruTaslakDegistirModal, document.getElementsByTagName('main')[0]);
     $('#soruTaslakDegistirModal').openModal({
-      complete: function() {
+      complete() {
         Blaze.remove(taslakDegistirView);
       }
     });
@@ -88,75 +86,75 @@ Template.soruDetayKart.onRendered(function(){
 });
 
 Template.soruDetayKart.events({
-  'click [data-trigger="clone"]': function(e,t) {
-    var doc = t.data;
+  'click [data-trigger="clone"]'(e,t) {
+    let doc = t.data;
     doc = _.extend(_.pick(doc, 'kurum', 'aciklama', 'alan', 'tip', 'zorlukDerecesi', 'soru', 'yanit'), {aktif: true, _clonedFrom: {_id: doc._id, _version: doc._version}});
     Session.set('soruClone',doc);
     FlowRouter.go('soruYeni');
   },
-  'click [data-trigger="cart"]': function(e,t) {
-    var soru = t.data._id;
-    var sepet = M.C.SoruSepetleri.findOne({createdBy: Meteor.userId(), soru: soru});
+  'click [data-trigger="cart"]'(e,t) {
+    const soru = t.data._id;
+    const sepet = M.C.SoruSepetleri.findOne({createdBy: Meteor.userId(), soru});
     if (sepet) {
       M.C.SoruSepetleri.remove({_id: sepet._id});
     } else {
-      M.C.SoruSepetleri.insert({soru: soru});
+      M.C.SoruSepetleri.insert({soru});
     }
   },
-  'click [data-trigger="favorite"]': function(e,t) {
-    var soru = t.data._id;
-    var favori = M.C.SoruFavorileri.findOne({createdBy: Meteor.userId(), soru: soru});
+  'click [data-trigger="favorite"]'(e,t) {
+    const soru = t.data._id;
+    const favori = M.C.SoruFavorileri.findOne({createdBy: Meteor.userId(), soru});
     if (favori) {
       M.C.SoruFavorileri.remove({_id: favori._id});
     } else {
-      M.C.SoruFavorileri.insert({soru: soru});
+      M.C.SoruFavorileri.insert({soru});
     }
   },
-  'click [data-trigger="comment"]': function(e,t) {
+  'click [data-trigger="comment"]'(e,t) {
     $("html, body").animate({ scrollTop: $(document).height() }, 1000);
   },
-  'click [data-trigger="onizleme"]': function(e,t) {
+  'click [data-trigger="onizleme"]'(e,t) {
     soruOnizlemeView = Blaze.render(Template.soruOnizlemeModal, document.getElementsByTagName('main')[0]);
   }
 });
 
 Template.soruDetayKart.helpers({
-  boslukSpan: function() {
+  boslukSpan() {
     return splitOnNewlines(this.cevap.replace(/\[(.+?)\]/g, "<span class=\"boslukDoldur\">$1</span>"));
   },
-  guncelHaliNotEditable: function() {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+  guncelHaliNotEditable() {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
     return soru && (soru.kilitli || soru.aktif === false);
   },
-  inCart: function() {
+  inCart() {
     return M.C.SoruSepetleri.findOne({createdBy: Meteor.userId(), soru: FlowRouter.getParam('_id')});
   },
-  inFavori: function() {
+  inFavori() {
     return M.C.SoruFavorileri.findOne({createdBy: Meteor.userId(), soru: FlowRouter.getParam('_id')});
   },
-  sinavBilgileri: function() {
-    var soru = this._id;
-    var sinavlarCursor = soru && M.C.Sinavlar.find({'sorular.soruId': soru});
+  sinavBilgileri() {
+    const soru = this._id;
+    const sinavlarCursor = soru && M.C.Sinavlar.find({'sorular.soruId': soru});
     return sinavlarCursor.count() && sinavlarCursor;
   },
-  commentCount: function() {
+  commentCount() {
     return M.C.Comments.find({collection: 'Sorular', doc: FlowRouter.getParam('_id')}).count();
   }
 });
 
 Template.soruTaslakDegistirModal.helpers({
-  taslak: function() {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+  taslak() {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
     return soru && soru.taslak;
   }
 });
 
 Template.soruTaslakDegistirModal.events({
-  'click [data-trigger="taslakDegistir"]': function(e,t) {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')})._id;
+  'click [data-trigger="taslakDegistir"]'(e,t) {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')})._id;
     Meteor.call('soruTaslakDegistir',soru);
     $('#soruTaslakDegistirModal').closeModal({
-      complete: function() {
+      complete() {
         Blaze.remove(taslakDegistirView);
       }
     });
@@ -164,11 +162,11 @@ Template.soruTaslakDegistirModal.events({
 });
 
 Template.soruKilitleModal.events({
-  'click [data-trigger="kilitle"]': function(e,t) {
-    var soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')})._id;
+  'click [data-trigger="kilitle"]'(e,t) {
+    const soru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')})._id;
     Meteor.call('soruKilitle',soru);
     $('#soruKilitleModal').closeModal({
-      complete: function() {
+      complete() {
         Blaze.remove(kilitleView);
       }
     });

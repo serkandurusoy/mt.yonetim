@@ -6,11 +6,11 @@ M.C.setUpCollection({
       label: 'Kurum',
       type: String,
       index: 1,
-      custom: function() {
-        var kurum = this;
-        var userRole = M.C.Users.findOne({_id: this.userId}).role;
-        var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
-        var kurumlar = M.C.Kurumlar.find().map(function(kurum) {return kurum._id;});
+      custom() {
+        const kurum = this;
+        const userRole = M.C.Users.findOne({_id: this.userId}).role;
+        const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+        const kurumlar = M.C.Kurumlar.find().map(kurum => kurum._id);
         if (kurum.isSet && !_.contains(kurumlar,kurum.value)) {
           return 'notAllowed';
         }
@@ -19,9 +19,9 @@ M.C.setUpCollection({
         }
         return true;
       },
-      autoValue: function() {
-        var kurum = this;
-        var user = M.C.Users.findOne({_id: this.userId});
+      autoValue() {
+        const kurum = this;
+        const user = M.C.Users.findOne({_id: this.userId});
         if (user && user.role !== 'mitolojix') {
           if (kurum.isInsert) {
             return user.kurum;
@@ -35,19 +35,29 @@ M.C.setUpCollection({
         }
       },
       autoform: {
-        type: function() {
+        type() {
           if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
             return 'hidden';
           }
         },
         class: 'browser-default',
         firstOption: 'Kurum seçin',
-        options: function() {
-          var kurumlar = [];
+        options() {
+          let kurumlar = [];
           if (Meteor.user().role === 'mitolojix') {
-            kurumlar = M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};});
+            kurumlar = M.C.Kurumlar.find({}, {sort: {isimCollate: 1}})
+                                   .map(kurum => {
+                                     const {
+                                       isim: label,
+                                       _id: value,
+                                     } = kurum;
+                                     return {
+                                       label,
+                                       value,
+                                     };
+                                   });
           } else {
-            var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+            const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
             kurumlar.push({label: userKurum.isim, value: userKurum._id});
           }
           return kurumlar;
@@ -58,13 +68,13 @@ M.C.setUpCollection({
       label: 'Kod',
       type: String,
       index: 1,
-      autoValue: function() {
+      autoValue() {
         if (this.isInsert) {
           if (Meteor.isServer) {
-            var kurum = this.field('kurum');
-            var isim = kurum && M.C.Kurumlar.findOne({_id: kurum.value}).isim;
-            var words = isim && _.first(s.words(isim),2);
-            var initials = 'MT';
+            const kurum = this.field('kurum');
+            const isim = kurum && M.C.Kurumlar.findOne({_id: kurum.value}).isim;
+            const words = isim && _.first(s.words(isim),2);
+            let initials = 'MT';
 
             if (words && words.length === 1) {
               initials = words[0].substring(0,2).toLocaleUpperCase()
@@ -74,10 +84,10 @@ M.C.setUpCollection({
               initials = words[0].substring(0,1) + words[1].substring(0,1)
             }
 
-            var count = M.C.Sorular.find().count() + 1;
+            let count = M.C.Sorular.find().count() + 1;
             count = s.pad(count,6,'0');
 
-            var kod = initials + count;
+            const kod = initials + count;
 
             return kod;
 
@@ -100,9 +110,9 @@ M.C.setUpCollection({
       label: 'Ders',
       type: String,
       index: 1,
-      custom: function() {
-        var ders = this;
-        if (ders.isSet && !_.contains(M.C.Dersler.find({},{fields: {_id: 1}}).map(function(ders) {return ders._id;}), ders.value)) {
+      custom() {
+        const ders = this;
+        if (ders.isSet && !_.contains(M.C.Dersler.find({},{fields: {_id: 1}}).map(ders => ders._id), ders.value)) {
           return 'notAllowed';
         }
         return true;
@@ -110,19 +120,33 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Ders seçin',
-        options: function() {
-          var user = M.C.Users.findOne({_id: Meteor.userId()});
-          var options = [];
+        options() {
+          const user = M.C.Users.findOne({_id: Meteor.userId()});
           if (user.role === 'ogretmen') {
-            options = M.C.Dersler.find({_id: {$in: user.dersleri}}).map(function(ders) {
-              return {value: ders._id, label: ders.isim};
-            });
+            return M.C.Dersler.find({_id: {$in: user.dersleri}})
+                                 .map(ders => {
+                                   const {
+                                     isim: label,
+                                     _id: value,
+                                   } = ders;
+                                   return {
+                                     label,
+                                     value,
+                                   };
+                                 });
           } else {
-            options = M.C.Dersler.find().map(function(ders) {
-              return {value: ders._id, label: ders.isim};
-            });
+            return M.C.Dersler.find()
+                                 .map(ders => {
+                                   const {
+                                     isim: label,
+                                     _id: value,
+                                   } = ders;
+                                   return {
+                                     value,
+                                     label,
+                                   };
+                                 });
           }
-          return options;
         }
       }
     },
@@ -130,8 +154,8 @@ M.C.setUpCollection({
       label: 'Sınıf',
       type: String,
       index: 1,
-      custom: function() {
-        var sinif = this;
+      custom() {
+        const sinif = this;
         if (sinif.isSet && !_.contains(M.E.Sinif, sinif.value)) {
           return 'notAllowed';
         }
@@ -140,8 +164,13 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Sınıf seçin',
-        options: function(){
-          return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+        options(){
+          return M.E.Sinif.map(sinif => {
+            return {
+              label: M.L.enumLabel(sinif),
+              value: sinif,
+            };
+          });
         }
       }
     },
@@ -150,7 +179,7 @@ M.C.setUpCollection({
       type: String,
       max: 256,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -160,13 +189,13 @@ M.C.setUpCollection({
     },
     'alan.mufredat': {
       type: String,
-      autoValue: function() {
+      autoValue() {
         if (Meteor.isServer) {
-          var kurum = this.field('kurum');
-          var ders = this.field('alan.ders');
-          var sinif = this.field('alan.sinif');
+          const kurum = this.field('kurum');
+          const ders = this.field('alan.ders');
+          const sinif = this.field('alan.sinif');
           if (kurum.isSet && ders.isSet && sinif.isSet) {
-            var mufredat = M.C.Mufredat.findOne({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value});
+            const mufredat = M.C.Mufredat.findOne({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value});
             return mufredat && mufredat._id;
           }
         } else {
@@ -179,13 +208,13 @@ M.C.setUpCollection({
     },
     'alan.mufredatVersion': {
       type: Number,
-      autoValue: function() {
+      autoValue() {
         if (Meteor.isServer) {
-          var kurum = this.field('kurum');
-          var ders = this.field('alan.ders');
-          var sinif = this.field('alan.sinif');
+          const kurum = this.field('kurum');
+          const ders = this.field('alan.ders');
+          const sinif = this.field('alan.sinif');
           if (kurum.isSet && ders.isSet && sinif.isSet) {
-            var mufredat = M.C.Mufredat.findOne({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value});
+            const mufredat = M.C.Mufredat.findOne({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value});
             return mufredat && mufredat._version;
           }
         } else {
@@ -198,7 +227,7 @@ M.C.setUpCollection({
     },
     'alan.egitimYili': {
       type: String,
-      autoValue: function() {
+      autoValue() {
         if (Meteor.isServer) {
           return M.C.AktifEgitimYili.findOne().egitimYili;
         } else {
@@ -213,12 +242,12 @@ M.C.setUpCollection({
       label: 'Konu',
       type: String,
       index: 1,
-      custom: function() {
-        var konu = this;
-        var kurum = this.field('kurum');
-        var ders = this.field('alan.ders');
-        var sinif = this.field('alan.sinif');
-        var kurumDersKonulari = kurum.isSet && ders.isSet && sinif.isSet && _.pluck(_.flatten(M.C.Mufredat.find({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value}).map(function(mufredat) {return mufredat.konular;})), 'konu');
+      custom() {
+        const konu = this;
+        const kurum = this.field('kurum');
+        const ders = this.field('alan.ders');
+        const sinif = this.field('alan.sinif');
+        const kurumDersKonulari = kurum.isSet && ders.isSet && sinif.isSet && _.pluck(_.flatten(M.C.Mufredat.find({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value}).map(mufredat => mufredat.konular)), 'konu');
         if (konu.isSet && !_.contains(kurumDersKonulari, konu.value)) {
           return 'dersKonusuHatali';
         }
@@ -227,21 +256,25 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Konu seçin',
-        options: function(){
-          var formId = AutoForm.getFormId();
-          var kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
-          var ders = AutoForm.getFieldValue('alan.ders', formId);
-          var sinif = AutoForm.getFieldValue('alan.sinif', formId);
-          var options = [];
+        options(){
+          const formId = AutoForm.getFormId();
+          const kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
+          const ders = AutoForm.getFieldValue('alan.ders', formId);
+          const sinif = AutoForm.getFieldValue('alan.sinif', formId);
 
           if (kurum && ders && sinif) {
-            var kurumTumDersKonulari = _.pluck(_.flatten(M.C.Mufredat.find({kurum: kurum, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders, sinif: sinif}).map(function(mufredat) {return mufredat.konular;})), 'konu');
-            var kurumDersKonulari = _.uniq(kurumTumDersKonulari).sort(function(a, b) {
+            const kurumTumDersKonulari = _.pluck(_.flatten(M.C.Mufredat.find({kurum, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders, sinif}).map(mufredat => mufredat.konular)), 'konu');
+            const kurumDersKonulari = _.uniq(kurumTumDersKonulari).sort((a, b) => {
               return a.localeCompare(b);
             });
-            options = _.map(kurumDersKonulari, function(konu) {return {label: konu, value: konu}; });
+            return kurumDersKonulari.map(konu => {
+              return {
+                label: konu,
+                value: konu,
+              };
+            });
           }
-          return options;
+          return [];
         }
       }
     },
@@ -249,43 +282,47 @@ M.C.setUpCollection({
       label: 'Kazanımlar',
       type: [String],
       minCount: 1,
-      custom: function() {
-        var kazanimlar = this.value;
+      custom() {
+        const kazanimlar = this.value;
         return _.uniq(kazanimlar).length === kazanimlar.length ? true : 'notUnique'
       },
       autoform: {
         type: 'select-checkbox',
-        options: function(){
-          var formId = AutoForm.getFormId();
-          var kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
-          var ders = AutoForm.getFieldValue('alan.ders', formId);
-          var sinif = AutoForm.getFieldValue('alan.sinif', formId);
-          var konu = AutoForm.getFieldValue('alan.konu', formId);
-          var options = [];
+        options(){
+          const formId = AutoForm.getFormId();
+          const kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
+          const ders = AutoForm.getFieldValue('alan.ders', formId);
+          const sinif = AutoForm.getFieldValue('alan.sinif', formId);
+          const konu = AutoForm.getFieldValue('alan.konu', formId);
 
           if (kurum && ders && sinif && konu) {
-            var kurumDersKonuSu = _.findWhere(_.flatten(M.C.Mufredat.find({kurum: kurum, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders, sinif: sinif}).map(function(mufredat) {return mufredat.konular;})), {konu: konu});
-            var kurumDersKonuKazanimlari = kurumDersKonuSu && kurumDersKonuSu.kazanimlar;
-            kurumDersKonuKazanimlari = _.uniq(kurumDersKonuKazanimlari).sort(function(a, b) {
+            const kurumDersKonuSu = _.findWhere(_.flatten(M.C.Mufredat.find({kurum, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders, sinif}).map(mufredat => mufredat.konular)), {konu});
+            let kurumDersKonuKazanimlari = kurumDersKonuSu && kurumDersKonuSu.kazanimlar;
+            kurumDersKonuKazanimlari = _.uniq(kurumDersKonuKazanimlari).sort((a, b) => {
               return a.localeCompare(b);
             });
-            options = _.map(kurumDersKonuKazanimlari, function(kazanim) {return {label: kazanim, value: kazanim}; });
+            return kurumDersKonuKazanimlari.map(kazanim => {
+              return {
+                label: kazanim,
+                value: kazanim,
+              };
+            });
           }
-          return options;
+          return [];
         }
       }
     },
     'alan.kazanimlar.$': {
       label: 'Kazanım',
       type: String,
-      custom: function() {
-        var kazanim = this;
-        var kurum = this.field('kurum');
-        var ders = this.field('alan.ders');
-        var sinif = this.field('alan.sinif');
-        var konu = this.field('alan.konu');
-        var kurumDersKonuSu = kurum.isSet && ders.isSet && sinif.isSet && _.findWhere(_.flatten(M.C.Mufredat.find({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value}).map(function(mufredat) {return mufredat.konular;})), {konu: konu.value});
-        var kurumDersKonuKazanimlari = kurumDersKonuSu && kurumDersKonuSu.kazanimlar;
+      custom() {
+        const kazanim = this;
+        const kurum = this.field('kurum');
+        const ders = this.field('alan.ders');
+        const sinif = this.field('alan.sinif');
+        const konu = this.field('alan.konu');
+        const kurumDersKonuSu = kurum.isSet && ders.isSet && sinif.isSet && _.findWhere(_.flatten(M.C.Mufredat.find({kurum: kurum.value, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders: ders.value, sinif: sinif.value}).map(mufredat => mufredat.konular)), {konu: konu.value});
+        const kurumDersKonuKazanimlari = kurumDersKonuSu && kurumDersKonuSu.kazanimlar;
         if (kazanim.isSet && !_.contains(kurumDersKonuKazanimlari, kazanim.value)) {
           return 'dersKazanimiHatali';
         }
@@ -300,13 +337,17 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Soru tipi seçin',
-        options: function() {
-          var options = _.map(M.E.SoruTipiObjects, function(t) {
+        options() {
+          return M.E.SoruTipiObjects.map(t => {
+            const {
+              label,
+              name: value,
+            } = t;
             return {
-              label: t.label, value: t.name
+              label,
+              value,
             };
           });
-          return options;
         }
       }
     },
@@ -317,9 +358,13 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Zorluk derecesi seçin',
-        options: function() {
-          var options = _.map(M.E.ZorlukDereceleri, function(zd) {return {label: zd.toString(), value: zd};});
-          return options;
+        options() {
+          return M.E.ZorlukDereceleri.map(zd => {
+            return {
+              label: zd.toString(),
+              value: zd,
+            };
+          });
         }
       }
     },
@@ -332,7 +377,7 @@ M.C.setUpCollection({
       type: String,
       min: 4,
       max: 128,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -346,7 +391,7 @@ M.C.setUpCollection({
       min: 4,
       max: 512,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.TrimButKeepParagraphs(this.value);
         } else {
@@ -381,9 +426,9 @@ M.C.setUpCollection({
       label: 'Yanıt',
       type: Object,
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return !tip && 'hidden';
         }
       }
@@ -392,9 +437,9 @@ M.C.setUpCollection({
       label: 'Doğru Yanlış',
       optional: true,
       type: Object,
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'dogruYanlis' && self.isSet) {
           return self.value;
         } else {
@@ -402,9 +447,9 @@ M.C.setUpCollection({
         }
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'dogruYanlis' && 'hidden';
         }
       }
@@ -422,9 +467,9 @@ M.C.setUpCollection({
       label: 'Çoktan Tek Seçmeli',
       optional: true,
       type: [Object],
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'coktanTekSecmeli' && self.isSet) {
           return _.compact(self.value);
         } else {
@@ -433,17 +478,17 @@ M.C.setUpCollection({
       },
       minCount: 4,
       maxCount: 4,
-      custom: function() {
-        var tip = this.field('tip');
+      custom() {
+        let tip = this.field('tip');
         tip = tip && tip.value;
         if (tip === 'coktanTekSecmeli') {
-          var secenekObjects = _.compact(this.value);
+          const secenekObjects = _.compact(this.value);
           if (secenekObjects.length > 1) {
-            var dogruAdet = _.where(secenekObjects, {dogru: true}).length;
+            const dogruAdet = _.where(secenekObjects, {dogru: true}).length;
             if ( dogruAdet < 1 ) {return 'enAzBirDogruOlmali';}
             if ( dogruAdet > 1 ) {return 'sadeceBirDogruOlmali';}
-            var metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekMetin'));
-            var gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekGorsel'));
+            const metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekMetin'));
+            const gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekGorsel'));
             if (_.uniq(metinler).length !== metinler.length || _.uniq(gorseller).length !== gorseller.length) {
               return 'notUniqueYanitlar';
             }
@@ -452,9 +497,9 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'coktanTekSecmeli' && 'hidden';
         }
       }
@@ -465,16 +510,16 @@ M.C.setUpCollection({
       min: 1,
       max: 256,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
           this.unset();
         }
       },
-      custom:  function() {
-        var metin = this;
-        var gorsel = this.siblingField('secenekGorsel');
+      custom() {
+        const metin = this;
+        const gorsel = this.siblingField('secenekGorsel');
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
@@ -485,16 +530,16 @@ M.C.setUpCollection({
       label: 'Seçenek Görseli',
       type: String,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return this.value;
         } else {
           this.unset();
         }
       },
-      custom:  function() {
-        var metin = this.siblingField('secenekMetin');
-        var gorsel = this;
+      custom() {
+        const metin = this.siblingField('secenekMetin');
+        const gorsel = this;
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
@@ -528,9 +573,9 @@ M.C.setUpCollection({
       label: 'Çoktan Çok Seçmeli',
       optional: true,
       type: [Object],
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'coktanCokSecmeli' && self.isSet) {
           return _.compact(self.value);
         } else {
@@ -539,16 +584,16 @@ M.C.setUpCollection({
       },
       minCount: 4,
       maxCount: 4,
-      custom: function() {
-        var tip = this.field('tip');
+      custom() {
+        let tip = this.field('tip');
         tip = tip && tip.value;
         if (tip === 'coktanCokSecmeli') {
-          var secenekObjects = _.compact(this.value);
+          const secenekObjects = _.compact(this.value);
           if (secenekObjects.length > 1) {
-            var dogruAdet = _.where(secenekObjects, {dogru: true}).length;
+            const dogruAdet = _.where(secenekObjects, {dogru: true}).length;
             if ( dogruAdet < 1 ) {return 'enAzBirDogruOlmali';}
-            var metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekMetin'));
-            var gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekGorsel'));
+            const metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekMetin'));
+            const gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'secenekGorsel'));
             if (_.uniq(metinler).length !== metinler.length || _.uniq(gorseller).length !== gorseller.length) {
               return 'notUniqueYanitlar';
             }
@@ -557,9 +602,9 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'coktanCokSecmeli' && 'hidden';
         }
       }
@@ -570,16 +615,16 @@ M.C.setUpCollection({
       min: 1,
       max: 256,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
           this.unset();
         }
       },
-      custom:  function() {
-        var metin = this;
-        var gorsel = this.siblingField('secenekGorsel');
+      custom() {
+        const metin = this;
+        const gorsel = this.siblingField('secenekGorsel');
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
@@ -590,16 +635,16 @@ M.C.setUpCollection({
       label: 'Seçenek Görseli',
       type: String,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return this.value;
         } else {
           this.unset();
         }
       },
-      custom:  function() {
-        var metin = this.siblingField('secenekMetin');
-        var gorsel = this;
+      custom() {
+        const metin = this.siblingField('secenekMetin');
+        const gorsel = this;
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
@@ -635,23 +680,23 @@ M.C.setUpCollection({
       type: [Object],
       minCount: 4,
       maxCount: 4,
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'siralama' && self.isSet) {
           return _.compact(self.value);
         } else {
           return self.unset();
         }
       },
-      custom: function() {
-        var tip = this.field('tip');
+      custom() {
+        let tip = this.field('tip');
         tip = tip && tip.value;
         if (tip === 'siralama') {
-          var secenekObjects = _.compact(this.value);
+          const secenekObjects = _.compact(this.value);
           if (secenekObjects.length > 1) {
-            var metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'metin'));
-            var gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'gorsel'));
+            const metinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'metin'));
+            const gorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'gorsel'));
             if (_.uniq(metinler).length !== metinler.length || _.uniq(gorseller).length !== gorseller.length) {
               return 'notUniqueYanitlar';
             }
@@ -660,9 +705,9 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'siralama' && 'hidden';
         }
       }
@@ -673,15 +718,15 @@ M.C.setUpCollection({
       optional: true,
       min: 1,
       max: 256,
-      custom: function() {
-        var metin = this;
-        var gorsel = this.siblingField('gorsel');
+      custom() {
+        const metin = this;
+        const gorsel = this.siblingField('gorsel');
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -693,15 +738,15 @@ M.C.setUpCollection({
       label: 'Görsel',
       type: String,
       optional: true,
-      custom: function() {
-        var metin = this.siblingField('metin');
-        var gorsel = this;
+      custom() {
+        const metin = this.siblingField('metin');
+        const gorsel = this;
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return this.value;
         } else {
@@ -727,9 +772,9 @@ M.C.setUpCollection({
       label: 'Eşleştirme',
       optional: true,
       type: [Object],
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'eslestirme' && self.isSet) {
           return _.compact(self.value);
         } else {
@@ -738,16 +783,16 @@ M.C.setUpCollection({
       },
       minCount: 5,
       maxCount: 5,
-      custom: function() {
-        var tip = this.field('tip');
+      custom() {
+        let tip = this.field('tip');
         tip = tip && tip.value;
         if (tip === 'eslestirme') {
-          var secenekObjects = _.compact(this.value);
+          const secenekObjects = _.compact(this.value);
           if (secenekObjects.length > 1) {
-            var solMetinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'solMetin'));
-            var solGorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'solGorsel'));
-            var sagMetinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'sagMetin'));
-            var sagGorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'sagGorsel'));
+            const solMetinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'solMetin'));
+            const solGorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'solGorsel'));
+            const sagMetinler = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'sagMetin'));
+            const sagGorseller = M.L.RejectUndefinedFromArray(_.pluck(secenekObjects, 'sagGorsel'));
             if (_.uniq(solMetinler).length !== solMetinler.length || _.uniq(solGorseller).length !== solGorseller.length || _.uniq(sagMetinler).length !== sagMetinler.length || _.uniq(sagGorseller).length !== sagGorseller.length) {
               return 'notUniqueYanitlar';
             }
@@ -756,9 +801,9 @@ M.C.setUpCollection({
         return true;
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'eslestirme' && 'hidden';
         }
       }
@@ -769,15 +814,15 @@ M.C.setUpCollection({
       optional: true,
       min: 1,
       max: 256,
-      custom: function() {
-        var metin = this;
-        var gorsel = this.siblingField('solGorsel');
+      custom() {
+        const metin = this;
+        const gorsel = this.siblingField('solGorsel');
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -789,15 +834,15 @@ M.C.setUpCollection({
       label: 'Sol Görsel',
       type: String,
       optional: true,
-      custom: function() {
-        var metin = this.siblingField('solMetin');
-        var gorsel = this;
+      custom() {
+        const metin = this.siblingField('solMetin');
+        const gorsel = this;
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return this.value;
         } else {
@@ -825,15 +870,15 @@ M.C.setUpCollection({
       optional: true,
       min: 1,
       max: 256,
-      custom: function() {
-        var metin = this;
-        var gorsel = this.siblingField('sagGorsel');
+      custom() {
+        const metin = this;
+        const gorsel = this.siblingField('sagGorsel');
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -845,15 +890,15 @@ M.C.setUpCollection({
       label: 'Sağ Görsel',
       type: String,
       optional: true,
-      custom: function() {
-        var metin = this.siblingField('sagMetin');
-        var gorsel = this;
+      custom() {
+        const metin = this.siblingField('sagMetin');
+        const gorsel = this;
         if (!metin.isSet && !gorsel.isSet) {
           return 'metinGorselBiriniGir';
         }
         return true;
       },
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return this.value;
         } else {
@@ -879,9 +924,9 @@ M.C.setUpCollection({
       label: '[Boşluk] Doldurma',
       optional: true,
       type: Object,
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
         if (tip.isSet && tip.value === 'boslukDoldurma' && self.isSet) {
           return self.value;
         } else {
@@ -889,9 +934,9 @@ M.C.setUpCollection({
         }
       },
       autoform: {
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
           return tip !== 'boslukDoldurma' && 'hidden';
         }
       }
@@ -901,18 +946,18 @@ M.C.setUpCollection({
       type: String,
       min: 3,
       max: 512,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.TrimButKeepParagraphs(this.value);
         } else {
           this.unset();
         }
       },
-      custom: function() {
-        var tip = this.field('tip');
+      custom() {
+        let tip = this.field('tip');
         tip = tip && tip.value;
         if (tip === 'boslukDoldurma') {
-          var cevap = this;
+          let cevap = this;
           if (cevap.isSet) {
             cevap = cevap.value;
             return /\[(.+?)\]/g.test(cevap) ? true : 'boslukFormatiHatali'
@@ -932,9 +977,13 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Karakter sayı toleransı seçin',
-        options: function() {
-          var options = _.map(M.E.Levenshtein, function(l) {return {label: l.toString(), value: l};});
-          return options;
+        options() {
+          return M.E.Levenshtein.map(l => {
+            return {
+              label: l.toString(),
+              value: l,
+            };
+          });
         }
       }
     },
@@ -951,11 +1000,11 @@ M.C.setUpCollection({
       type: Boolean,
       index: 1,
       defaultValue: true,
-      custom: function() {
-        var taslak = this;
-        var soruId = this.docId;
+      custom() {
+        const taslak = this;
+        const soruId = this.docId;
         if (taslak.isUpdate && taslak.isSet && taslak.value === true) {
-          var sinav = M.C.Sinavlar.findOne({'sorular.soruId': soruId});
+          const sinav = M.C.Sinavlar.findOne({'sorular.soruId': soruId});
           if (sinav) {
             return 'sinavdakiSoruTaslakYapilamaz';
           }
@@ -970,14 +1019,14 @@ M.C.setUpCollection({
       type: Boolean,
       index: 1,
       defaultValue: false,
-      custom: function() {
-        var soruId = this.docId;
-        var taslak = this.field('taslak');
-        var kilitli = this;
+      custom() {
+        const soruId = this.docId;
+        const taslak = this.field('taslak');
+        const kilitli = this;
         if (taslak.isSet && taslak.value === true && kilitli.isSet && kilitli.value === true) {
           return 'taslakSoruKilitlenemez';
         } else if (!taslak.isSet && kilitli.isSet && kilitli.value === true) {
-          var taslak = M.C.Sorular.findOne({_id: soruId}).taslak === true;
+          const taslak = M.C.Sorular.findOne({_id: soruId}).taslak === true;
           if (taslak) {
             return 'taslakSoruKilitlenemez';
           }
@@ -995,9 +1044,9 @@ M.C.setUpCollection({
   cloneable: true
 });
 
-M.C.Sorular.before.update(function (userId, doc, fields, modifier, options) {
-  var tip = modifier.$set && modifier.$set.tip;
-  var tumTip = [
+M.C.Sorular.before.update((userId, doc, fields, modifier, options) => {
+  const tip = modifier.$set && modifier.$set.tip;
+  const tumTip = [
     'dogruYanlis',
     'coktanTekSecmeli',
     'coktanCokSecmeli',
@@ -1008,14 +1057,14 @@ M.C.Sorular.before.update(function (userId, doc, fields, modifier, options) {
 
   if (tip) {
     modifier.$unset = modifier.$unset || {};
-    var unset = _.keys(modifier.$unset);
+    const unset = _.keys(modifier.$unset);
     unset.push(tip);
 
-    var digerTip = _.difference(tumTip, unset);
+    const digerTip = _.difference(tumTip, unset);
 
-    _.each(digerTip, function(t) {
-      var path = 'yanit.' + t;
-      var obj = {};
+    digerTip.forEach(t => {
+      const path = 'yanit.' + t;
+      let obj = {};
       obj[path]= '';
       modifier.$unset = _.extend(modifier.$unset, obj);
     });
@@ -1042,19 +1091,19 @@ if (Meteor.isServer) {
 
 if (Meteor.isServer) {
   Meteor.methods({
-    'soruTaslakDegistir': function(soruId) {
+    'soruTaslakDegistir'(soruId) {
       check(soruId, String);
 
       if (M.L.userHasRole(this.userId, 'mudur')) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var soru = M.C.Sorular.findOne({_id: soruId});
+      const soru = M.C.Sorular.findOne({_id: soruId});
       if (!soru) {
         M.L.ThrowError({error:'404',reason:'Soru bulunamadı',details:'Soru bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
         if (!(_.contains(user.dersleri, soru.alan.ders) && user.kurum === soru.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
@@ -1071,33 +1120,33 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'soruKilitli',reason:'Soru kilitli',details:'Soru kilitli'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({'sorular.soruId': soruId});
+      const sinav = M.C.Sinavlar.findOne({'sorular.soruId': soruId});
       if (sinav && soru.taslak === false) {
         M.L.ThrowError({error:'sinavdakiSoruTaslakYapilamaz',reason:'Sınavdaki soru taslak yapılamaz',details:'Sınavdaki soru taslak yapılamaz'});
       }
 
-      var updateDoc = {
+      const updateDoc = {
         taslak: !soru.taslak
       };
 
-      var sonuc = M.C.Sorular.update({_id: soru._id}, {$set: updateDoc});
+      const sonuc = M.C.Sorular.update({_id: soru._id}, {$set: updateDoc});
 
       return sonuc;
 
     },
-    'soruKilitle': function(soruId) {
+    'soruKilitle'(soruId) {
       check(soruId, String);
 
       if (M.L.userHasRole(this.userId, 'mudur')) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var soru = M.C.Sorular.findOne({_id: soruId});
+      const soru = M.C.Sorular.findOne({_id: soruId});
       if (!soru) {
         M.L.ThrowError({error:'404',reason:'Soru bulunamadı',details:'Soru bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
         if (!(_.contains(user.dersleri, soru.alan.ders) && user.kurum === soru.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
@@ -1118,14 +1167,11 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'taslakSoruKilitlenemez',reason:'Taslak soru kilitlenemez',details:'Taslak soru kilitlenemez'});
       }
 
-      var updateDoc = {
+      const updateDoc = {
         kilitli: true
       };
 
-      var sonuc = M.C.Sorular.update({_id: soru._id}, {$set: updateDoc});
-
-      return sonuc;
-
+      return M.C.Sorular.update({_id: soru._id}, {$set: updateDoc});
     }
   })
 }

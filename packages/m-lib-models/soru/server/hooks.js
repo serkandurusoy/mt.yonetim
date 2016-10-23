@@ -2,10 +2,11 @@ M.C.Sorular.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
+  const{
+    _id= doc._id,
+  } = this;
 
-  var _id = this._id ? this._id : doc._id;
-
-  var story = {
+  const story = {
     kurum: doc.kurum,
     collection: 'Sorular',
     doc: _id,
@@ -21,11 +22,13 @@ M.C.Sorular.after.insert(function(userId,doc) {
 M.C.Sorular.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (this.previous.searchSource.kurum === doc.searchSource.kurum) {
 
-    var _id = this._id ? this._id : doc._id;
+    const{
+      _id= doc._id,
+    } = this;
 
-    if (userId) {
+   if (userId) {
 
-      var story = {
+      let story = {
         kurum: doc.kurum,
         collection: 'Sorular',
         doc: _id,
@@ -34,7 +37,7 @@ M.C.Sorular.after.update(function(userId, doc, fieldNames, modifier, options) {
         createdBy: userId
       };
 
-      var comment = {
+      let comment = {
         collection: 'Sorular',
         doc: _id,
         body: 'Soruda değişiklik yaptım.'
@@ -139,8 +142,8 @@ M.C.Sorular.after.update(function(userId, doc, fieldNames, modifier, options) {
       M.C.Sinavlar.find({
         iptal: false,
         'sorular.soruId': _id
-      }).forEach(function(sinav) {
-        var sinavComment = {
+      }).forEach(sinav => {
+        const sinavComment = {
           collection: 'Sinavlar',
           doc: sinav._id,
           body: doc.kod + ' kodlu ' + comment.body.toLocaleLowerCase()

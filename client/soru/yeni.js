@@ -7,7 +7,7 @@ Template.soruYeni.onCreated(function() {
 
 AutoForm.hooks({
   soruYeniForm: {
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('soruDetay', {_id: result});
       }
