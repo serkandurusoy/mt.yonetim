@@ -29,7 +29,7 @@ M.E.PickadateOptions = {
   firstDay: 1,
   format: 'dd.mm.yyyy',
   timezoneId: 'Europe/Istanbul',
-  onClose: function() {
+  onClose() {
     $(document.activeElement).blur();
   }
 };
@@ -68,12 +68,12 @@ M.E.RoleObjects = [
 M.E.Roles = _.pluck(M.E.RoleObjects,'name');
 
 M.E.EgitimYiliObjects = [];
-_.each(_.range(2016, new Date().getFullYear() + 6, 1), function(yil) {
-  var yilString = yil.toString() + '-' + (parseInt(yil)+1).toString();
+_.range(2016, new Date().getFullYear() + 6, 1).forEach(yil => {
+  const yilString = yil.toString() + '-' + (parseInt(yil)+1).toString();
   M.E.EgitimYiliObjects.push(
     {
       name: yilString,
-      label: yilString
+      label: yilString,
     }
   );
 });
@@ -116,14 +116,18 @@ M.E.CanliStatusObjects = [
 ];
 M.E.CanliStatus = _.pluck(M.E.CanliStatusObjects,'name');
 
-M.L.enumLabel = function(name) {
-  var enumArray = _.flatten(_.map([M.E.CinsiyetObjects, M.E.SifreObjects, M.E.RoleObjects, M.E.EgitimYiliObjects, M.E.SinifObjects, M.E.SoruTipiObjects, M.E.SinavTipiObjects, M.E.CanliStatusObjects], function(o) {
-    return _.map(o,function(e){
+M.L.enumLabel = name => {
+  const enumArray = _.flatten([M.E.CinsiyetObjects, M.E.SifreObjects, M.E.RoleObjects, M.E.EgitimYiliObjects, M.E.SinifObjects, M.E.SoruTipiObjects, M.E.SinavTipiObjects, M.E.CanliStatusObjects].map(o => {
+    return o.map(e =>{
+      const {
+        name,
+        label,
+      } = e;
       return {
-        name:e.name,
-        label:e.label
+        name,
+        label,
       };
     });
   }));
-  return _.findWhere(enumArray,{name:name}).label;
+  return _.findWhere(enumArray,{name}).label;
 };
