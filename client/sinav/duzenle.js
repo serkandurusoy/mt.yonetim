@@ -1,14 +1,13 @@
 Template.sinavDuzenle.onCreated(function() {
-  template = this;
-  template.autorun(function() {
-    template.subscribe('sinav', FlowRouter.getParam('_id'));
-    template.subscribe('mufredatlar');
+  this.autorun(() => {
+    this.subscribe('sinav', FlowRouter.getParam('_id'));
+    this.subscribe('mufredatlar');
   });
 });
 
 Template.sinavDuzenle.helpers({
-  sinav: function() {
-    var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id'), aktif: true, kilitli: false, iptal: false});
+  sinav() {
+    const sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id'), aktif: true, kilitli: false, iptal: false});
     return sinav;
   }
 });
@@ -16,14 +15,14 @@ Template.sinavDuzenle.helpers({
 AutoForm.hooks({
   sinavDuzenleForm: {
     before: {
-      update: function(doc) {
+      update(doc) {
         if (doc.$set.sorular && doc.$set.sorular.length > 0) {
           doc.$set.sorular = AutoForm.getCurrentDataForForm('sinavDuzenleForm').doc.sorular;
         }
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         FlowRouter.go('sinavDetay', {_id: FlowRouter.getParam('_id')});
       }

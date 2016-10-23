@@ -3,9 +3,11 @@ M.C.Sinavlar.after.insert(function(userId,doc) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
 
-  var _id = this._id ? this._id : doc._id;
+  const {
+    _id = doc._id,
+  } = this;
 
-  var story = {
+  const story = {
     kurum: doc.kurum,
     collection: 'Sinavlar',
     doc: _id,
@@ -20,8 +22,8 @@ M.C.Sinavlar.after.insert(function(userId,doc) {
 
 M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (!this.previous.kilitli && doc.kilitli) {
-    var soruIdleri = _.pluck(doc.sorular, 'soruId');
-    M.C.Sorular.find({_id: {$in: soruIdleri}}).forEach(function(soru) {
+    const soruIdleri = _.pluck(doc.sorular, 'soruId');
+    M.C.Sorular.find({_id: {$in: soruIdleri}}).forEach(soru => {
       M.C.Sorular.update(
         {
           _id: soru._id,
@@ -41,14 +43,16 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
   if (this.previous.searchSource.kurum === doc.searchSource.kurum) {
 
-    var userEvent = true;
+    let userEvent = true;
     if (!userId) {
       userEvent = false;
       userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
     }
-    var _id = this._id ? this._id : doc._id;
+    const {
+      _id = doc._id,
+    } = this;
 
-    var story = {
+    const story = {
       kurum: doc.kurum,
       collection: 'Sinavlar',
       doc: _id,
@@ -57,7 +61,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
       createdBy: userId
     };
 
-    var comment = {
+    let comment = {
       collection: 'Sinavlar',
       doc: _id,
       body: 'Testte değişiklik yaptım.'
@@ -200,11 +204,11 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
       comment.body = comment.body + ' Canlı durumunu '+ M.L.enumLabel(doc.canliStatus) +' olarak değiştirdim.';
     }
 
-    var onceSoru = this.previous.sorular || [];
-    var sonraSoru = doc.sorular || [];
+    const onceSoru = this.previous.sorular || [];
+    const sonraSoru = doc.sorular || [];
 
     if (onceSoru.length < sonraSoru.length) {
-      var adet = sonraSoru.length - onceSoru.length;
+      const adet = sonraSoru.length - onceSoru.length;
       story.operation = 'special';
       story.specialOperation = 'Teste soru eklendi';
       story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' içine ' + adet + ' adet soru eklendi.';
@@ -212,15 +216,15 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
     }
 
     if (onceSoru.length > sonraSoru.length) {
-      var adet = onceSoru.length - sonraSoru.length;
+      const adet = onceSoru.length - sonraSoru.length;
       story.operation = 'special';
       story.specialOperation = 'Testten soru çıkarıldı';
       story.specialNote = doc.kod + ' kodlu ' + M.L.enumLabel(doc.tip) + ' içinden ' + adet + ' adet soru çıkarıldı.';
       comment.body = comment.body + ' ' + adet +' adet soru çıkardım.';
     }
 
-    var onceSoruIdleri = _.pluck(onceSoru, 'soruId');
-    var sonraSoruIdleri = _.pluck(sonraSoru, 'soruId');
+    const onceSoruIdleri = _.pluck(onceSoru, 'soruId');
+    const sonraSoruIdleri = _.pluck(sonraSoru, 'soruId');
     if ((onceSoru.length === sonraSoru.length) && !(onceSoruIdleri.sameAs(sonraSoruIdleri))) {
       story.operation = 'special';
       story.specialOperation = 'Test soru sırası değişti';
@@ -228,8 +232,8 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
       comment.body = comment.body + ' Soru sırasını değiştirdim.';
     }
 
-    var onceSoruToplamZD = _.reduce(_.pluck(onceSoru, 'zorlukDerecesi'), function(memo,zorlukDerecesi){return memo+parseInt(zorlukDerecesi)}, 0);
-    var sonraSoruToplamZD = _.reduce(_.pluck(sonraSoru, 'zorlukDerecesi'), function(memo,zorlukDerecesi){return memo+parseInt(zorlukDerecesi)}, 0);
+    const onceSoruToplamZD = _.pluck(onceSoru, 'zorlukDerecesi').reduce((memo,zorlukDerecesi) => {return memo+parseInt(zorlukDerecesi)}, 0);
+    const sonraSoruToplamZD = _.pluck(sonraSoru, 'zorlukDerecesi').reduce((memo,zorlukDerecesi) => {return memo+parseInt(zorlukDerecesi)}, 0);
     if ((onceSoru.length === sonraSoru.length) && (onceSoruToplamZD !== sonraSoruToplamZD)) {
       story.operation = 'special';
       story.specialOperation = 'Test zorluğu değişti';
@@ -246,10 +250,10 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
   }
 });
 
-M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
+M.C.Sinavlar.after.update((userId, doc, fieldNames, modifier, options) => {
   if (doc.iptal) {
 
-    var sinav = M.C.Sinavlar.findOne({
+    const sinav = M.C.Sinavlar.findOne({
       _id: doc._id,
       taslak: false,
       aktif: true,
@@ -260,7 +264,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
     if (sinav) {
 
-      var users = [];
+      let users = [];
 
       // sinavi olusturan ve son guncelleyenini al
       users = _.union(users, [sinav.createdBy]);
@@ -268,7 +272,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
 
       // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
       if (sinav._version > 1) {
-        sinav.versions().forEach(function(sinav) {
+        sinav.versions().forEach(sinav => {
           users = _.union(users, [sinav.createdBy]);
           users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
         })
@@ -280,7 +284,7 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
         kurum: sinav.kurum,
         role: 'ogretmen',
         dersleri: sinav.ders
-      }).forEach(function(user) {
+      }).forEach(user => {
         users = _.union(users, [user._id]);
       });
 
@@ -288,14 +292,14 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
       M.C.Comments.find({
         collection: 'Sinavlar',
         doc: sinav._id
-      }).forEach(function(comment) {
-        var user = M.C.Users.findOne({_id: comment.createdBy});
+      }).forEach(comment => {
+        const user = M.C.Users.findOne({_id: comment.createdBy});
         if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
           M.C.Users.find({
             aktif: true,
             kurum: user.kurum,
             role: user.role
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
         }
@@ -308,25 +312,25 @@ M.C.Sinavlar.after.update(function(userId, doc, fieldNames, modifier, options) {
         kurum: sinav.kurum,
         sinif: sinav.sinif,
         sube: {$in: sinav.subeler}
-      }).forEach(function(user) {
+      }).forEach(user => {
         users = _.union(users, [user._id]);
       });
 
       users = _.uniq(users);
 
-      _.each(users, function(userId) {
+      users.forEach(userId => {
 
-        var user = M.C.Users.findOne({_id: userId});
+        const user = M.C.Users.findOne({_id: userId});
 
         if (user) {
-          var muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
-          var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-          var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
-          var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
-          var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
-          var tip = M.L.enumLabel(sinav.tip);
-          var kod = sinav.kod;
-          var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+          const muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
+          const ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+          const muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+          const sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+          const subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
+          const tip = M.L.enumLabel(sinav.tip);
+          const kod = sinav.kod;
+          const kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
 
           if (user.role === 'ogrenci') {
 

@@ -2,57 +2,57 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
   SyncedCron.add({
     name: 'Kapanışı yaklaşan sınavları almamışlara hatırlat.',
-    schedule: function (parser) {
+    schedule(parser) {
       return parser.recur().every(1).minute();
     },
-    job: function () {
+    job() {
       Meteor.call('sinavKapanislariniHatirlat');
     }
   });
 
   SyncedCron.add({
     name: 'Vakti geçen sınavları otomatik kapat.',
-    schedule: function (parser) {
+    schedule(parser) {
       return parser.recur().every(1).minute();
     },
-    job: function () {
+    job() {
       Meteor.call('sinavlariKapat');
     }
   });
 
   SyncedCron.add({
     name: 'Zorluk derecelerini hesaplayıp güncelle.',
-    schedule: function (parser) {
+    schedule(parser) {
       return parser.recur().every(1).minute();
     },
-    job: function () {
+    job() {
       Meteor.call('zdHesapla');
     }
   });
 
   SyncedCron.add({
     name: 'Başlayacak sınavlara mühür ataması yap ve email hatırlatmalarını gönder.',
-    schedule: function (parser) {
+    schedule(parser) {
       return parser.recur().every(1).minute();
     },
-    job: function () {
+    job() {
       Meteor.call('sinavAcVeMuhurAta');
     }
   });
 
   SyncedCron.add({
     name: 'Yanıtları açıklanan sınavları email ile duyur.',
-    schedule: function (parser) {
+    schedule(parser) {
       return parser.recur().every(1).hour();
     },
-    job: function () {
+    job() {
       Meteor.call('yanitAcildiBildir');
     }
   });
 
   Meteor.methods({
 
-    'sinavKapanislariniHatirlat': function() {
+    'sinavKapanislariniHatirlat'() {
       this.unblock();
 
       M.C.Sinavlar.find({
@@ -65,20 +65,20 @@ if (Meteor.settings.public.APP === 'YONETIM') {
         kapanisZamani: {$lt: moment().add(24,'hours').toDate()},
         tip: {$in: ['alistirma','konuTarama','deneme']},
         sinavKapanisiHatirlatmaZamani: {$exists: false}
-      }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
+      }, {sort: {acilisZamani: 1}}).forEach(sinav => {
 
         M.C.Users.find({
-          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(function(sinavKagidi) {return sinavKagidi.ogrenci;}))},
+          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(sinavKagidi => sinavKagidi.ogrenci))},
           aktif: true,
           role: 'ogrenci',
           kurum: sinav.kurum,
           sinif: sinav.sinif,
           sube: {$in: sinav.subeler}
-        }).forEach(function(user) {
+        }).forEach(user => {
 
-          var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-          var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
-          var muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
+          const ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+          const muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+          const muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
 
           try {
 
@@ -111,7 +111,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
       })
     },
 
-    'sinavlariKapat': function() {
+    'sinavlariKapat'() {
       this.unblock();
 
       M.C.Sinavlar.find({
@@ -135,14 +135,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             ]
           }
         ]
-      }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
+      }, {sort: {acilisZamani: 1}}).forEach(sinav => {
 
         M.C.Users.find({
-          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(function(sinavKagidi) {return sinavKagidi.ogrenci;}))},
+          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(sinavKagidi => sinavKagidi.ogrenci))},
           kurum: sinav.kurum,
           sinif: sinav.sinif,
           sube: {$in: sinav.subeler}
-        }).forEach(function(user) {
+        }).forEach(user => {
           Meteor.call('sinavaBasla', {sinavId: sinav._id, userId: user._id, ogrenciSinavaGirdi: false});
         });
 
@@ -151,7 +151,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             sinav: sinav._id,
             bitirmeZamani: {$exists: true},
             iptal: false
-          }).forEach(function(sinavKagidi) {
+          }).forEach(sinavKagidi => {
             M.C.SinavKagitlari.update({
               _id: sinavKagidi._id
             },{
@@ -167,7 +167,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
         M.C.SinavKagitlari.find({
           sinav: sinav._id,
           bitirmeZamani: {$exists: false}
-        }).forEach(function(sinavKagidi) {
+        }).forEach(sinavKagidi => {
           Meteor.call('sinaviBitir', {sinavKagidiId: sinavKagidi._id, userId: sinavKagidi.ogrenci, iptal: sinav.iptal});
         });
 
@@ -180,7 +180,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
       M.C.SinavKagitlari.find({
         bitirmeZamani: {$exists: false},
         maxBitirmeZamani: {$lt: new Date()}
-      }).forEach(function(sinavKagidi) {
+      }).forEach(sinavKagidi => {
         Meteor.call('sinaviBitir', {sinavKagidiId: sinavKagidi._id, userId: sinavKagidi.ogrenci});
       });
 
@@ -189,27 +189,27 @@ if (Meteor.settings.public.APP === 'YONETIM') {
         puanOrtalamayaGirdi: false,
         bitirmeZamani: {$exists: true},
         yanitlarAcilmaZamani: {$lt: new Date()}
-      }).forEach(function(sinavKagidi) {
+      }).forEach(sinavKagidi => {
         M.C.SinavKagitlari.update({_id: sinavKagidi._id}, {$set: {puanOrtalamayaGirdi: true}});
         Meteor.call('ortalamaGuncelle', sinavKagidi.ogrenci);
       })
 
     },
 
-    'sinavKapanisiBildir': function(args) {
+    'sinavKapanisiBildir'(args) {
       this.unblock();
 
       check(args, {
         sinavId: String
       });
 
-      var sinav = M.C.Sinavlar.findOne(args.sinavId);
+      const sinav = M.C.Sinavlar.findOne(args.sinavId);
 
       if (sinav) {
 
         try {
 
-          var users = [];
+          let users = [];
 
           // sinavi olusturan ve son guncelleyenini al
           users = _.union(users, [sinav.createdBy]);
@@ -217,7 +217,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
           // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
           if (sinav._version > 1) {
-            sinav.versions().forEach(function(sinav) {
+            sinav.versions().forEach(sinav => {
               users = _.union(users, [sinav.createdBy]);
               users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
             })
@@ -229,7 +229,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             kurum: sinav.kurum,
             role: 'ogretmen',
             dersleri: sinav.ders
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
 
@@ -237,14 +237,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           M.C.Comments.find({
             collection: 'Sinavlar',
             doc: sinav._id
-          }).forEach(function(comment) {
-            var user = M.C.Users.findOne({_id: comment.createdBy});
+          }).forEach(comment => {
+            const user = M.C.Users.findOne({_id: comment.createdBy});
             if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
               M.C.Users.find({
                 aktif: true,
                 kurum: user.kurum,
                 role: user.role
-              }).forEach(function(user) {
+              }).forEach(user => {
                 users = _.union(users, [user._id]);
               });
             }
@@ -252,23 +252,23 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
           users = _.uniq(users);
 
-          _.each(users, function(userId) {
+          users.forEach(userId => {
 
-            var user = M.C.Users.findOne({_id: userId});
+            const user = M.C.Users.findOne({_id: userId});
 
             if (user) {
 
               try {
 
-                var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-                var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
-                var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
-                var tip = M.L.enumLabel(sinav.tip);
-                var sinavKod = sinav.kod;
-                var acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
-                var kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
-                var soruSayisi = sinav.sorular.length;
-                var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+                const ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+                const sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+                const subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
+                const tip = M.L.enumLabel(sinav.tip);
+                const sinavKod = sinav.kod;
+                const acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
+                const kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
+                const soruSayisi = sinav.sorular.length;
+                const kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
 
                 if (user.role !== 'ogrenci') {
 
@@ -308,14 +308,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
     },
 
-    'zdHesapla': function() {
+    'zdHesapla'() {
       this.unblock();
 
-      var aktifEgitimYili = M.C.AktifEgitimYili.findOne().egitimYili;
+      const aktifEgitimYili = M.C.AktifEgitimYili.findOne().egitimYili;
 
-      var soruSeti = [];
-      var sinavSeti = [];
-      var guncellenecekSinavlar = [];
+      let soruSeti = [];
+      let sinavSeti = [];
+      let guncellenecekSinavlar = [];
 
       M.C.Sinavlar.find({
         tip: {$in: ['deneme', 'canli']},
@@ -326,8 +326,8 @@ if (Meteor.settings.public.APP === 'YONETIM') {
         egitimYili: aktifEgitimYili,
         kapanisZamani: {$lt: new Date()},
         soruZDGuncellemesiYapilmaZamani: {$exists: false}
-      }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
-        _.each(_.pluck(sinav.sorular, 'soruId'), function(soruId) {
+      }, {sort: {acilisZamani: 1}}).forEach(sinav => {
+        _.pluck(sinav.sorular, 'soruId').forEach(soruId => {
           soruSeti.push(soruId);
         });
         sinavSeti.push(sinav._id);
@@ -337,8 +337,8 @@ if (Meteor.settings.public.APP === 'YONETIM') {
       sinavSeti = _.uniq(sinavSeti);
 
       if (soruSeti.length > 0 && sinavSeti.length > 0) {
-        _.each(soruSeti, function(soruId) {
-          var yanlisAdet = M.C.SinavKagitlari.aggregate([
+        soruSeti.forEach(soruId => {
+          let yanlisAdet = M.C.SinavKagitlari.aggregate([
             {
               $match:
               {
@@ -357,7 +357,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             }
           ])[0];
           yanlisAdet = !!yanlisAdet ? parseInt(yanlisAdet.adet) : 0;
-          var dogruAdet = M.C.SinavKagitlari.aggregate([
+          let dogruAdet = M.C.SinavKagitlari.aggregate([
             {
               $match:
               {
@@ -376,10 +376,10 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             }
           ])[0];
           dogruAdet = !!dogruAdet ? parseInt(dogruAdet.adet) : 0;
-          var toplamAdet = math.chain(yanlisAdet).add(dogruAdet).done();
+          const toplamAdet = math.chain(yanlisAdet).add(dogruAdet).done();
 
           if (toplamAdet > 0) {
-            var yeniZD = math.chain(5).subtract(math.chain(dogruAdet).divide(toplamAdet).multiply(4).round().done()).done();
+            const yeniZD = math.chain(5).subtract(math.chain(dogruAdet).divide(toplamAdet).multiply(4).round().done()).done();
 
             M.C.Sorular._collection.update({_id: soruId},{
               $set: {zorlukDerecesi: yeniZD}
@@ -393,7 +393,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               muhur: {$exists: false},
               egitimYili: aktifEgitimYili,
               acilisZamani: {$gt: new Date()}
-            }).forEach(function(sinav) {
+            }).forEach(sinav => {
               guncellenecekSinavlar.push(sinav._id);
             });
 
@@ -401,14 +401,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
         });
 
-        _.each(sinavSeti, function(sinavId) {
+        sinavSeti.forEach(sinavId => {
           M.C.Sinavlar._collection.update({_id: sinavId},{
             $set: {soruZDGuncellemesiYapilmaZamani: new Date()}
           });
         });
 
         guncellenecekSinavlar = _.uniq(guncellenecekSinavlar);
-        _.each(guncellenecekSinavlar, function(sinavId) {
+        guncellenecekSinavlar.forEach(sinavId => {
           M.C.Sinavlar.find({
             _id: sinavId,
             kilitli: false,
@@ -417,17 +417,17 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             muhur: {$exists: false},
             egitimYili: aktifEgitimYili,
             acilisZamani: {$gt: new Date()}
-          }, {fields: {_id: 1, sorular: 1}}).forEach(function(sinav) {
-            var sorular = _.map(sinav.sorular, function(soru) {
+          }, {fields: {_id: 1, sorular: 1}}).forEach(sinav => {
+            let sorular = sinav.sorular.map(soru => {
               soru.zorlukDerecesi = M.C.Sorular.findOne({_id: soru.soruId}).zorlukDerecesi;
               return soru;
             });
 
-            var initialToplamZD = _.reduce(sorular, function(memo, soru) {
+            const initialToplamZD = sorular.reduce((memo, soru) => {
               return memo + soru.zorlukDerecesi
             }, 0);
 
-            sorular = _.map(sorular, function(soru) {
+            sorular = sorular.map(soru => {
               return {
                 soruId: soru.soruId,
                 zorlukDerecesi: soru.zorlukDerecesi,
@@ -435,18 +435,18 @@ if (Meteor.settings.public.APP === 'YONETIM') {
               }
             });
 
-            var initialToplamPuan = _.reduce(sorular, function(memo, soru) {
+            const initialToplamPuan = sorular.reduce((memo, soru) => {
               return memo + soru.puan
             }, 0);
 
-            var sortedSorular = _.sortBy(sorular, 'puan');
-            var soruCount = sorular.length;
-            var puanFarki = initialToplamPuan - 100;
+            const sortedSorular = _.sortBy(sorular, 'puan');
+            const soruCount = sorular.length;
+            const puanFarki = initialToplamPuan - 100;
 
             if (!!puanFarki) {
-              for (var ix=0; ix < Math.abs(puanFarki); ix++) {
-                var soruIndex = soruCount-ix-1;
-                sorular = _.map(sorular, function(soru) {
+              for (let ix=0; ix < Math.abs(puanFarki); ix++) {
+                let soruIndex = soruCount-ix-1;
+                sorular = sorular.map(soru => {
                   if (soru.soruId === sortedSorular[soruIndex].soruId) {
                     soru.puan = soru.puan - ( puanFarki / Math.abs(puanFarki) );
                   }
@@ -467,10 +467,10 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
     },
 
-    'yanitAcildiBildir': function() {
+    'yanitAcildiBildir'() {
       this.unblock();
 
-      M.C.Kurumlar.find().forEach(function(kurum) {
+      M.C.Kurumlar.find().forEach(kurum => {
 
         M.C.Sinavlar.find({
           $and: [
@@ -484,8 +484,8 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             {muhur: {$exists: true}},
             {egitimYili: M.C.AktifEgitimYili.findOne().egitimYili}
           ]
-        }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
-          var users = [];
+        }, {sort: {acilisZamani: 1}}).forEach(sinav => {
+          let users = [];
 
           // sinavi olusturan ve son guncelleyenini al
           users = _.union(users, [sinav.createdBy]);
@@ -493,7 +493,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
           // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
           if (sinav._version > 1) {
-            sinav.versions().forEach(function(sinav) {
+            sinav.versions().forEach(sinav => {
               users = _.union(users, [sinav.createdBy]);
               users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
             })
@@ -505,7 +505,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             kurum: sinav.kurum,
             role: 'ogretmen',
             dersleri: sinav.ders
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
 
@@ -513,14 +513,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           M.C.Comments.find({
             collection: 'Sinavlar',
             doc: sinav._id
-          }).forEach(function(comment) {
-            var user = M.C.Users.findOne({_id: comment.createdBy});
+          }).forEach(comment => {
+            const user = M.C.Users.findOne({_id: comment.createdBy});
             if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
               M.C.Users.find({
                 aktif: true,
                 kurum: user.kurum,
                 role: user.role
-              }).forEach(function(user) {
+              }).forEach(user => {
                 users = _.union(users, [user._id]);
               });
             }
@@ -533,25 +533,25 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             kurum: sinav.kurum,
             sinif: sinav.sinif,
             sube: {$in: sinav.subeler}
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
 
           users = _.uniq(users);
 
-          _.each(users, function(userId) {
+          users.forEach(userId => {
 
-            var user = M.C.Users.findOne({_id: userId});
+            const user = M.C.Users.findOne({_id: userId});
 
             if (user) {
-              var muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
-              var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-              var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
-              var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
-              var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
-              var tip = M.L.enumLabel(sinav.tip);
-              var soruSayisi = sinav.sorular.length;
-              var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+              const muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
+              const ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+              const muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+              const sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+              const subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
+              const tip = M.L.enumLabel(sinav.tip);
+              const soruSayisi = sinav.sorular.length;
+              const kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
 
               if (user.role === 'ogrenci') {
 
@@ -602,13 +602,13 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
     },
 
-    'sinavAcVeMuhurAta': function() {
+    'sinavAcVeMuhurAta'() {
       // TODO: there is some duplication of this code in comment/server/hooks.js
       this.unblock();
 
-      M.C.Kurumlar.find().forEach(function(kurum) {
+      M.C.Kurumlar.find().forEach(kurum => {
 
-        var sinavlar = [];
+        let sinavlar = [];
         // TODO: use a query iterator or isolated find/update here for possible concurrency issues
         M.C.Sinavlar.find({
           kurum: kurum._id,
@@ -620,8 +620,8 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           'sorular.0': {$exists: true}, // en az bir soru var
           muhur: {$exists: false},
           egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
-        }, {sort: {acilisZamani: 1}}).forEach(function(sinav) {
-          var kullanilmisMuhurler = _.pluck(M.C.Sinavlar.find({
+        }, {sort: {acilisZamani: 1}}).forEach(sinav => {
+          const kullanilmisMuhurler = _.pluck(M.C.Sinavlar.find({
             kurum: sinav.kurum,
             egitimYili: sinav.egitimYili,
             ders: sinav.ders,
@@ -629,15 +629,15 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             muhur: {$exists: true}
           },{fields: {muhur: 1}}).fetch(),'muhur');
 
-          var tumMuhurler = _.pluck(M.C.Muhurler.find({
+          const tumMuhurler = _.pluck(M.C.Muhurler.find({
             ders: sinav.ders,
             aktif: true
           },{fields: {_id: 1}}).fetch(), '_id');
 
-          var potansiyelMuhurler = _.difference(tumMuhurler, kullanilmisMuhurler);
+          const potansiyelMuhurler = _.difference(tumMuhurler, kullanilmisMuhurler);
 
           if (potansiyelMuhurler.length > 0) {
-            var siradakiMuhur = M.C.Muhurler.find({
+            const siradakiMuhur = M.C.Muhurler.find({
               _id: {$in: potansiyelMuhurler}
             },{sort: {sira: 1}, limit: 1, fields: {_id: 1, sira: 1}}).fetch()[0]._id;
 
@@ -649,15 +649,15 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             });
             sinavlar.push(sinav._id);
           } else {
-            var sorunluKurum = M.C.Kurumlar.findOne({_id: sinav.kurum}).isim;
-            var sorunluDers = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-            var sorunluMuhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
-            var sorunluSinavKodu = sinav.kod;
-            var sorunluSubeler = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler.join(', ') + ' ' + (sinav.subeler.length > 1 ? 'şubeleri' : 'şubesi');
-            var sorunluAcilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
-            var sorunluSinavTipi = M.L.enumLabel(sinav.tip);
+            const sorunluKurum = M.C.Kurumlar.findOne({_id: sinav.kurum}).isim;
+            const sorunluDers = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+            const sorunluMuhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
+            const sorunluSinavKodu = sinav.kod;
+            const sorunluSubeler = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler.join(', ') + ' ' + (sinav.subeler.length > 1 ? 'şubeleri' : 'şubesi');
+            const sorunluAcilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
+            const sorunluSinavTipi = M.L.enumLabel(sinav.tip);
 
-            M.C.Users.find({role: 'mitolojix'}).forEach(function(user) {
+            M.C.Users.find({role: 'mitolojix'}).forEach(user => {
               Email.send({
                 to: user.emails[0].address,
                 from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
@@ -681,11 +681,11 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
         });
 
-        _.each(sinavlar, function(sinavId) {
+        sinavlar.forEach(sinavId => {
 
-          var users = [];
+          let users = [];
 
-          var sinav = M.C.Sinavlar.findOne({
+          let sinav = M.C.Sinavlar.findOne({
             _id: sinavId
           });
 
@@ -695,7 +695,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
           // varsa eski versiyonlarin olusturan ve guncelleyenlerini al
           if (sinav._version > 1) {
-            sinav.versions().forEach(function(sinav) {
+            sinav.versions().forEach(sinav => {
               users = _.union(users, [sinav.createdBy]);
               users = !!sinav.updatedBy ? _.union(users, [sinav.updatedBy]) : users;
             })
@@ -707,7 +707,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             kurum: sinav.kurum,
             role: 'ogretmen',
             dersleri: sinav.ders
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
 
@@ -715,14 +715,14 @@ if (Meteor.settings.public.APP === 'YONETIM') {
           M.C.Comments.find({
             collection: 'Sinavlar',
             doc: sinav._id
-          }).forEach(function(comment) {
-            var user = M.C.Users.findOne({_id: comment.createdBy});
+          }).forEach(comment => {
+            const user = M.C.Users.findOne({_id: comment.createdBy});
             if (user.role !== 'ogretmen' && user.role !== 'ogrenci') {
               M.C.Users.find({
                 aktif: true,
                 kurum: user.kurum,
                 role: user.role
-              }).forEach(function(user) {
+              }).forEach(user =>{
                 users = _.union(users, [user._id]);
               });
             }
@@ -735,31 +735,31 @@ if (Meteor.settings.public.APP === 'YONETIM') {
             kurum: sinav.kurum,
             sinif: sinav.sinif,
             sube: {$in: sinav.subeler}
-          }).forEach(function(user) {
+          }).forEach(user => {
             users = _.union(users, [user._id]);
           });
 
           users = _.uniq(users);
 
-          _.each(users, function(userId) {
+          users.forEach(userId => {
 
-            var user = M.C.Users.findOne({_id: userId});
+            const user = M.C.Users.findOne({_id: userId});
 
             if (user) {
-              var muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
-              var ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
-              var muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
-              var muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
-              var sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
-              var subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
-              var tip = M.L.enumLabel(sinav.tip);
-              var kod = sinav.kod;
-              var soruSayisi = sinav.sorular.length;
-              var sureMetin = sinav.sure + ' dakika içinde tamamlanarak ';
-              var sureMetinOgrenci = sinav.sure + ' dakika içinde yanıtlarsan ';
-              var acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
-              var kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
-              var kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
+              const muhurGrubu = M.C.Dersler.findOne({_id: sinav.ders}).muhurGrubu.isim;
+              const ders = M.C.Dersler.findOne({_id: sinav.ders}).isim;
+              const muhur = M.C.Muhurler.findOne({_id: sinav.muhur}).isim;
+              const muhurURL = M.FS.Muhur.findOne({_id: M.C.Muhurler.findOne({_id: sinav.muhur}).gorsel}).url();
+              const sinifSube = M.L.enumLabel(sinav.sinif) + ' ' + sinav.subeler;
+              const subeMetin = sinav.subeler.length === 1 ? 'şubesi' : 'şubeleri';
+              const tip = M.L.enumLabel(sinav.tip);
+              const kod = sinav.kod;
+              const soruSayisi = sinav.sorular.length;
+              const sureMetin = sinav.sure + ' dakika içinde tamamlanarak ';
+              const sureMetinOgrenci = sinav.sure + ' dakika içinde yanıtlarsan ';
+              const acilisZamani = moment(sinav.acilisZamani).format('DD MMMM YYYY HH:mm');
+              const kapanisZamani = moment(sinav.kapanisZamani).format('DD MMMM YYYY HH:mm');
+              const kurum = user.kurum === 'mitolojix' ? ( M.C.Kurumlar.findOne({_id: sinav.kurum}).isim + ' altında ' ) : '';
 
               if (user.role === 'ogrenci') {
 

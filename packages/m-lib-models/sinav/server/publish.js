@@ -1,18 +1,18 @@
 Meteor.publishComposite('sinavlar', function(time) {
   check(time, Match.Optional(Date));
-  var currentTime = new Date();
+  let currentTime = new Date();
   if (time) {
     currentTime = time;
   }
   return {
-    find: function() {
+    find(){
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Sinavlar.find();
         } else {
-          var user = M.C.Users.findOne({_id: this.userId});
+          const user = M.C.Users.findOne({_id: this.userId});
           if (!M.L.userHasRole(this.userId, 'ogrenci')) {
-            var selector = {kurum: user.kurum};
+            let selector = {kurum: user.kurum};
             if (M.L.userHasRole(this.userId, 'ogretmen')) {
               selector.ders = {
                 $in: M.C.Users.findOne({_id: this.userId}).dersleri
@@ -41,21 +41,19 @@ Meteor.publishComposite('sinavlar', function(time) {
 
 Meteor.publish('girilmemisSinavVar', function(time) {
   check(time, Match.Optional(Date));
-  var currentTime = new Date();
+  let currentTime = new Date();
   if (time) {
     currentTime = time;
   }
   if (this.userId && M.L.userHasRole(this.userId, 'ogrenci')) {
-    var user = M.C.Users.findOne({_id: this.userId});
+    const user = M.C.Users.findOne({_id: this.userId});
 
-    var girilenSinavlar = M.C.SinavKagitlari.find({
+    const girilenSinavlar = M.C.SinavKagitlari.find({
       ogrenci: user._id,
       kurum: user.kurum,
       sinif: user.sinif,
       egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
-    }).map(function(sinavKagidi) {
-      return sinavKagidi.sinav;
-    });
+    }).map(sinavKagidi => sinavKagidi.sinav);
 
     Counts.publish(this, 'girilmemisHalaAcikSinav', M.C.Sinavlar.find({
       $and: [
@@ -92,17 +90,17 @@ Meteor.publish('girilmemisSinavVar', function(time) {
 Meteor.publishComposite('sinav', function(sinavId, time) {
   check(sinavId, String);
   check(time, Match.Optional(Date));
-  var currentTime = new Date();
+  let currentTime = new Date();
   if (time) {
     currentTime = time;
   }
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'mitolojix')) {
           return M.C.Sinavlar.find({_id: sinavId});
         } else {
-          var user = M.C.Users.findOne({_id: this.userId});
+          const user = M.C.Users.findOne({_id: this.userId});
           if (!M.L.userHasRole(this.userId, 'ogrenci')) {
             return M.C.Sinavlar.find({_id: sinavId, kurum: user.kurum});
           } else {
@@ -127,27 +125,27 @@ Meteor.publishComposite('sinav', function(sinavId, time) {
   }
 });
 
-var userCursor = function(userId) {
+const userCursor = userId => {
   return M.C.Users.find({_id: userId}, {fields: {cinsiyet: 1, status: 1, avatar: 1, kurum: 1, role: 1, name: 1, lastName: 1}})
 };
 
-var sinavAuditLog = [
+const sinavAuditLog = [
   {
-    find: function (doc) {
+    find(doc) {
       return M.C.Comments.find({collection: 'Sinavlar', doc: doc._id});
     },
     children: [
       {
-        find: function(comment) {
+        find(comment) {
           return userCursor(comment.createdBy);
         }
       }
     ]
   },
   {
-    find: function (doc) {
+    find(doc) {
       if (doc.sorular) {
-        var fields = {_id: 1, alan: 1, zorlukDerecesi: 1, tip: 1, aktif: 1, kod: 1, soru: 1};
+        let fields = {_id: 1, alan: 1, zorlukDerecesi: 1, tip: 1, aktif: 1, kod: 1, soru: 1};
         if (!M.L.userHasRole(this.userId, 'ogrenci')) {
           fields.yanit = 1;
         }
@@ -156,34 +154,34 @@ var sinavAuditLog = [
     }
   },
   {
-    find: function (doc) {
+    find(doc) {
       return userCursor(doc.createdBy);
     }
   },
   {
-    find: function (doc) {
+    find(doc) {
       return userCursor(doc.updatedBy);
     }
   },
   {
-    find: function(doc) {
+    find(doc) {
       return doc.versions();
     },
     children: [
       {
-        find: function (version) {
+        find(version) {
           if (version.sorular) {
             return M.C.Sorular.find({_id: {$in: _.pluck(version.sorular, 'soruId')}}, {fields: {_id: 1, alan: 1, zorlukDerecesi: 1, tip: 1, aktif: 1, kod: 1, soru: 1}});
           }
         }
       },
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.createdBy);
         }
       },
       {
-        find: function (version) {
+        find(version) {
           return userCursor(version.updatedBy);
         }
       }
@@ -194,15 +192,15 @@ var sinavAuditLog = [
 Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
   check(sinavId, String);
   check(time, Match.Optional(Date));
-  var currentTime = new Date();
+  let currentTime = new Date();
   if (time) {
     currentTime = time;
   }
   return {
-    find: function() {
+    find() {
       if (this.userId && M.L.userHasRole(this.userId, 'ogrenci')) {
-        var user = M.C.Users.findOne({_id: this.userId});
-        var sinavCursor = M.C.Sinavlar.find({
+        const user = M.C.Users.findOne({_id: this.userId});
+        const sinavCursor = M.C.Sinavlar.find({
           _id: sinavId,
           kurum: user.kurum,
           taslak: false,
@@ -215,10 +213,10 @@ Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
           // TODO: check this for timezone compatibility for NON-Europe/Istanbul
           acilisZamani: {$lt: currentTime}
         });
-        var buSinavAlinmis = M.C.SinavKagitlari.findOne({sinav: sinavId, ogrenciSinavaGirdi: true, bitirmeZamani: {$exists: true}});
-        var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+        const buSinavAlinmis = M.C.SinavKagitlari.findOne({sinav: sinavId, ogrenciSinavaGirdi: true, bitirmeZamani: {$exists: true}});
+        const sinav = M.C.Sinavlar.findOne({_id: sinavId});
 
-        if (_.contains(['alistirma','konuTarama'], sinav.tip)) {
+        if (_.contains(['alistirma','konuTarama'],sinav.tip)) {
           if (buSinavAlinmis) {
             return sinavCursor;
           } else if (moment(sinav.kapanisZamani).isBefore(new Date())) {
@@ -232,15 +230,15 @@ Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
     },
     children: [
       {
-        find: function (sinav) {
+        find(sinav) {
           if (sinav.sorular) {
             return M.C.Sorular.find({_id: {$in: _.pluck(sinav.sorular, 'soruId')}});
           }
         }
       },
       {
-        find: function (sinav) {
-          var user = M.C.Users.findOne({_id: this.userId});
+        find(sinav) {
+          const user = M.C.Users.findOne({_id: this.userId});
           return M.C.SinavKagitlari.find({
             sinav: sinav._id,
             iptal: false,
@@ -258,7 +256,7 @@ Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
 
 Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
   check(sinavId, String);
-  var sinav = M.C.Sinavlar.findOne({
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     taslak: false,
     aktif: true,
@@ -268,7 +266,7 @@ Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
     acilisZamani: {$lt: new Date()}
   });
   return {
-    find: function() {
+    find() {
       if (sinav && this.userId && !M.L.userHasRole(this.userId, 'ogrenci') && (M.L.userHasRole(this.userId, 'mitolojix') || sinav.kurum === M.C.Users.findOne({_id: this.userId}).kurum)) {
         return M.C.Users.find({
           aktif: true,
@@ -296,7 +294,7 @@ Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
 
 Meteor.publishComposite('sinavinKagitlari', function(sinavId) {
   check(sinavId, String);
-  var sinav = M.C.Sinavlar.findOne({
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     taslak: false,
     aktif: true,
@@ -306,7 +304,7 @@ Meteor.publishComposite('sinavinKagitlari', function(sinavId) {
     acilisZamani: {$lt: new Date()}
   });
   return {
-    find: function() {
+    find() {
       if (sinav && this.userId && !M.L.userHasRole(this.userId, 'ogrenci') && (M.L.userHasRole(this.userId, 'mitolojix') || sinav.kurum === M.C.Users.findOne({_id: this.userId}).kurum)) {
         return M.C.SinavKagitlari.find({
           sinav: sinavId,

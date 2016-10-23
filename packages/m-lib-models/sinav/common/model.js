@@ -6,11 +6,11 @@ M.C.setUpCollection({
       label: 'Kurum',
       type: String,
       index: 1,
-      custom: function() {
-        var kurum = this;
-        var userRole = M.C.Users.findOne({_id: this.userId}).role;
-        var userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
-        var kurumlar = M.C.Kurumlar.find().map(function(kurum) {return kurum._id;});
+      custom() {
+        const kurum = this;
+        const userRole = M.C.Users.findOne({_id: this.userId}).role;
+        const userKurum = M.C.Users.findOne({_id: this.userId}).kurum;
+        const kurumlar = M.C.Kurumlar.find().map(kurum => kurum._id);
         if (kurum.isSet && !_.contains(kurumlar,kurum.value)) {
           return 'notAllowed';
         }
@@ -19,9 +19,9 @@ M.C.setUpCollection({
         }
         return true;
       },
-      autoValue: function() {
-        var kurum = this;
-        var user = M.C.Users.findOne({_id: this.userId});
+      autoValue() {
+        const kurum = this;
+        const user = M.C.Users.findOne({_id: this.userId});
         if (user && user.role !== 'mitolojix') {
           if (kurum.isInsert) {
             return user.kurum;
@@ -36,23 +36,33 @@ M.C.setUpCollection({
       },
       autoform: {
         // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
-        type: function() {
+        type() {
           if (Meteor.user() && Meteor.user().role !== 'mitolojix') {
             return 'hidden';
           } else {
-            var formId = AutoForm.getFormId();
-            var sorular = AutoForm.getFieldValue('sorular', formId);
+            const formId = AutoForm.getFormId();
+            const sorular = AutoForm.getFieldValue('sorular', formId);
             return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
           }
         },
         class: 'browser-default',
         firstOption: 'Kurum seçin',
-        options: function() {
-          var kurumlar = [];
+        options() {
+          let kurumlar = [];
           if (Meteor.user().role === 'mitolojix') {
-            kurumlar = M.C.Kurumlar.find({}, {sort: {isimCollate: 1}}).map(function(kurum) {return {label: kurum.isim, value: kurum._id};});
+            kurumlar = M.C.Kurumlar.find({}, {sort: {isimCollate: 1}})
+                                    .map(kurum => {
+                                      const {
+                                        isim: label,
+                                        _id: value,
+                                      } = kurum;
+                                      return {
+                                        label,
+                                        value,
+                                      };
+                                    });
           } else {
-            var userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
+            const userKurum = M.C.Kurumlar.findOne({_id: Meteor.user().kurum});
             kurumlar.push({label: userKurum.isim, value: userKurum._id});
           }
           return kurumlar;
@@ -63,13 +73,13 @@ M.C.setUpCollection({
       label: 'Kod',
       type: String,
       index: 1,
-      autoValue: function() {
+      autoValue() {
         if (this.isInsert) {
           if (Meteor.isServer) {
-            var kurum = this.field('kurum');
-            var isim = kurum && M.C.Kurumlar.findOne({_id: kurum.value}).isim;
-            var words = isim && _.first(s.words(isim),2);
-            var initials = 'MT';
+            const kurum = this.field('kurum');
+            const isim = kurum && M.C.Kurumlar.findOne({_id: kurum.value}).isim;
+            const words = isim && _.first(s.words(isim),2);
+            let initials = 'MT';
 
             if (words && words.length === 1) {
               initials = words[0].substring(0,2).toLocaleUpperCase()
@@ -79,10 +89,10 @@ M.C.setUpCollection({
               initials = words[0].substring(0,1) + words[1].substring(0,1) + 'S'
             }
 
-            var count = M.C.Sinavlar.find().count() + 1;
+            let count = M.C.Sinavlar.find().count() + 1;
             count = s.pad(count,5,'0');
 
-            var kod = initials + count;
+            const kod = initials + count;
 
             return kod;
 
@@ -99,7 +109,7 @@ M.C.setUpCollection({
     },
     iptal: {
       type: Boolean,
-      autoValue: function() {
+      autoValue() {
         if (this.isInsert) {
           return false;
         } else if (this.isUpdate && this.isSet) {
@@ -116,9 +126,9 @@ M.C.setUpCollection({
       label: 'Eğitim Yılı',
       type: String,
       index: 1,
-      autoValue: function() {
+      autoValue() {
         if (this.isInsert) {
-          var aktifEgitimYili = M.C.AktifEgitimYili.findOne();
+          const aktifEgitimYili = M.C.AktifEgitimYili.findOne();
           return aktifEgitimYili && aktifEgitimYili.egitimYili;
         }
       },
@@ -131,17 +141,17 @@ M.C.setUpCollection({
       label: 'Ders',
       type: String,
       index: 1,
-      custom: function() {
-        var ders = this;
-        var kurum = this.field('kurum');
-        var egitimYili = this.field('egitimYili');
-        var sinif = this.field('sinif');
-        var tumu = M.C.Dersler.find().map(function(ders) {return ders._id;});
+      custom() {
+        const ders = this;
+        const kurum = this.field('kurum');
+        const egitimYili = this.field('egitimYili');
+        const sinif = this.field('sinif');
+        const tumu = M.C.Dersler.find().map(ders => ders._id);
         if (ders.isSet && !_.contains(tumu,ders.value)) {
           return 'notAllowed';
         }
         if (ders.isInsert && ders.isSet && kurum.isSet && egitimYili.isSet && sinif.isSet) {
-          var kullanilanMuhurAdedi = M.C.Sinavlar.find({
+          const kullanilanMuhurAdedi = M.C.Sinavlar.find({
             $or: [
               {
                 $and:[
@@ -164,7 +174,7 @@ M.C.setUpCollection({
               }
             ]
           }).count();
-          var mevcutMuhurAdedi = M.C.Muhurler.find({
+          const mevcutMuhurAdedi = M.C.Muhurler.find({
             aktif: true,
             ders: ders.value
           }).count();
@@ -176,27 +186,31 @@ M.C.setUpCollection({
       },
       autoform: {
         // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var sorular = AutoForm.getFieldValue('sorular', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const sorular = AutoForm.getFieldValue('sorular', formId);
           return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
         },
         class: 'browser-default',
         firstOption: 'Ders seçin',
-        options: function() {
-          var user = M.C.Users.findOne({_id: Meteor.userId()});
-          var olasiDersler = [];
+        options() {
+          const user = M.C.Users.findOne({_id: Meteor.userId()});
+          let olasiDersler = [];
           if (user.role === 'ogretmen') {
             olasiDersler = user.dersleri;
           } else {
-            olasiDersler = M.C.Dersler.find().map(function(ders) {return ders._id;});
+            olasiDersler = M.C.Dersler.find().map(ders => ders._id);
           }
-          var options = [];
+          let options = [];
           if (olasiDersler.length > 0) {
-            options = M.C.Dersler.find({_id: {$in: olasiDersler}}).map(function(ders) {
+            options = M.C.Dersler.find({_id: {$in: olasiDersler}}).map(ders => {
+              const {
+                _id: value,
+                isim: label,
+              } = ders;
               return {
-                value: ders._id,
-                label: ders.isim
+                value,
+                label,
               };
             });
           }
@@ -209,7 +223,7 @@ M.C.setUpCollection({
       type: String,
       max: 256,
       optional: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
           return M.L.Trim(this.value);
         } else {
@@ -223,9 +237,9 @@ M.C.setUpCollection({
       denyInsert: true,
       index: 1,
       sparse: true,
-      custom: function() {
+      custom() {
         if (this.isSet) {
-          var muhur = M.C.Muhurler.findOne({_id: this.value});
+          const muhur = M.C.Muhurler.findOne({_id: this.value});
           if (!muhur) {
             return 'notAllowed';
           }
@@ -239,8 +253,8 @@ M.C.setUpCollection({
       label: 'Sınıf',
       type: String,
       index: 1,
-      custom: function() {
-        var sinif = this;
+      custom() {
+        const sinif = this;
         if (sinif.isSet && !_.contains(M.E.Sinif, sinif.value)) {
           return 'notAllowed';
         }
@@ -248,15 +262,20 @@ M.C.setUpCollection({
       },
       autoform: {
         // TODO: selectDisabled yaptigimiz durumlarda custom icinde de handle edelim ki disaridan editleme de olmasin
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var sorular = AutoForm.getFieldValue('sorular', formId);
+        type() {
+          const formId = AutoForm.getFormId();
+          const sorular = AutoForm.getFieldValue('sorular', formId);
           return (sorular && sorular.length > 0) ? 'selectDisabled' : 'select';
         },
         class: 'browser-default',
         firstOption: 'Sınıf seçin',
-        options: function(){
-          return _.map(M.E.Sinif, function(sinif) {return {label: M.L.enumLabel(sinif), value: sinif};});
+        options(){
+          return M.E.Sinif.map(sinif => {
+            return {
+              label: M.L.enumLabel(sinif),
+              value: sinif,
+            };
+          });
         }
       }
     },
@@ -265,8 +284,8 @@ M.C.setUpCollection({
       type: [String],
       index: 1,
       minCount: 1,
-      custom: function() {
-        var subeler = this.value;
+      custom() {
+        const subeler = this.value;
         if (_.uniq(subeler).length !== subeler.length) {
           return 'notUnique';
         }
@@ -274,8 +293,13 @@ M.C.setUpCollection({
       },
       autoform: {
         type: 'select-checkbox-inline',
-        options: function() {
-          return _.map(M.E.Sube, function(sube) {return {label: sube, value: sube}; })
+        options() {
+          return M.E.Sube.map(sube => {
+            return {
+              label: sube,
+              value: sube,
+            };
+          });
         }
       }
     },
@@ -289,7 +313,7 @@ M.C.setUpCollection({
       index: -1,
       autoform: {
         type: 'pickadate',
-        pickadateOptions: function() {
+        pickadateOptions() {
           return _.extend(
             M.E.PickadateOptions,
             {min: moment.tz(new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate()},
@@ -304,9 +328,9 @@ M.C.setUpCollection({
       min: 5,
       max: 5,
       index: 1,
-      custom: function() {
-        var saat = this;
-        var tarih = this.field('acilisTarihi');
+      custom() {
+        const saat = this;
+        const tarih = this.field('acilisTarihi');
         if (saat.isSet) {
           if (!M.L.TestSaat(saat.value)) {
             return 'notAllowed';
@@ -319,7 +343,7 @@ M.C.setUpCollection({
       },
       autoform: {
         class: 'saat',
-        type: function() {
+        type() {
           $('.saat').clockpicker(M.E.ClockPickerOptions);
           return 'text';
         }
@@ -328,9 +352,9 @@ M.C.setUpCollection({
     acilisZamani: {
       type: Date,
       index: -1,
-      autoValue: function() {
-        var tarih = this.field('acilisTarihi');
-        var saat = this.field('acilisSaati');
+      autoValue() {
+        const tarih = this.field('acilisTarihi');
+        const saat = this.field('acilisSaati');
         if (tarih.isSet && saat.isSet) {
           return moment(tarih.value).hour(saat.value.split(':')[0]).minute(saat.value.split(':')[1]).toDate();
         }
@@ -343,16 +367,16 @@ M.C.setUpCollection({
       label: 'Test Kapanış Tarihi',
       type: Date,
       index: -1,
-      custom: function() {
-        var acilis = this.field('acilisTarihi');
-        var kapanis = this;
+      custom() {
+        const acilis = this.field('acilisTarihi');
+        const kapanis = this;
         if (acilis.isSet && kapanis.isSet) {
           return moment(kapanis.value).isBefore(moment(acilis.value)) ? 'kapanisSonraOlmali' : true;
         }
       },
       autoform: {
         type: 'pickadate',
-        pickadateOptions: function() {
+        pickadateOptions() {
           return _.extend(
             M.E.PickadateOptions,
             {min: moment.tz(new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate()},
@@ -367,11 +391,11 @@ M.C.setUpCollection({
       min: 5,
       max: 5,
       index: 1,
-      custom: function() {
-        var saat = this;
-        var acilisSaat = this.field('acilisSaati');
-        var acilis = this.field('acilisTarihi');
-        var kapanis = this.field('kapanisTarihi');
+      custom() {
+        const saat = this;
+        const acilisSaat = this.field('acilisSaati');
+        const acilis = this.field('acilisTarihi');
+        const kapanis = this.field('kapanisTarihi');
         if (saat.isSet) {
           if (!M.L.TestSaat(saat.value)) {
             return 'notAllowed';
@@ -384,7 +408,7 @@ M.C.setUpCollection({
       },
       autoform: {
         class: 'saat',
-        type: function() {
+        type() {
           $('.saat').clockpicker(M.E.ClockPickerOptions);
           return 'text';
         }
@@ -393,9 +417,9 @@ M.C.setUpCollection({
     kapanisZamani: {
       type: Date,
       index: -1,
-      autoValue: function() {
-        var tarih = this.field('kapanisTarihi');
-        var saat = this.field('kapanisSaati');
+      autoValue() {
+        const tarih = this.field('kapanisTarihi');
+        const saat = this.field('kapanisSaati');
         if (tarih.isSet && saat.isSet) {
           return moment(tarih.value).hour(saat.value.split(':')[0]).minute(saat.value.split(':')[1]).toDate();
         }
@@ -407,9 +431,9 @@ M.C.setUpCollection({
     acilisKapanisArasindakiSureSaat: {
       type: Number,
       index: 1,
-      autoValue: function() {
-        var acilisZamani = this.field('acilisZamani');
-        var kapanisZamani = this.field('kapanisZamani');
+      autoValue() {
+        const acilisZamani = this.field('acilisZamani');
+        const kapanisZamani = this.field('kapanisZamani');
         if (acilisZamani.isSet && kapanisZamani.isSet) {
           return Math.ceil(parseFloat(moment(kapanisZamani.value).diff(moment(acilisZamani.value), 'hours', true)));
         }
@@ -426,13 +450,17 @@ M.C.setUpCollection({
       autoform: {
         class: 'browser-default',
         firstOption: 'Test tipi seçin',
-        options: function() {
-          var options = _.map(M.E.SinavTipiObjects, function(t) {
+        options() {
+          return M.E.SinavTipiObjects.map(t => {
+            const {
+              label,
+              name: value,
+            } = t;
             return {
-              label: t.label, value: t.name
+              label,
+              value,
             };
           });
-          return options;
         }
       }
     },
@@ -441,19 +469,19 @@ M.C.setUpCollection({
       type: Number,
       min: 5,
       max: 180,
-      custom: function() {
-        var sure = this;
+      custom() {
+        const sure = this;
         if (sure.isSet) {
 
-          var acilisTarihi = this.field('acilisTarihi');
-          var acilisSaati = this.field('acilisSaati');
+          const acilisTarihi = this.field('acilisTarihi');
+          const acilisSaati = this.field('acilisSaati');
 
-          var kapanisTarihi = this.field('kapanisTarihi');
-          var kapanisSaati = this.field('kapanisSaati');
+          const kapanisTarihi = this.field('kapanisTarihi');
+          const kapanisSaati = this.field('kapanisSaati');
 
           if (acilisTarihi.isSet && acilisSaati.isSet && kapanisTarihi.isSet && kapanisSaati.isSet) {
-            var acilisZamani = moment(acilisTarihi.value).hour(acilisSaati.value.split(':')[0]).minute(acilisSaati.value.split(':')[1]);
-            var kapanisZamani = moment(kapanisTarihi.value).hour(kapanisSaati.value.split(':')[0]).minute(kapanisSaati.value.split(':')[1]);
+            const acilisZamani = moment(acilisTarihi.value).hour(acilisSaati.value.split(':')[0]).minute(acilisSaati.value.split(':')[1]);
+            const kapanisZamani = moment(kapanisTarihi.value).hour(kapanisSaati.value.split(':')[0]).minute(kapanisSaati.value.split(':')[1]);
             if (kapanisZamani.isBefore(acilisZamani.add(parseInt(sure.value), 'minutes'))) {
               return 'sureIcinZamanYok';
             }
@@ -465,20 +493,20 @@ M.C.setUpCollection({
       type: String,
       optional: true,
       index: 1,
-      custom: function() {
-        var tip = this.field('tip');
-        var canliStatus = this;
-        var sinavId = this.docId;
+      custom() {
+        const tip = this.field('tip');
+        const canliStatus = this;
+        const sinavId = this.docId;
         if (tip.value === 'canli' && !canliStatus.isInsert) {
-          var eskiStatus = M.C.Sinavlar.findOne({_id: sinavId}).canliStatus;
-          if (!_.contains(['running','paused','completed'], canliStatus.value) || eskiStatus === 'completed') {
+          const eskiStatus = M.C.Sinavlar.findOne({_id: sinavId}).canliStatus;
+          if (!_.contains(['running','paused','completed'],canliStatus.value) || eskiStatus === 'completed') {
             return 'notAllowed';
           }
         }
       },
-      autoValue: function() {
-        var tip = this.field('tip');
-        var canliStatus = this;
+      autoValue() {
+        const tip = this.field('tip');
+        const canliStatus = this;
         if (tip.isSet && tip.value === 'canli') {
           if (canliStatus.isInsert) {
             return 'pending';
@@ -499,15 +527,15 @@ M.C.setUpCollection({
       type: Date,
       index: -1,
       optional: true,
-      custom: function() {
-        var tip = this.field('tip');
-        var self = this;
-        if (tip.isSet && _.contains(['deneme','canli'], tip.value)) {
+      custom() {
+        const tip = this.field('tip');
+        const self = this;
+        if (tip.isSet && _.contains(['deneme','canli'],tip.value)) {
           if (!self.isSet) {
             return 'required';
           } else {
-            var kapanis = this.field('kapanisTarihi');
-            var yanitlar = this;
+            const kapanis = this.field('kapanisTarihi');
+            const yanitlar = this;
             if (kapanis.isSet && yanitlar.isSet) {
               return moment(yanitlar.value).isBefore(moment(kapanis.value)) ? 'yanitlarSonraOlmali' : true;
             }
@@ -517,10 +545,10 @@ M.C.setUpCollection({
           return true;
         }
       },
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
-        if (tip.isSet && _.contains(['deneme','canli'], tip.value) && self.isSet) {
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
+        if (tip.isSet && _.contains(['deneme','canli'],tip.value) && self.isSet) {
           return moment.tz(new Date(self.value.getFullYear(),self.value.getMonth(),self.value.getDate()),'Europe/Istanbul').toDate();
         } else {
           return self.unset();
@@ -528,17 +556,17 @@ M.C.setUpCollection({
       },
       autoform: {
         class: 'optionalDatePicker',
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
-          if (_.contains(['deneme','canli'], tip)) {
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
+          if (_.contains(['deneme','canli'],tip)) {
             $('.optionalDatePicker').parent().parent().show();
           } else {
             $('.optionalDatePicker').parent().parent().hide();
           }
           return 'pickadate';
         },
-        pickadateOptions: function() {
+        pickadateOptions() {
           return _.extend(
             M.E.PickadateOptions,
             {min: moment.tz(new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),'Europe/Istanbul').toDate()},
@@ -554,11 +582,11 @@ M.C.setUpCollection({
       max: 5,
       index: 1,
       optional: true,
-      custom: function() {
-        var saat = this;
-        var kapanisSaat = this.field('kapanisSaati');
-        var kapanisTarihi = this.field('kapanisTarihi');
-        var yanitlarAcilmaTarihi = this.field('yanitlarAcilmaTarihi');
+      custom() {
+        const saat = this;
+        const kapanisSaat = this.field('kapanisSaati');
+        const kapanisTarihi = this.field('kapanisTarihi');
+        const yanitlarAcilmaTarihi = this.field('yanitlarAcilmaTarihi');
         if (saat.isSet) {
           if (!M.L.TestSaat(saat.value)) {
             return 'notAllowed';
@@ -569,10 +597,10 @@ M.C.setUpCollection({
           }
         }
       },
-      autoValue: function() {
-        var tip = this.field('tip');
-        var self = this;
-        if (tip.isSet && _.contains(['deneme','canli'], tip.value) && self.isSet) {
+      autoValue() {
+        const tip = this.field('tip');
+        const self = this;
+        if (tip.isSet && _.contains(['deneme','canli'],tip.value) && self.isSet) {
           return self.value;
         } else {
           return self.unset();
@@ -580,10 +608,10 @@ M.C.setUpCollection({
       },
       autoform: {
         class: 'optionalSaat',
-        type: function() {
-          var formId = AutoForm.getFormId();
-          var tip = AutoForm.getFieldValue('tip', formId);
-          if (_.contains(['deneme','canli'], tip)) {
+        type() {
+          const formId = AutoForm.getFormId();
+          const tip = AutoForm.getFieldValue('tip', formId);
+          if (_.contains(['deneme','canli'],tip)) {
             $('.optionalSaat').parent().parent().show();
           } else {
             $('.optionalSaat').parent().parent().hide();
@@ -597,9 +625,9 @@ M.C.setUpCollection({
       type: Date,
       index: -1,
       optional: true,
-      autoValue: function() {
-        var tarih = this.field('yanitlarAcilmaTarihi');
-        var saat = this.field('yanitlarAcilmaSaati');
+      autoValue() {
+        const tarih = this.field('yanitlarAcilmaTarihi');
+        const saat = this.field('yanitlarAcilmaSaati');
         if (tarih.isSet && saat.isSet) {
           return moment(tarih.value).hour(saat.value.split(':')[0]).minute(saat.value.split(':')[1]).toDate();
         } else if (this.isSet) {
@@ -645,19 +673,19 @@ M.C.setUpCollection({
     sorular: {
       type: [Object],
       optional: true,
-      autoValue: function() {
-        var cloned = this.field('_clonedFrom').isSet;
+      autoValue() {
+        const cloned = this.field('_clonedFrom').isSet;
         if (this.isInsert && !cloned) {
           return [];
         }
       },
-      custom: function() {
-        var soru = this;
-        var kurum = this.field('kurum');
-        var egitimYili = this.field('egitimYili');
-        var sinif = this.field('sinif');
-        var cloned = this.field('_clonedFrom').isSet;
-        var ders = this.field('ders');
+      custom() {
+        const soru = this;
+        const kurum = this.field('kurum');
+        const egitimYili = this.field('egitimYili');
+        const sinif = this.field('sinif');
+        const cloned = this.field('_clonedFrom').isSet;
+        const ders = this.field('ders');
         // TODO: soru validasyonunu kontrol et!
         if (soru.isInsert && soru.isSet && soru.value.length > 0) {
           if (cloned) {
@@ -673,7 +701,7 @@ M.C.setUpCollection({
               return true;
             } else {
               if (Meteor.isServer) {
-                var uygunluk = Meteor.call('sorularSinavaUygunMu', _.pluck(soru.value, 'soruId'),kurum.value, M.C.Sinavlar.findOne({_id:soru.docId}).egitimYili,ders.value,sinif.value);
+                const uygunluk = Meteor.call('sorularSinavaUygunMu', _.pluck(soru.value, 'soruId'),kurum.value, M.C.Sinavlar.findOne({_id:soru.docId}).egitimYili,ders.value,sinif.value);
                 return uygunluk === 'uygun' ? true : 'notAllowed';
               } else {
                 return true;
@@ -711,9 +739,9 @@ M.C.setUpCollection({
       type: Boolean,
       index: 1,
       defaultValue: true,
-      custom: function() {
+      custom() {
         if (this.isUpdate && this.isSet && this.value === false) {
-          var sorular = this.field('sorular');
+          const sorular = this.field('sorular');
           if (sorular.value && sorular.value.length < 1) {
             return 'sorusuzSinavTaslakKalmali';
           }
@@ -728,15 +756,15 @@ M.C.setUpCollection({
       type: Boolean,
       index: 1,
       defaultValue: false,
-      custom: function() {
-        var taslak = this.field('taslak');
-        var sinavId = this.docId;
-        var kilitli = this;
+      custom() {
+        const taslak = this.field('taslak');
+        const sinavId = this.docId;
+        const kilitli = this;
         if (taslak.isSet && taslak.value === true && kilitli.isSet && kilitli.value === true) {
           return 'taslakSinavKilitlenemez';
         }
         if (this.isSet && this.value === true) {
-          var sorular = M.C.Sinavlar.findOne({_id: sinavId}).sorular;
+          const sorular = M.C.Sinavlar.findOne({_id: sinavId}).sorular;
           if (!sorular || (sorular.length < 1)) {
             return 'sorusuzSinavKilitsizKalmali';
           }
@@ -758,8 +786,8 @@ M.C.setUpCollection({
   cloneable: true
 });
 
-M.C.Sinavlar.before.update(function (userId, doc, fields, modifier, options) {
-  var tip = modifier.$set && modifier.$set.tip;
+M.C.Sinavlar.before.update((userId, doc, fields, modifier, options) => {
+  const tip = modifier.$set && modifier.$set.tip;
 
   if (tip && !_.contains(['deneme','canli'], tip)) {
     delete modifier.$set.yanitlarAcilmaTarihi;
@@ -790,34 +818,34 @@ if (Meteor.isServer) {
 // TODO: bu gibi isClient ve daha ziyade isServer bloklarini temizle ve ait olduklari yerlere al
 if (Meteor.isServer) {
   Meteor.methods({
-    'soruSiraDegistir': function(sinavId,soruId,yon) {
+    'soruSiraDegistir'(sinavId,soruId,yon) {
       check(sinavId, String);
       check(soruId, String);
       check(yon, String);
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
-      var from = _.indexOf(_.pluck(sinav.sorular, 'soruId'), soruId);
+      const from = _.pluck(sinav.sorular, 'soruId').indexOf(soruId);
       if (from < 0) {
         M.L.ThrowError({error:'404',reason:'Soru sınavda bulunamadı',details:'Soru sınavda bulunamadı'});
       }
 
-      if (!_.contains(['asagi','yukari'], yon)) {
+      if (!_.contains(['asagi','yukari'],yon)) {
         M.L.ThrowError({error:'403',reason:'Geçersiz yön',details:'Geçersiz yön'});
       }
 
-      var to = yon === 'asagi' ? from+1 : from-1;
+      const to = yon === 'asagi' ? from+1 : from-1;
 
-      var sorular = sinav.sorular;
+      const sorular = sinav.sorular;
 
-      var temp = sorular[to];
+      const temp = sorular[to];
       sorular[to] = sorular[from];
       sorular[from] = temp;
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: {
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: {
         kurum: sinav.kurum,
         ders: sinav.ders,
         sinif: sinav.sinif,
@@ -827,30 +855,26 @@ if (Meteor.isServer) {
       return sonuc;
 
     },
-    'sepetiSinavaEkle': function(sinavId) {
+    'sepetiSinavaEkle'(sinavId) {
       check(sinavId, String);
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
-      var uygunSorular = Meteor.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
-      var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: this.userId, soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(function(sepet) {return sepet.soru;});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const uygunSorular = Meteor.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
+      const sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: this.userId, soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(sepet => sepet.soru);
       if (!sepetSoruIdArray || sepetSoruIdArray.length === 0) {
         M.L.ThrowError({error:'404',reason:'Soru bulunamadı',details:'Sepette sınava uygun soru bulunamadı'});
       }
-      var soruIdleri = M.C.Sorular.find({_id: {$in: sepetSoruIdArray}}).map(function(soru) {
-        return soru._id;
-      });
+      const soruIdleri = M.C.Sorular.find({_id: {$in: sepetSoruIdArray}}).map(soru => soru._id);
       Meteor.call('sinavaSoruEkleCikar',sinavId,soruIdleri,'ekle');
       return 'ok';
     },
-    'sinavdakiSorulariBosalt': function(sinavId) {
+    'sinavdakiSorulariBosalt'(sinavId) {
       check(sinavId, String);
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
-      var soruIdleri = M.C.Sorular.find({_id: {$in: _.pluck(sinav.sorular, 'soruId')}}).map(function(soru) {
-        return soru._id;
-      });
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const soruIdleri = M.C.Sorular.find({_id: {$in: _.pluck(sinav.sorular, 'soruId')}}).map(soru => soru._id);
       Meteor.call('sinavaSoruEkleCikar',sinavId,soruIdleri,'cikar');
       return 'ok';
     },
-    'sorularSinavaUygunMu': function(soru,kurum,egitimYili,ders,sinif) {
+    'sorularSinavaUygunMu'(soru,kurum,egitimYili,ders,sinif) {
       check(soru,[String]);
       check(kurum,String);
       check(egitimYili,String);
@@ -859,35 +883,35 @@ if (Meteor.isServer) {
       if (soru.length < 1) {
         return 'degil';
       }
-      var sorular = Meteor.call('sinavaUygunSorular',kurum,egitimYili,ders,sinif);
+      const sorular = Meteor.call('sinavaUygunSorular',kurum,egitimYili,ders,sinif);
       return sorular.length > 0 && _.intersection(sorular,soru).length === soru.length ? 'uygun' : 'degil';
     },
-    'sinavaUygunSorular': function(kurum,egitimYili,ders,sinif) {
+    'sinavaUygunSorular'(kurum,egitimYili,ders,sinif) {
       check(kurum,String);
       check(egitimYili,String);
       check(ders,String);
       check(sinif,String);
-      var mufredatDers = M.C.Mufredat.find({
+      const mufredatDers = M.C.Mufredat.find({
         kurum: kurum,
         egitimYili: egitimYili,
         ders: ders,
         sinif: sinif
-      }).map(function(mufredat) {return mufredat.ders});
-      var sorular = M.C.Sorular.find({
+      }).map(mufredat => mufredat.ders);
+      const sorular = M.C.Sorular.find({
         aktif: true,
         taslak: false,
         kurum: kurum,
         'alan.sinif': sinif,
         'alan.ders': {$in: mufredatDers}
-      }).map(function(soru) { return soru._id;});
+      }).map(soru => soru._id);
       return sorular;
     },
-    'sinavaSoruEkleCikar': function(sinavId,soruId,islem) {
+    'sinavaSoruEkleCikar'(sinavId,soruId,islem) {
       check(sinavId, String);
       check(soruId, Match.OneOf(String,[String]));
       check(islem, String);
-      var soruIdleri;
-      var currentUser = this.userId;
+      let soruIdleri;
+      const currentUser = this.userId;
 
       if (_.isString(soruId)) {
         soruIdleri = [soruId]
@@ -912,45 +936,45 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'403',reason:'Hatalı işlem',details:'Hatalı işlem'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
       if (M.L.userHasRole(currentUser, 'ogretmen')) {
-        if (!_.contains(M.C.Users.findOne({_id: currentUser}).dersleri, sinav.ders)) {
+        if (!_.contains(M.C.Users.findOne({_id: currentUser}).dersleri,sinav.ders)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
         }
       }
 
-      M.C.Sorular.find({_id: {$in: soruIdleri}}).forEach(function(soru) {
+      M.C.Sorular.find({_id: {$in: soruIdleri}}).forEach(soru => {
         if (!soru) {
           M.L.ThrowError({error:'404',reason:'Soru bulunamadı',details:'Soru bulunamadı'});
         }
 
         if (M.L.userHasRole(currentUser, 'ogretmen')) {
-          if (!_.contains(M.C.Users.findOne({_id: currentUser}).dersleri, soru.alan.ders)) {
+          if (!_.contains(M.C.Users.findOne({_id: currentUser}).dersleri,soru.alan.ders)) {
             M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
           }
         }
 
-        if(islem === 'ekle' && _.contains(_.pluck(sinav.sorular, 'soruId'), soru._id)) {
+        if(islem === 'ekle' && _.contains(_.pluck(sinav.sorular, 'soruId'),soru._id)) {
           M.L.ThrowError({error:'403',reason:'Soru sınavda zaten var',details:'Soru sınavda zaten var'});
         }
 
-        if(islem === 'cikar' && !_.contains(_.pluck(sinav.sorular, 'soruId'), soru._id)) {
+        if(islem === 'cikar' && !_.contains(_.pluck(sinav.sorular, 'soruId'),soru._id)) {
           M.L.ThrowError({error:'403',reason:'Soru sınavda zaten yok',details:'Soru sınavda zaten yok'});
         }
 
         if (islem === 'ekle') {
-          var uygunluk = Meteor.call('sorularSinavaUygunMu',[soru._id],sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
+          const uygunluk = Meteor.call('sorularSinavaUygunMu',[soru._id],sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
           if (uygunluk !== 'uygun') {
             M.L.ThrowError({error:'403',reason:'Bu soru bu sınava eklenemez',details:'Bu soru bu sınava eklenemez'});
           }
         }
       });
 
-      var yeniSoruIdleri = _.pluck(sinav.sorular, 'soruId') || [];
+      let yeniSoruIdleri = _.pluck(sinav.sorular, 'soruId') || [];
 
       if (islem === 'ekle') {
         yeniSoruIdleri = _.union(yeniSoruIdleri, soruIdleri);
@@ -960,7 +984,7 @@ if (Meteor.isServer) {
         yeniSoruIdleri = _.difference(yeniSoruIdleri, soruIdleri);
       }
 
-      var sorular = _.map(yeniSoruIdleri, function(soruId) {
+      let sorular = yeniSoruIdleri.map(soruId => {
         return {
           soruId: soruId,
           zorlukDerecesi: M.C.Sorular.findOne({_id: soruId}).zorlukDerecesi,
@@ -970,11 +994,11 @@ if (Meteor.isServer) {
 
       if (sorular.length > 0) {
 
-        var initialToplamZD = _.reduce(sorular, function(memo, soru) {
+        const initialToplamZD = sorular.reduce((memo, soru) => {
           return memo + soru.zorlukDerecesi
         }, 0);
 
-        sorular = _.map(sorular, function(soru) {
+        sorular = sorular.map(soru => {
           return {
             soruId: soru.soruId,
             zorlukDerecesi: soru.zorlukDerecesi,
@@ -982,18 +1006,18 @@ if (Meteor.isServer) {
           }
         });
 
-        var initialToplamPuan = _.reduce(sorular, function(memo, soru) {
+        const initialToplamPuan = sorular.reduce((memo, soru) => {
           return memo + soru.puan
         }, 0);
 
-        var sortedSorular = _.sortBy(sorular, 'puan');
-        var soruCount = sorular.length;
-        var puanFarki = initialToplamPuan - 100;
+        const sortedSorular = _.sortBy(sorular, 'puan');
+        const soruCount = sorular.length;
+        const puanFarki = initialToplamPuan - 100;
 
         if (!!puanFarki) {
-          for (var ix=0; ix < Math.abs(puanFarki); ix++) {
-            var soruIndex = soruCount-ix-1;
-            sorular = _.map(sorular, function(soru) {
+          for (let ix=0; ix < Math.abs(puanFarki); ix++) {
+            let soruIndex = soruCount-ix-1;
+            sorular = sorular.map(soru => {
               if (soru.soruId === sortedSorular[soruIndex].soruId) {
                 soru.puan = soru.puan - ( puanFarki / Math.abs(puanFarki) );
               }
@@ -1004,19 +1028,19 @@ if (Meteor.isServer) {
 
       }
 
-      var updateDoc = {
+      const updateDoc = {
         kurum: sinav.kurum,
         ders: sinav.ders,
         sinif: sinav.sinif,
         sorular: sorular
       };
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
 
       return sonuc;
 
     },
-    'setSinavCanliStatus': function(sinavId, newStatus) {
+    'setSinavCanliStatus'(sinavId, newStatus) {
       check(sinavId, String);
       check(newStatus, String);
 
@@ -1024,14 +1048,14 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId, tip: 'canli'});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId, tip: 'canli'});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
-        if (!(_.contains(user.dersleri, sinav.ders) && user.kurum === sinav.kurum)) {
+        if (!(_.contains(user.dersleri,sinav.ders) && user.kurum === sinav.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
         }
       }
@@ -1042,34 +1066,34 @@ if (Meteor.isServer) {
         }
       }
 
-      if (!_.contains(['running','paused','completed'], newStatus) || sinav.canliStatus === 'completed') {
+      if (!_.contains(['running','paused','completed'],newStatus) || sinav.canliStatus === 'completed') {
         M.L.ThrowError({error:'400',reason:'Status hatalı',details:'Status hatalı'});
       }
 
-      var updateDoc = {
+      const updateDoc = {
         canliStatus: newStatus
       };
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
 
       return sonuc;
 
     },
-    'sinavIptal': function(sinavId) {
+    'sinavIptal'(sinavId) {
       check(sinavId, String);
 
       if (M.L.userHasRole(this.userId, 'mudur')) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
-        if (!(_.contains(user.dersleri, sinav.ders) && user.kurum === sinav.kurum)) {
+        if (!(_.contains(user.dersleri,sinav.ders) && user.kurum === sinav.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
         }
       }
@@ -1080,30 +1104,30 @@ if (Meteor.isServer) {
         }
       }
 
-      var updateDoc = {
+      const updateDoc = {
         iptal: true
       };
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
 
       return sonuc;
 
     },
-    'sinavTaslakDegistir': function(sinavId) {
+    'sinavTaslakDegistir'(sinavId) {
       check(sinavId, String);
 
       if (M.L.userHasRole(this.userId, 'mudur')) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
-        if (!(_.contains(user.dersleri, sinav.ders) && user.kurum === sinav.kurum)) {
+        if (!(_.contains(user.dersleri,sinav.ders) && user.kurum === sinav.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
         }
       }
@@ -1126,30 +1150,30 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'acilisSonraOlmali',reason:'Açılış zamanı şu andan sonra olmalı',details:'Açılış zamanı şu andan sonra olmalı'});
       }
 
-      var updateDoc = {
+      const updateDoc = {
         taslak: !sinav.taslak
       };
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
 
       return sonuc;
 
     },
-    'sinavKilitle': function(sinavId) {
+    'sinavKilitle'(sinavId) {
       check(sinavId, String);
 
       if (M.L.userHasRole(this.userId, 'mudur')) {
         M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
       }
 
-      var sinav = M.C.Sinavlar.findOne({_id: sinavId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavId});
       if (!sinav) {
         M.L.ThrowError({error:'404',reason:'Sınav bulunamadı',details:'Sınav bulunamadı'});
       }
 
-      var user = M.C.Users.findOne({_id: this.userId});
+      const user = M.C.Users.findOne({_id: this.userId});
       if (M.L.userHasRole(this.userId, 'ogretmen')) {
-        if (!(_.contains(user.dersleri, sinav.ders) && user.kurum === sinav.kurum)) {
+        if (!(_.contains(user.dersleri,sinav.ders) && user.kurum === sinav.kurum)) {
           M.L.ThrowError({error:'503',reason:'Yetki yok',details:'Yetki yok'});
         }
       }
@@ -1172,11 +1196,11 @@ if (Meteor.isServer) {
         M.L.ThrowError({error:'sorusuzSinavKilitsizKalmali',reason:'Sorusuz sınav kilitlenemez',details:'Sorusuz sınav kilitlenemez'});
       }
 
-      var updateDoc = {
+      const updateDoc = {
         kilitli: true
       };
 
-      var sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
+      const sonuc = M.C.Sinavlar.update({_id: sinav._id}, {$set: updateDoc});
 
       return sonuc;
 

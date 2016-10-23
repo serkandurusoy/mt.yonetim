@@ -6,39 +6,39 @@ Template.sinavOnizlemeModal.onCreated(function() {
 });
 
 Template.sinavOnizlemeModal.helpers({
-  formatliSinavSuresi: function(t) {
+  formatliSinavSuresi(t) {
     return M.L.FormatSinavSuresi(t*60*1000);
   },
-  sinav: function() {
+  sinav() {
     return Template.instance().sinav.get();
   },
-  renderComponent: function() {
+  renderComponent() {
     return Template.instance().renderComponent.get();
   },
-  seciliSoruIndex: function() {
+  seciliSoruIndex() {
     return Template.instance().seciliSoruIndex.get();
   },
-  soruPuani: function() {
-    var seciliSoruIndex = Template.instance().seciliSoruIndex.get();
-    var sinav = Template.instance().sinav.get();
-    var soruPuani = sinav && sinav.sorular[seciliSoruIndex].puan;
+  soruPuani() {
+    const seciliSoruIndex = Template.instance().seciliSoruIndex.get();
+    const sinav = Template.instance().sinav.get();
+    const soruPuani = sinav && sinav.sorular[seciliSoruIndex].puan;
     return sinav && soruPuani.toString();
   },
-  seciliSoru: function() {
-    var seciliSoruIndex = Template.instance().seciliSoruIndex.get();
-    var sinav = Template.instance().sinav.get();
+  seciliSoru() {
+    const seciliSoruIndex = Template.instance().seciliSoruIndex.get();
+    const sinav = Template.instance().sinav.get();
     return sinav && M.C.Sorular.findOne({_id: sinav.sorular[seciliSoruIndex].soruId});
   },
-  soruKomponent: function() {
-    var seciliSoruIndex = Template.instance().seciliSoruIndex.get();
-    var sinav = Template.instance().sinav.get();
-    var seciliSoru = sinav && M.C.Sorular.findOne({_id: sinav.sorular[seciliSoruIndex].soruId});
+  soruKomponent() {
+    const seciliSoruIndex = Template.instance().seciliSoruIndex.get();
+    const sinav = Template.instance().sinav.get();
+    const seciliSoru = sinav && M.C.Sorular.findOne({_id: sinav.sorular[seciliSoruIndex].soruId});
     return M.L.komponentSec(seciliSoru);
   }
 });
 
 Template.sinavOnizlemeModal.events({
-  'click .dugmeNav.anaEkran': function(e,t) {
+  'click .dugmeNav.anaEkran'(e,t) {
     e.preventDefault();
     Blaze.remove(sinavOnizlemeView);
   }

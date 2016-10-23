@@ -1,7 +1,7 @@
 M.C.Sinavlar.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,
-    autoValue: function() {
+    autoValue() {
       if (this.isInsert) {
         return "turkish";
       }
@@ -10,64 +10,64 @@ M.C.Sinavlar.attachSchema(new SimpleSchema({
   'searchSource.kurum': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('kurum');
+    autoValue() {
+      const src = this.field('kurum');
       return this.isSet ? this.value : src.isSet ? M.L.LatinizeLower(src.value === 'mitolojix' ? 'mitolojix' : M.C.Kurumlar.findOne({_id: src.value}).isim) : this.unset();
     }
   },
   'searchSource.kod': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('kod');
+    autoValue() {
+      const src = this.field('kod');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.egitimYili': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('egitimYili');
+    autoValue() {
+      const src = this.field('egitimYili');
       return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
     }
   },
   'searchSource.ders': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('ders');
+    autoValue() {
+      const src = this.field('ders');
       return src.isSet ? M.L.LatinizeLower(M.C.Dersler.findOne({_id: src.value}).isim) : this.unset();
     }
   },
   'searchSource.aciklama': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('aciklama');
+    autoValue() {
+      const src = this.field('aciklama');
       return src.isSet ? M.L.LatinizeLower(src.value) : this.unset();
     }
   },
   'searchSource.sinif': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('sinif');
+    autoValue() {
+      const src = this.field('sinif');
       return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
     }
   },
   'searchSource.subeler': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('subeler');
+    autoValue() {
+      const src = this.field('subeler');
       return src.isSet ? M.L.LatinizeLower(src.value.join(' ')) : this.unset();
     }
   },
   'searchSource.tip': {
     type: String,
     optional: true,
-    autoValue: function() {
-      var src = this.field('tip');
+    autoValue() {
+      const src = this.field('tip');
       return src.isSet ? M.L.LatinizeLower(M.L.enumLabel(src.value)) : this.unset();
     }
   }
@@ -95,11 +95,15 @@ if (Meteor.isServer) {
 }
 
 // TODO: mufredat.after.update (konu) ayrica bunun diger bagli kontrolleri de var tabii ki
-Meteor.startup(function() {
+Meteor.startup(() => {
   M.C.Kurumlar.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+
+    const {
+      _id = doc._id,
+    } = this;
+
     if (this.previous.isim !== doc.isim) {
-      M.C.Sinavlar.find({kurum: _id}).forEach(function(sinav) {
+      M.C.Sinavlar.find({kurum: _id}).forEach(sinav => {
         M.C.Sinavlar.update(
           {_id: sinav._id},
           {$set: {'searchSource.kurum': M.L.LatinizeLower(doc.isim)}},
@@ -110,9 +114,13 @@ Meteor.startup(function() {
   });
 
   M.C.Dersler.after.update(function(userId, doc, fieldNames, modifier, options) {
-    var _id = this._id ? this._id : doc._id;
+
+    const {
+      _id = doc._id,
+    } = this;
+
     if (this.previous.isim !== doc.isim) {
-      M.C.Sinavlar.find({ders: _id}).forEach(function(sinav) {
+      M.C.Sinavlar.find({ders: _id}).forEach(sinav => {
         M.C.Sinavlar.update(
           {_id: sinav._id},
           {$set: {'searchSource.ders': M.L.LatinizeLower(doc.isim)}},
@@ -124,7 +132,7 @@ Meteor.startup(function() {
 });
 
 Meteor.methods({
-  'search.sinav': function(keywords, filters) {
+  'search.sinav'(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));
     check(filters, {
       kurum: Match.Optional(String),
@@ -136,10 +144,10 @@ Meteor.methods({
       sinavSahibi: Match.Optional(String),
       konu: Match.Optional(String)
     });
-    var userId = this.userId;
+    const userId = this.userId;
     if (userId) {
-      var selector = {};
-      var soruSelector = {};
+      let selector = {};
+      let soruSelector = {};
 
       if (!!keywords) {
         selector.$text = {$search: M.L.LatinizeLower(keywords)}
@@ -215,8 +223,8 @@ Meteor.methods({
 
       if(filters.konu){
         soruSelector['alan.konu'] = filters.konu;
-        var konuyuIcerenSoruIdleri = _.pluck(M.C.Sorular.find(soruSelector).fetch(),'_id');
-        var sorulariIcerenSinavIdleri = _.pluck(M.C.Sinavlar.find({'sorular.soruId': {$in: konuyuIcerenSoruIdleri}}).fetch(),'_id');
+        const konuyuIcerenSoruIdleri = _.pluck(M.C.Sorular.find(soruSelector).fetch(),'_id');
+        const sorulariIcerenSinavIdleri = _.pluck(M.C.Sinavlar.find({'sorular.soruId': {$in: konuyuIcerenSoruIdleri}}).fetch(),'_id');
         selector._id = {$in: sorulariIcerenSinavIdleri};
       }
 
@@ -234,9 +242,7 @@ Meteor.methods({
             },
             limit: 100
           }
-        ).map(function(doc) {
-          return doc._id;
-        });
+        ).map(doc => doc._id);
       }
 
     } else {

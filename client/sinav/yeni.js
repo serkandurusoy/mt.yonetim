@@ -7,14 +7,14 @@ Template.sinavYeni.onCreated(function() {
 AutoForm.hooks({
   sinavYeniForm: {
     before: {
-      insert: function(doc) {
+      insert(doc) {
         if (doc._clonedFrom) {
           doc.sorular = AutoForm.getCurrentDataForForm('sinavYeniForm').doc.sorular;
         }
         return doc;
       }
     },
-    onSuccess: function(operation, result, template) {
+    onSuccess(operation, result, template) {
       if (result) {
         Session.set('yeniSinav', result);
         FlowRouter.go('sinavDetay', {_id: result});

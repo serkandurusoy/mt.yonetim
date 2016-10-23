@@ -1,5 +1,5 @@
-M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
-  var report = {};
+M.L.PrintReport = (res, content, orientation, fileName, reportName) => {
+  let report = {};
   report.pageSize = 'A4';
   report.pageOrientation = orientation;
   report.pageMargins = [40,80,40,40];
@@ -27,19 +27,19 @@ M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
         ]
       },
       layout: {
-        hLineWidth: function(i,node) { return 0},
-        vLineWidth: function() {return 0},
-        hLineColor: function() {return 'black'},
-        vLineColor: function() {return 'black'},
-        paddingLeft: function(i, node) { return 0; },
-        paddingRight: function(i, node) { return 0; },
-        paddingTop: function(i, node) { return 4; },
-        paddingBottom: function(i, node) { return 4; }
+        hLineWidth(i,node) { return 0},
+        vLineWidth() {return 0},
+        hLineColor() {return 'black'},
+        vLineColor() {return 'black'},
+        paddingLeft(i, node) { return 0; },
+        paddingRight(i, node) { return 0; },
+        paddingTop(i, node) { return 4; },
+        paddingBottom(i, node) { return 4; }
       }
     }
   ], content);
 
-  report.footer = function(currentPage, pageCount) {
+  report.footer = (currentPage, pageCount) => {
     return [{
       margin: [20,0,20,0],
       table: {
@@ -52,28 +52,28 @@ M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
           ]
         ]
       }, layout: {
-        hLineWidth: function(i,node) { return i === 0 ? 1 : 0},
-        vLineWidth: function() {return 0},
-        hLineColor: function() {return 'black'},
-        vLineColor: function() {return 'black'},
-        paddingLeft: function(i, node) { return 0; },
-        paddingRight: function(i, node) { return 0; },
-        paddingTop: function(i, node) { return 2; },
-        paddingBottom: function(i, node) { return 2; }
+        hLineWidth(i,node) { return i === 0 ? 1 : 0},
+        vLineWidth() {return 0},
+        hLineColor() {return 'black'},
+        vLineColor() {return 'black'},
+        paddingLeft(i, node) { return 0; },
+        paddingRight(i, node) { return 0; },
+        paddingTop(i, node) { return 2; },
+        paddingBottom(i, node) { return 2; }
       }
     }];
   };
 
-  M.L.getDataUri('/mitolojix-logo-rapor-bg.jpg', function(mitolojixLogo) {
-    var marginTop = orientation === 'landscape' ? 100 : 220;
-    report.background = function(currentPage, pageCount) {
+  M.L.getDataUri('/mitolojix-logo-rapor-bg.jpg', mitolojixLogo => {
+    const marginTop = orientation === 'landscape' ? 100 : 220;
+    report.background = (currentPage, pageCount) => {
       return [
         { image: mitolojixLogo, fit: [400,400], alignment: 'center', margin: [0, marginTop, 0, 0] }
       ];
     };
 
-    M.L.getDataUri(res.meta.logo, function(kurumLogo) {
-      report.header = function(currentPage, pageCount) {
+    M.L.getDataUri(res.meta.logo, kurumLogo => {
+      report.header = (currentPage, pageCount) => {
         return [{
           margin: [20,20,20,20],
           table: {
@@ -85,14 +85,14 @@ M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
               ]
             ]
           }, layout: {
-            hLineWidth: function(i,node) { return i === 1 ? 1 : 0},
-            vLineWidth: function() {return 0},
-            hLineColor: function() {return 'black'},
-            vLineColor: function() {return 'black'},
-            paddingLeft: function(i, node) { return 0; },
-            paddingRight: function(i, node) { return 0; },
-            paddingTop: function(i, node) { return 2; },
-            paddingBottom: function(i, node) { return 2; }
+            hLineWidth(i,node) { return i === 1 ? 1 : 0},
+            vLineWidth() {return 0},
+            hLineColor() {return 'black'},
+            vLineColor() {return 'black'},
+            paddingLeft(i, node) { return 0; },
+            paddingRight(i, node) { return 0; },
+            paddingTop(i, node) { return 2; },
+            paddingBottom(i, node) { return 2; }
           }
         }];
       };
@@ -107,9 +107,9 @@ M.L.PrintReport = function(res, content, orientation, fileName, reportName) {
   })
 };
 
-M.L.analizRaporuContent = function(res){
-  var content = [];
-  var rows = [
+M.L.analizRaporuContent = res =>{
+  let content = [];
+  let rows = [
     [{text: 'Şube Puan Karşılaştırması', bold: true, alignment: 'center', colSpan: 9}, {}, {}, {}, {}, {}, {}, {}, {}],
     [
       {text: 'Şube', bold: true},
@@ -124,7 +124,7 @@ M.L.analizRaporuContent = function(res){
     ]
   ];
 
-  _.each(res.report.subeler, function(row, ix) {
+  res.report.subeler.forEach((row, ix) => {
     rows.push([
       {text: res.meta.sinifKisa + row.sube, bold: true},
       {text: row.katilan},
@@ -150,7 +150,7 @@ M.L.analizRaporuContent = function(res){
     {text: res.report.genel.ranj, alignment: 'right', bold: true}
   ]);
 
-  var table = [
+  const table = [
     {
       margin: [0,0,0,0],
       style: 'mainFont',
@@ -159,27 +159,27 @@ M.L.analizRaporuContent = function(res){
         body: rows
       },
       layout:  {
-        hLineWidth: function(i, node) {
+        hLineWidth(i, node) {
           return (i === 0 || i === node.table.body.length) ? 0 : 1;
         },
-        vLineWidth: function(i, node) { return 0; },
-        hLineColor: function(i, node) { return '#aaa'; },
-        vLineColor: function(i, node) { return 'black'; },
-        paddingLeft: function(i, node) { return 0; },
-        paddingRight: function(i, node) { return 0; },
-        paddingTop: function(i, node) { return 8; },
-        paddingBottom: function(i, node) { return 8; }
+        vLineWidth(i, node) { return 0; },
+        hLineColor(i, node) { return '#aaa'; },
+        vLineColor(i, node) { return 'black'; },
+        paddingLeft(i, node) { return 0; },
+        paddingRight(i, node) { return 0; },
+        paddingTop(i, node) { return 8; },
+        paddingBottom(i, node) { return 8; }
       }
     }
   ];
 
   content.push(table);
 
-  var sinifKarsilastirmalariCanvas = document.createElement('canvas');
+  let sinifKarsilastirmalariCanvas = document.createElement('canvas');
   sinifKarsilastirmalariCanvas.width = 1000;
   sinifKarsilastirmalariCanvas.height = 500;
 
-  var sinifKarsilastirmalariData = {
+  const sinifKarsilastirmalariData = {
     labels: _.pluck(res.report.grafik.sinifKarsilastirmalari, 'sube'),
     datasets: [
       {
@@ -189,7 +189,7 @@ M.L.analizRaporuContent = function(res){
     ]
   };
 
-  var sinifKarsilastirmalariChart = new Chart(sinifKarsilastirmalariCanvas.getContext('2d')).Bar(sinifKarsilastirmalariData, {
+  const sinifKarsilastirmalariChart = new Chart(sinifKarsilastirmalariCanvas.getContext('2d')).Bar(sinifKarsilastirmalariData, {
     animation: false,
     scaleBeginAtZero: true,
     scaleFontSize: 24,
@@ -216,11 +216,11 @@ M.L.analizRaporuContent = function(res){
     }
   );
 
-  var puanFrekanslariCanvas = document.createElement('canvas');
+  let puanFrekanslariCanvas = document.createElement('canvas');
   puanFrekanslariCanvas.width = 1000;
   puanFrekanslariCanvas.height = 500;
 
-  var puanFrekanslariData = {
+  const puanFrekanslariData = {
     labels: _.pluck(res.report.grafik.puanFrekanslari, 'puan'),
     datasets: [
       {
@@ -231,7 +231,7 @@ M.L.analizRaporuContent = function(res){
     ]
   };
 
-  var puanFrekanslariChart = new Chart(puanFrekanslariCanvas.getContext('2d')).Line(puanFrekanslariData, {
+  const puanFrekanslariChart = new Chart(puanFrekanslariCanvas.getContext('2d')).Line(puanFrekanslariData, {
     bezierCurve: false,
     animation: false,
     scaleBeginAtZero: true,
@@ -264,34 +264,34 @@ M.L.analizRaporuContent = function(res){
   return content;
 };
 
-M.L.testMaddeAnaliziContent = function(res) {
-  var sayfaBoyu = 25;
+M.L.testMaddeAnaliziContent = res => {
+  const sayfaBoyu = 25;
 
-  var tamSayfaSayisi = parseInt(res.report.sorular.length/sayfaBoyu);
-  var artikSayfa = res.report.sorular.length % sayfaBoyu;
+  const tamSayfaSayisi = parseInt(res.report.sorular.length/sayfaBoyu);
+  const artikSayfa = res.report.sorular.length % sayfaBoyu;
 
-  var sayfaSayisi = tamSayfaSayisi + (!!(artikSayfa) ? 1 : 0);
+  const sayfaSayisi = tamSayfaSayisi + (!!(artikSayfa) ? 1 : 0);
 
-  var content = [];
+  let content = [];
 
-  _.each(res.report.subeler, function(sube) {
+  res.report.subeler.forEach(sube => {
 
-    _.each(_.range( sayfaSayisi ), function(sayfa) {
-      var rangeEnd = sayfa * sayfaBoyu + ((sayfaSayisi === sayfa + 1) ? (!!artikSayfa ? artikSayfa : sayfaBoyu) : sayfaBoyu);
-      var rows = [];
+    _.range( sayfaSayisi ).forEach(sayfa => {
+      const rangeEnd = sayfa * sayfaBoyu + ((sayfaSayisi === sayfa + 1) ? (!!artikSayfa ? artikSayfa : sayfaBoyu) : sayfaBoyu);
+      let rows = [];
 
-      var header = [
+      let header = [
         {text: 'ŞB', bold: true, alignment: 'center', margin: [0,30,0,0]},{text: 'Öğrenci', bold: true, margin: [2,30,0,0]}
       ];
-      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+      _.range( sayfa*sayfaBoyu , rangeEnd ).forEach(ix => {
         header.push({image: M.L.WriteRotatedText(res.report.sorular[ix].kod), fit:[5,38], alignment: 'center'});
       });
       rows.push(header);
 
-        _.each(sube.sinavKagitlari, function(sinavKagidi) {
-          var row = [{text: res.meta.sinifKisa + sube.sube, bold: true, alignment: 'center'}];
+        _.each(sube.sinavKagitlari, sinavKagidi => {
+          let row = [{text: res.meta.sinifKisa + sube.sube, bold: true, alignment: 'center'}];
           row.push({text: sinavKagidi.ogrenci, margin: [2,0,0,0]});
-          _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+          _.range( sayfa*sayfaBoyu , rangeEnd ).forEach(ix => {
             row.push({
               text: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'B' : ( (sinavKagidi.yanitlar[ix].dogru === true ? 'D' : 'Y') + (res.meta.tip === 'Alıştırma Testi' ? sinavKagidi.yanitlar[ix].yanitlandi.toString() : '' ) ),
               color: sinavKagidi.yanitlar[ix].yanitlandi === 0 ? 'goldenrod' : (sinavKagidi.yanitlar[ix].dogru === true ? 'gray' : 'darkred'),
@@ -302,30 +302,30 @@ M.L.testMaddeAnaliziContent = function(res) {
           rows.push(row);
         });
 
-      var subeFooter = [
+      const subeFooter = [
         {text: ''},{text: 'Şube Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
       ];
-      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+      _.range( sayfa*sayfaBoyu , rangeEnd ).forEach(ix => {
         subeFooter.push({text: sube.dogruOran[ix], alignment: 'center', color: sube.dogruOran[ix] === '100.00' ? 'darkgreen' : (sube.dogruOran[ix] === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
       });
       rows.push(subeFooter);
 
-      var sinifFooter = [
+      let sinifFooter = [
         {text: ''},{text: 'Sınıf Bazında Doğru Yüzde', bold: true, alignment: 'right', margin: [0,0,4,0]}
       ];
-      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+      _.range( sayfa*sayfaBoyu , rangeEnd ).forEach(ix => {
         sinifFooter.push({text: res.report.sorular[ix].dogruOran, alignment: 'center', color: res.report.sorular[ix].dogruOran === '100.00' ? 'darkgreen' : (res.report.sorular[ix].dogruOran === '0.00' ? 'darkred' : undefined), bold: true, fontSize: 7, margin: [0,2,0,0]});
       });
       rows.push(sinifFooter);
 
-      var widths = [
+      let widths = [
         22,160
       ];
-      _.each(_.range( sayfa*sayfaBoyu , rangeEnd ), function(ix) {
+      _.range( sayfa*sayfaBoyu , rangeEnd ).forEach(ix => {
         widths.push(22);
       });
 
-      var table = [
+      const table = [
         {
           margin: [0,0,0,40],
           style: 'smallTableFont',
@@ -334,14 +334,14 @@ M.L.testMaddeAnaliziContent = function(res) {
             body: rows
           },
           layout:  {
-            hLineWidth: function(i, node) { return 1; },
-            vLineWidth: function(i, node) { return 1; },
-            hLineColor: function(i, node) { return '#aaa'; },
-            vLineColor: function(i, node) { return '#aaa'; },
-            paddingLeft: function(i, node) { return 0; },
-            paddingRight: function(i, node) { return 0; },
-            paddingTop: function(i, node) { return 4; },
-            paddingBottom: function(i, node) { return 4; }
+            hLineWidth(i, node) { return 1; },
+            vLineWidth(i, node) { return 1; },
+            hLineColor(i, node) { return '#aaa'; },
+            vLineColor(i, node) { return '#aaa'; },
+            paddingLeft(i, node) { return 0; },
+            paddingRight(i, node) { return 0; },
+            paddingTop(i, node) { return 4; },
+            paddingBottom(i, node) { return 4; }
           }
         }
       ];
@@ -355,9 +355,9 @@ M.L.testMaddeAnaliziContent = function(res) {
   return content;
 };
 
-M.L.testCeldiriciAnaliziContent = function(res) {
-  var content = [];
-  var rows = [
+M.L.testCeldiriciAnaliziContent = res => {
+  let content = [];
+  let rows = [
     [
       {text: 'No', bold: true},
       {text: 'Kod', bold: true},
@@ -373,8 +373,8 @@ M.L.testCeldiriciAnaliziContent = function(res) {
     ]
   ];
 
-  _.each(res.report, function(row, ix) {
-    var color = row.dogruOran === '100.00' ? 'darkgreen' : (row.yanlisOran === '100.00' ? 'darkred' : ((row.bosOran === '100.00'&& row.dogruOran === '0.00') ? 'goldenrod' : undefined));
+  res.report.forEach((row, ix) => {
+    const color = row.dogruOran === '100.00' ? 'darkgreen' : (row.yanlisOran === '100.00' ? 'darkred' : ((row.bosOran === '100.00'&& row.dogruOran === '0.00') ? 'goldenrod' : undefined));
     rows.push([
       {text: (ix+1).toString(), bold: true, color: color},
       {text: row.kod, color: color},
@@ -390,7 +390,7 @@ M.L.testCeldiriciAnaliziContent = function(res) {
     ])
   });
 
-  var table = [
+  const table = [
     {
       margin: [0,0,0,0],
       style: 'mainFont',
@@ -399,16 +399,16 @@ M.L.testCeldiriciAnaliziContent = function(res) {
         body: rows
       },
       layout:  {
-        hLineWidth: function(i, node) {
+        hLineWidth(i, node) {
           return (i === 0 || i === node.table.body.length) ? 0 : 1;
         },
-        vLineWidth: function(i, node) { return 0; },
-        hLineColor: function(i, node) { return '#aaa'; },
-        vLineColor: function(i, node) { return 'black'; },
-        paddingLeft: function(i, node) { return 0; },
-        paddingRight: function(i, node) { return 0; },
-        paddingTop: function(i, node) { return 8; },
-        paddingBottom: function(i, node) { return 8; }
+        vLineWidth(i, node) { return 0; },
+        hLineColor(i, node) { return '#aaa'; },
+        vLineColor(i, node) { return 'black'; },
+        paddingLeft(i, node) { return 0; },
+        paddingRight(i, node) { return 0; },
+        paddingTop(i, node) { return 8; },
+        paddingBottom(i, node) { return 8; }
       }
     }
   ];
@@ -418,9 +418,9 @@ M.L.testCeldiriciAnaliziContent = function(res) {
   return content;
 };
 
-M.L.sinifBazindaPuanlarContent = function(res) {
-  var content = [];
-  var rows = [
+M.L.sinifBazindaPuanlarContent = res => {
+  let content = [];
+  let rows = [
     [
       {text: 'Şb', bold: true, alignment: 'center'},
       {text: 'Öğrenci', bold: true},
@@ -436,7 +436,7 @@ M.L.sinifBazindaPuanlarContent = function(res) {
     ]
   ];
 
-  _.each(res.report, function(row) {
+  res.report.forEach(row => {
     rows.push([
       {text: res.meta.sinifKisa + row.sube, alignment: 'center'},
       {text: row.ogrenci},
@@ -452,7 +452,7 @@ M.L.sinifBazindaPuanlarContent = function(res) {
     ]);
   });
 
-  var table = [
+  const table = [
     {
       margin: [0,0,0,0],
       style: 'smallTableFont',
@@ -461,16 +461,16 @@ M.L.sinifBazindaPuanlarContent = function(res) {
         body: rows
       },
       layout:  {
-        hLineWidth: function(i, node) {
+        hLineWidth(i, node) {
           return (i === 0 || i === node.table.body.length) ? 0 : 1;
         },
-        vLineWidth: function(i, node) { return 0; },
-        hLineColor: function(i, node) { return '#aaa'; },
-        vLineColor: function(i, node) { return 'black'; },
-        paddingLeft: function(i, node) { return 0; },
-        paddingRight: function(i, node) { return 0; },
-        paddingTop: function(i, node) { return 4; },
-        paddingBottom: function(i, node) { return 4; }
+        vLineWidth(i, node) { return 0; },
+        hLineColor(i, node) { return '#aaa'; },
+        vLineColor(i, node) { return 'black'; },
+        paddingLeft(i, node) { return 0; },
+        paddingRight(i, node) { return 0; },
+        paddingTop(i, node) { return 4; },
+        paddingBottom(i, node) { return 4; }
       }
     }
   ];
@@ -480,11 +480,11 @@ M.L.sinifBazindaPuanlarContent = function(res) {
   return content;
 };
 
-M.L.subeBazindaPuanlarContent = function(res) {
-  var content = [];
+M.L.subeBazindaPuanlarContent = res => {
+  let content = [];
 
-  _.each(res.report.subeler, function(sube) {
-    var rows = [
+  res.report.subeler.forEach(sube => {
+    let rows = [
       [
         {text: 'Şb', bold: true, alignment: 'center'},
         {text: 'Öğrenci', bold: true},
@@ -500,7 +500,7 @@ M.L.subeBazindaPuanlarContent = function(res) {
       ]
     ];
 
-    _.each(sube.sinavKagitlari, function(row) {
+    _.each(sube.sinavKagitlari, row => {
       rows.push([
         {text: res.meta.sinifKisa + row.sube, alignment: 'center'},
         {text: row.ogrenci},
@@ -628,7 +628,7 @@ M.L.subeBazindaPuanlarContent = function(res) {
       {text: ''}
     ]);
 
-    var table = [
+    const table = [
       {
         margin: [0,0,0,50],
         style: 'smallTableFont',
@@ -637,16 +637,16 @@ M.L.subeBazindaPuanlarContent = function(res) {
           body: rows
         },
         layout:  {
-          hLineWidth: function(i, node) {
+          hLineWidth(i, node) {
             return (i === 0 || i === node.table.body.length) ? 0 : 1;
           },
-          vLineWidth: function(i, node) { return 0; },
-          hLineColor: function(i, node) { return '#aaa'; },
-          vLineColor: function(i, node) { return 'black'; },
-          paddingLeft: function(i, node) { return 0; },
-          paddingRight: function(i, node) { return 0; },
-          paddingTop: function(i, node) { return 4; },
-          paddingBottom: function(i, node) { return 4; }
+          vLineWidth(i, node) { return 0; },
+          hLineColor(i, node) { return '#aaa'; },
+          vLineColor(i, node) { return 'black'; },
+          paddingLeft(i, node) { return 0; },
+          paddingRight(i, node) { return 0; },
+          paddingTop(i, node) { return 4; },
+          paddingBottom(i, node) { return 4; }
         }
       }
     ];
