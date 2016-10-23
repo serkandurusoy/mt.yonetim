@@ -1,7 +1,7 @@
-var ilib = Npm.require('ilib');
-var Collator = Npm.require('ilib/lib/Collator.js');
-var collator = new Collator({locale: 'tr'});
-var bin2hex = function (s) {
+const ilib = Npm.require('ilib');
+const Collator = Npm.require('ilib/lib/Collator.js');
+const collator = new Collator({locale: 'tr'});
+const bin2hex = function(s) {
   var i, l, o = '', n;
 
   s += '';
