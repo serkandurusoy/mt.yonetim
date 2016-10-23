@@ -9,10 +9,9 @@ M.C.setUpCollection({
       max:256,
       index: 1,
       unique: true,
-      autoValue: function() {
+      autoValue() {
         if (this.isSet) {
-          var value = this.value;
-          return M.L.Trim(value).localeTitleize();
+          return M.L.Trim(this.value).localeTitleize();
         } else {
           this.unset();
         }

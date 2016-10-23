@@ -2,10 +2,11 @@ M.C.YardimDokumanlari.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
+  const {
+    _id = doc._id,
+  } = this;
 
-  var _id = this._id ? this._id : doc._id;
-
-  var story = {
+  const story = {
     kurum: 'mitolojix',
     collection: 'YardimDokumanlari',
     doc: _id,
@@ -21,9 +22,12 @@ M.C.YardimDokumanlari.after.update(function(userId, doc, fieldNames, modifier, o
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
   }
-  var _id = this._id ? this._id : doc._id;
 
-  var story = {
+  const {
+    _id = doc._id,
+  } = this;
+
+  const story = {
     kurum: 'mitolojix',
     collection: 'YardimDokumanlari',
     doc: _id,
