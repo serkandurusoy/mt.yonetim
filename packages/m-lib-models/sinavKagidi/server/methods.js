@@ -1,33 +1,39 @@
 Meteor.methods({
-  'sinavaBasla': function(args) {
+  'sinavaBasla'(args) {
     check(args, {
       sinavId: String,
       userId: Match.Optional(String),
       ogrenciSinavaGirdi: Match.Optional(Boolean)
     });
 
-    var sinavId = args.sinavId;
-    var user = args.userId ? M.C.Users.findOne({_id: args.userId}) : Meteor.user();
-    var ogrenciSinavaGirdi = _.has(args, 'ogrenciSinavaGirdi') ? args.ogrenciSinavaGirdi : true;
+    const sinavId = args.sinavId;
+    const user = args.userId ? M.C.Users.findOne({_id: args.userId}) : Meteor.user();
+    const ogrenciSinavaGirdi = _.has(args, 'ogrenciSinavaGirdi') ? args.ogrenciSinavaGirdi : true;
 
     if (!user || user.role!=='ogrenci') {
       M.L.ThrowError({error: '403', reason: 'Yetki yok', details: 'Yetki yok'})
     }
 
-    var sinav;
+    let sinav;
+
+    const {
+      kurum,
+      sinif,
+      sube: subeler,
+    } = user;
 
     if (ogrenciSinavaGirdi === false) {
       sinav = M.C.Sinavlar.findOne({_id: sinavId});
     } else {
       sinav = M.C.Sinavlar.findOne({
         _id: sinavId,
-        kurum: user.kurum,
+        kurum,
         taslak: false,
         aktif: true,
         iptal: false,
         muhur: {$exists: true},
-        sinif: user.sinif,
-        subeler: user.sube,
+        sinif,
+        subeler,
         egitimYili: M.C.AktifEgitimYili.findOne().egitimYili,
         acilisZamani: {$lt: new Date()},
         kapanisZamani: {$gt: new Date()}
@@ -38,7 +44,7 @@ Meteor.methods({
       M.L.ThrowError({error: '404', reason: 'Sınav yok', details: 'Bu sınav girişe uygun değil'})
     }
 
-    var bitmemisSinavKagidi = M.C.SinavKagitlari.findOne({
+    const bitmemisSinavKagidi = M.C.SinavKagitlari.findOne({
       ogrenci: user._id,
       bitirmeZamani: {$exists: false}
     });
@@ -47,7 +53,7 @@ Meteor.methods({
       M.L.ThrowError({error: '500', reason: 'Aynı anda tek sınav yapılabilir', details: 'Devam eden başka bir sınav var'})
     }
 
-    var sinavKagidi = M.C.SinavKagitlari.findOne({
+    const sinavKagidi = M.C.SinavKagitlari.findOne({
       ogrenci: user._id,
       sinav: sinavId
     });
@@ -56,12 +62,12 @@ Meteor.methods({
       M.L.ThrowError({error: '500', reason: 'Sınava zaten başlanmış', details: 'Sınava zaten başlanmış'})
     }
 
-    var sorular = _.pluck(sinav.sorular, 'soruId');
-    var yanitlar = [];
+    const sorular = _.pluck(sinav.sorular, 'soruId');
+    let yanitlar = [];
 
-    _.each(sorular, function(soruId) {
-      var yanit;
-      var soru = M.C.Sorular.findOne({_id: soruId});
+    sorular.forEach(soruId => {
+      let yanit;
+      const soru = M.C.Sorular.findOne({_id: soruId});
       if (soru) {
 
         if (soru.tip === 'dogruYanlis') {
@@ -72,10 +78,14 @@ Meteor.methods({
 
         if (soru.tip === 'coktanTekSecmeli') {
           yanit = {
-            secenekler: _.shuffle(_.map(soru.yanit.coktanTekSecmeli, function(secenek,sIx) {
+            secenekler: _.shuffle(soru.yanit.coktanTekSecmeli.map((secenek,sIx) => {
+              const {
+                secenekMetin,
+                secenekGorsel,
+              } = secenek;
               return {
-                secenekMetin: secenek.secenekMetin,
-                secenekGorsel: secenek.secenekGorsel,
+                secenekMetin,
+                secenekGorsel,
                 dogru: false
               };
             }))
@@ -84,10 +94,14 @@ Meteor.methods({
 
         if (soru.tip === 'coktanCokSecmeli') {
           yanit = {
-            secenekler: _.shuffle(_.map(soru.yanit.coktanCokSecmeli, function(secenek) {
+            secenekler: _.shuffle(soru.yanit.coktanCokSecmeli.map(secenek => {
+              const {
+                secenekMetin,
+                secenekGorsel,
+              } = secenek;
               return {
-                secenekMetin: secenek.secenekMetin,
-                secenekGorsel: secenek.secenekGorsel,
+                secenekMetin,
+                secenekGorsel,
                 dogru: false
               };
             }))
@@ -96,32 +110,44 @@ Meteor.methods({
 
         if (soru.tip === 'siralama') {
           yanit = {
-            secenekler: _.shuffle(_.map(soru.yanit.siralama, function(secenek) {
+            secenekler: _.shuffle(soru.yanit.siralama.map(secenek => {
+              const {
+                metin,
+                gorsel,
+              } = secenek;
               return {
-                metin: secenek.metin,
-                gorsel: secenek.gorsel
+                metin,
+                gorsel,
               };
             }))
           }
         }
 
         if (soru.tip === 'eslestirme') {
-          var eslestirArray = [];
-          var eslestirLength = soru.yanit.eslestirme.length;
-          for(var i = 0; i < eslestirLength; i++) {
+          let eslestirArray = [];
+          const eslestirLength = soru.yanit.eslestirme.length;
+          for(let i = 0; i < eslestirLength; i++) {
             eslestirArray.push([i,i]);
           }
           yanit = {
-            sol: _.shuffle(_.map(soru.yanit.eslestirme, function(secenek) {
+            sol: _.shuffle(soru.yanit.eslestirme.map(secenek => {
+              const {
+                solMetin: metin,
+                solGorsel: gorsel,
+              } = secenek;
               return {
-                metin: secenek.solMetin,
-                gorsel: secenek.solGorsel
+                metin,
+                gorsel,
               }
             })),
-            sag: _.shuffle(_.map(soru.yanit.eslestirme, function(secenek) {
+            sag: _.shuffle(soru.yanit.eslestirme.map(secenek => {
+              const {
+                sagMetin: metin,
+                sagGorsel: gorsel,
+              } = secenek;
               return {
-                metin: secenek.sagMetin,
-                gorsel: secenek.sagGorsel
+                metin,
+                gorsel,
               }
             })),
             eslestirme: eslestirArray
@@ -129,26 +155,26 @@ Meteor.methods({
         }
 
         if (soru.tip === 'boslukDoldurma') {
-          var boslukArray = [];
-          var bosluklar;
-          var boslukLength = soru.yanit.boslukDoldurma.cevap.match(/\[(.+?)\]/g).length;
-          for(var i = 0; i < boslukLength; i++) {
+          let boslukArray = [];
+          let bosluklar;
+          const boslukLength = soru.yanit.boslukDoldurma.cevap.match(/\[(.+?)\]/g).length;
+          for(let i = 0; i < boslukLength; i++) {
             boslukArray.push('');
           }
-          var boslukIndex = 0;
-          bosluklar = '<p>' + splitOnNewlines(soru.yanit.boslukDoldurma.cevap.replace(/\[(.+?)\]/g, function () {
+          let boslukIndex = 0;
+          bosluklar = '<p>' + splitOnNewlines(soru.yanit.boslukDoldurma.cevap.replace(/\[(.+?)\]/g, () => {
             return "<input type=\"text\" id=\""+ boslukIndex++ +"\" maxlength=\"40\" size=\"8\" class=\"boslukDoldurSecenek\"/>";
           })).join('</p><p>') + '</p>';
           yanit = {
-            bosluklar: bosluklar,
+            bosluklar,
             cevaplar: boslukArray
           }
         }
 
         if (yanit) {
           yanitlar.push({
-            soruId: soruId,
-            yanit: yanit
+            soruId,
+            yanit,
           });
         }
       }
@@ -161,31 +187,31 @@ Meteor.methods({
     M.C.SinavKagitlari.insert({
       sinav: sinavId,
       ogrenci: user._id,
-      ogrenciSinavaGirdi: ogrenciSinavaGirdi,
-      yanitlar: yanitlar
+      ogrenciSinavaGirdi,
+      yanitlar,
     });
 
     return 'OK';
 
   },
-  'sinaviBitir': function(args) {
+  'sinaviBitir'(args) {
     check(args, {
       sinavKagidiId: String,
       userId: Match.Optional(String),
       iptal: Match.Optional(Boolean)
     });
 
-    var dogruPuan;
+    let dogruPuan;
 
-    var sinavKagidiId = args.sinavKagidiId;
-    var user = args.userId ? M.C.Users.findOne({_id: args.userId}) : Meteor.user();
-    var iptal = _.has(args, 'iptal') ? args.iptal : false;
+    const sinavKagidiId = args.sinavKagidiId;
+    const user = args.userId ? M.C.Users.findOne({_id: args.userId}) : Meteor.user();
+    const iptal = _.has(args, 'iptal') ? args.iptal : false;
 
     if (!user || user.role!=='ogrenci') {
       M.L.ThrowError({error: '403', reason: 'Yetki yok', details: 'Yetki yok'})
     }
 
-    var sinavKagidi = M.C.SinavKagitlari.findOne({
+    const sinavKagidi = M.C.SinavKagitlari.findOne({
       _id: sinavKagidiId,
       ogrenci: user._id,
       bitirmeZamani: {$exists: false}
@@ -196,16 +222,16 @@ Meteor.methods({
     }
 
     if (sinavKagidi.tip === 'alistirma') {
-      dogruPuan = _.reduce(_.where(sinavKagidi.yanitlar, {dogru: true}), function(memo,yanit) {
+      dogruPuan = _.where(sinavKagidi.yanitlar, {dogru: true}).reduce((memo,yanit) => {
         return math.chain(memo).add(math.chain(yanit.puan).divide(parseInt(yanit.yanitlandi)).round().done()).done()
       }, 0);
     } else {
-      dogruPuan = _.reduce(_.where(sinavKagidi.yanitlar, {dogru: true}), function(memo,yanit) {
+      dogruPuan = _.where(sinavKagidi.yanitlar, {dogru: true}).reduce((memo,yanit) => {
         return math.chain(memo).add(yanit.puan).done()
       }, 0);
     }
 
-    var puanOrtalamayaGirdi = false;
+    let puanOrtalamayaGirdi = false;
     if (_.contains(['alistirma','konuTarama'], sinavKagidi.tip)) {
       puanOrtalamayaGirdi = true;
     }
@@ -216,10 +242,10 @@ Meteor.methods({
       bitirmeZamani: {$exists: false}
     },{
       $set: {
-        iptal: iptal,
+        iptal,
         bitirmeZamani: new Date(),
         puan: dogruPuan,
-        puanOrtalamayaGirdi: puanOrtalamayaGirdi
+        puanOrtalamayaGirdi,
       }
     });
 
@@ -228,10 +254,10 @@ Meteor.methods({
     return 'OK';
 
   },
-  'ortalamaGuncelle': function(userId) {
+  'ortalamaGuncelle'(userId) {
     check(userId, String);
-    var aktifEgitimYili = M.C.AktifEgitimYili.findOne().egitimYili;
-    var ortalamaPuan = M.C.SinavKagitlari.aggregate([
+    const aktifEgitimYili = M.C.AktifEgitimYili.findOne().egitimYili;
+    let ortalamaPuan = M.C.SinavKagitlari.aggregate([
       {
         $match:
         {
@@ -257,19 +283,19 @@ Meteor.methods({
 
     return 'OK';
   },
-  'soruYanitla': function(sinavKagidiId,yanitIndex,yanit) {
+  'soruYanitla'(sinavKagidiId,yanitIndex,yanit) {
     check(sinavKagidiId, String);
     check(yanitIndex, Match.Integer);
     // TODO: We are going to sanitize this below! We can write a complex Match.Where but it is not that necessary
     check(yanit, Match.Any);
 
-    var user = Meteor.user();
+    const user = Meteor.user();
 
     if (!user || user.role!=='ogrenci') {
       M.L.ThrowError({error: '403', reason: 'Yetki yok', details: 'Yetki yok'})
     }
 
-    var sinavKagidi = M.C.SinavKagitlari.findOne({
+    const sinavKagidi = M.C.SinavKagitlari.findOne({
       _id: sinavKagidiId,
       ogrenci: user._id,
       bitirmeZamani: {$exists: false}
@@ -283,13 +309,13 @@ Meteor.methods({
       M.L.ThrowError({error: '500', reason: 'Index hatalı', details: 'Sınavda bu kadar çok soru yok'})
     }
 
-    var kayitliYanit = sinavKagidi.yanitlar[yanitIndex];
-    var yanitlanmaSayisi = parseInt(sinavKagidi.yanitlar[yanitIndex].yanitlandi);
-    var zatenDogruyduVeAlistirmaTesti = sinavKagidi.yanitlar[yanitIndex].dogru === true && sinavKagidi.tip === 'alistirma';
+    const kayitliYanit = sinavKagidi.yanitlar[yanitIndex];
+    const yanitlanmaSayisi = parseInt(sinavKagidi.yanitlar[yanitIndex].yanitlandi);
+    const zatenDogruyduVeAlistirmaTesti = sinavKagidi.yanitlar[yanitIndex].dogru === true && sinavKagidi.tip === 'alistirma';
 
-    var dogruYanit = M.C.Sorular.findOne({_id: kayitliYanit.soruId}).yanit;
+    const dogruYanit = M.C.Sorular.findOne({_id: kayitliYanit.soruId}).yanit;
 
-    var dogru = false;
+    let dogru = false;
 
     if (kayitliYanit.tip === 'dogruYanlis') {
       check(yanit, {
@@ -300,7 +326,7 @@ Meteor.methods({
         dogru = true;
       }
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.cevap'] = yanit.cevap;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -322,11 +348,11 @@ Meteor.methods({
         secenekler: [Object]
       });
 
-      var dogruHash = _.map(dogruYanit.coktanTekSecmeli, function(secenek) {
+      const dogruHash = dogruYanit.coktanTekSecmeli.map(secenek => {
         return (secenek.secenekMetin?secenek.secenekMetin:'')+''+(secenek.secenekGorsel?secenek.secenekGorsel:'')+''+secenek.dogru;
       });
 
-      var yanitHash = _.map(yanit.secenekler, function(secenek) {
+      const yanitHash = yanit.secenekler.map(secenek => {
         return (secenek.secenekMetin?secenek.secenekMetin:'')+''+(secenek.secenekGorsel?secenek.secenekGorsel:'')+''+secenek.dogru;
       });
 
@@ -334,7 +360,7 @@ Meteor.methods({
         dogru = true;
       }
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.secenekler'] = yanit.secenekler;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -355,11 +381,11 @@ Meteor.methods({
         secenekler: [Object]
       });
 
-      var dogruHash = _.map(dogruYanit.coktanCokSecmeli, function(secenek) {
+      const dogruHash = dogruYanit.coktanCokSecmeli.map(secenek => {
         return (secenek.secenekMetin?secenek.secenekMetin:'')+''+(secenek.secenekGorsel?secenek.secenekGorsel:'')+''+secenek.dogru;
       });
 
-      var yanitHash = _.map(yanit.secenekler, function(secenek) {
+      const yanitHash = yanit.secenekler.map(secenek => {
         return (secenek.secenekMetin?secenek.secenekMetin:'')+''+(secenek.secenekGorsel?secenek.secenekGorsel:'')+''+secenek.dogru;
       });
 
@@ -367,7 +393,7 @@ Meteor.methods({
         dogru = true;
       }
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.secenekler'] = yanit.secenekler;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -388,11 +414,11 @@ Meteor.methods({
         secenekler: [Object]
       });
 
-      var dogruHash = _.map(dogruYanit.siralama, function(secenek) {
+      const dogruHash = dogruYanit.siralama.map(secenek => {
         return (secenek.metin?secenek.metin:'')+''+(secenek.gorsel?secenek.gorsel:'')+'';
       });
 
-      var yanitHash = _.map(yanit.secenekler, function(secenek) {
+      const yanitHash = yanit.secenekler.map(secenek => {
         return (secenek.metin?secenek.metin:'')+''+(secenek.gorsel?secenek.gorsel:'')+'';
       });
 
@@ -400,7 +426,7 @@ Meteor.methods({
         dogru = true;
       }
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.secenekler'] = yanit.secenekler;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -421,7 +447,7 @@ Meteor.methods({
         eslestirme: [[Match.Integer]]
       });
 
-      var dogruHash = _.map(dogruYanit.eslestirme, function(secenek) {
+      const dogruHash = dogruYanit.eslestirme.map(secenek => {
         return (secenek.solMetin?secenek.solMetin:'')
           +''
           +(secenek.solGorsel?secenek.solGorsel:'')
@@ -431,7 +457,7 @@ Meteor.methods({
           +(secenek.sagGorsel?secenek.sagGorsel:'');
       });
 
-      var yanitHash = _.map(yanit.eslestirme, function(eslesme) {
+      const yanitHash = yanit.eslestirme.map(eslesme => {
         return (kayitliYanit.yanit.sol[eslesme[0]].metin?kayitliYanit.yanit.sol[eslesme[0]].metin:'')
           +''
           +(kayitliYanit.yanit.sol[eslesme[0]].gorsel?kayitliYanit.yanit.sol[eslesme[0]].gorsel:'')
@@ -445,7 +471,7 @@ Meteor.methods({
         dogru = true;
       }
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.eslestirme'] = yanit.eslestirme;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -466,23 +492,23 @@ Meteor.methods({
         cevaplar: [String]
       });
 
-      var dogruHash = dogruYanit.boslukDoldurma.cevap.match(/\[(.+?)\]/g).map(function(cevap) {
+      let dogruHash = dogruYanit.boslukDoldurma.cevap.match(/\[(.+?)\]/g).map(cevap => {
         return cevap.replace(/\[(.+?)\]/g, "$1")
       });
 
-      var yanitHash = yanit.cevaplar;
+      let yanitHash = yanit.cevaplar;
 
       if (dogruYanit.boslukDoldurma.toleransBuyukKucukHarf === true) {
-        dogruHash = _.map(dogruHash, function(cevap) {
+        dogruHash = dogruHash.map(cevap => {
           return cevap.toLocaleLowerCase();
         });
-        yanitHash = _.map(yanitHash, function(cevap) {
+        yanitHash = yanitHash.map(cevap => {
           return cevap.toLocaleLowerCase();
         });
       }
 
       if (dogruYanit.boslukDoldurma.toleransTurkce === true) {
-        dogruHash = _.map(dogruHash, function(cevap) {
+        dogruHash = dogruHash.map(cevap => {
           //TODO: slug kullanma, doğrudan türkçe harf çevrimi yap
           return getSlug(cevap, {
             separator: '',
@@ -493,7 +519,7 @@ Meteor.methods({
             mark: true
           });
         });
-        yanitHash = _.map(yanitHash, function(cevap) {
+        yanitHash = yanitHash.map(cevap => {
           //TODO: slug kullanma, doğrudan türkçe harf çevrimi yap
           return getSlug(cevap, {
             separator: '',
@@ -506,11 +532,11 @@ Meteor.methods({
         });
       }
 
-      dogru = _.every(dogruHash, function(dogruCevap,ix) {
+      dogru = _.every(dogruHash, (dogruCevap,ix) => {
         return s.levenshtein(dogruCevap, yanitHash[ix]) <= dogruYanit.boslukDoldurma.toleransKarakter
       });
 
-      var setter = {};
+      let setter = {};
 
       setter['yanitlar.'+yanitIndex+'.yanit.cevaplar'] = yanit.cevaplar;
       setter['yanitlar.'+yanitIndex+'.yanitlandi'] = zatenDogruyduVeAlistirmaTesti ? yanitlanmaSayisi : (yanitlanmaSayisi + 1);
@@ -531,19 +557,24 @@ Meteor.methods({
     return 'OK';
 
   },
-  'sonMuhur': function() {
-    var user = Meteor.user();
+  'sonMuhur'() {
+    const user = Meteor.user();
 
     if (user && user.role === 'ogrenci') {
-      var sinavKagidi = M.C.SinavKagitlari.find({
-        ogrenci: user._id,
+      const {
+        _id: ogrenci,
+        kurum,
+        sinif,
+      } = user;
+      const sinavKagidi = M.C.SinavKagitlari.find({
+        ogrenci,
         iptal: false,
-        kurum: user.kurum,
-        sinif: user.sinif,
+        kurum,
+        sinif,
         egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
       }, {sort: {bitirmeZamani: -1}, limit: 1}).fetch()[0];
 
-      var muhur =  sinavKagidi && M.C.Sinavlar.findOne({_id: sinavKagidi.sinav}).muhur;
+      const muhur =  sinavKagidi && M.C.Sinavlar.findOne({_id: sinavKagidi.sinav}).muhur;
 
       return muhur && M.C.Muhurler.findOne({_id: muhur}).gorsel;
 

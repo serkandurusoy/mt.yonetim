@@ -6,8 +6,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     index: 1,
     denyUpdate: true,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).kurum;
       }
@@ -23,8 +23,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     index: 1,
     denyUpdate: true,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).sinif;
       }
@@ -33,8 +33,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   sube: {
     type: String,
     denyUpdate: true,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).sube;
       }
@@ -45,7 +45,7 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     allowedValues: M.E.EgitimYili,
     index: 1,
     denyUpdate: true,
-    autoValue: function() {
+    autoValue() {
       if (this.isInsert) {
         return M.C.AktifEgitimYili.findOne().egitimYili;
       }
@@ -56,9 +56,9 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     index: 1,
     denyUpdate: true,
-    custom: function() {
+    custom() {
       if (this.isSet) {
-        var hit = M.C.Sinavlar.findOne({_id: this.value});
+        const hit = M.C.Sinavlar.findOne({_id: this.value});
         return hit ? true : 'notAllowed';
       }
     }
@@ -67,8 +67,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     allowedValues: M.E.SinavTipi,
     denyUpdate: true,
-    autoValue: function() {
-      var sinav = this.field('sinav');
+    autoValue() {
+      const sinav = this.field('sinav');
       if (this.isInsert && sinav.isSet) {
         return M.C.Sinavlar.findOne({_id: sinav.value}).tip;
       }
@@ -87,7 +87,7 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: Date,
     index: -1,
     denyUpdate: true,
-    autoValue: function() {
+    autoValue() {
       if (this.isInsert) {
         return new Date();
       }
@@ -96,15 +96,15 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   maxBitirmeZamani: {
     type: Date,
     denyUpdate: true,
-    autoValue: function() {
-      var sinavId = this.field('sinav');
+    autoValue() {
+      const sinavId = this.field('sinav');
       if (this.isInsert && sinavId.isSet) {
-        var sinav = M.C.Sinavlar.findOne({_id: sinavId.value});
+        const sinav = M.C.Sinavlar.findOne({_id: sinavId.value});
         if (sinav.tip === 'canli') {
           return sinav.kapanisZamani;
         } else {
-          var now = new Date();
-          var olasiBitirme = new Date( now.getTime() + parseInt(sinav.sure) * 60 * 1000 );
+          const now = new Date();
+          const olasiBitirme = new Date( now.getTime() + parseInt(sinav.sure) * 60 * 1000 );
           return olasiBitirme.getTime() < sinav.kapanisZamani.getTime() ? olasiBitirme : sinav.kapanisZamani;
         }
       }
@@ -113,10 +113,10 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   yanitlarAcilmaZamani: {
     type: Date,
     denyUpdate: true,
-    autoValue: function() {
-      var sinavId = this.field('sinav');
+    autoValue() {
+      const sinavId = this.field('sinav');
       if (this.isInsert && sinavId.isSet) {
-        var sinav = M.C.Sinavlar.findOne({_id: sinavId.value});
+        const sinav = M.C.Sinavlar.findOne({_id: sinavId.value});
         return sinav.yanitlarAcilmaZamani ? sinav.yanitlarAcilmaZamani : sinav.kapanisZamani;
       }
     }
@@ -137,8 +137,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: Date,
     denyUpdate: true,
     index: 1,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).dogumTarihi;
       }
@@ -148,8 +148,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     denyUpdate: true,
     index: 1,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).nameCollate;
       }
@@ -159,8 +159,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     denyUpdate: true,
     index: 1,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).lastNameCollate;
       }
@@ -170,8 +170,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     denyUpdate: true,
     index: -1,
-    autoValue: function() {
-      var ogrenci = this.field('ogrenci');
+    autoValue() {
+      const ogrenci = this.field('ogrenci');
       if (this.isInsert && ogrenci.isSet) {
         return M.C.Users.findOne({_id: ogrenci.value}).cinsiyet;
       }
@@ -191,11 +191,11 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     denyUpdate: true,
-    custom: function() {
-      var sinav = this.field('sinav');
-      var soruId = this;
+    custom() {
+      const sinav = this.field('sinav');
+      const soruId = this;
       if (this.isInsert && soruId.isSet && sinav.isSet) {
-        var hit = M.C.Sinavlar.findOne({_id: sinav.value, 'sorular.soruId': soruId.value});
+        const hit = M.C.Sinavlar.findOne({_id: sinav.value, 'sorular.soruId': soruId.value});
         return hit ? true : 'notAllowed';
       }
     }
@@ -203,8 +203,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   'yanitlar.$.tip': {
     type: String,
     denyUpdate: true,
-    autoValue: function() {
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet) {
         return M.C.Sorular.findOne({_id: soruId.value}).tip;
       }
@@ -213,8 +213,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   'yanitlar.$.kod': {
     type: String,
     denyUpdate: true,
-    autoValue: function() {
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet) {
         return M.C.Sorular.findOne({_id: soruId.value}).kod;
       }
@@ -223,9 +223,9 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   'yanitlar.$.zorlukDerecesi': {
     type: Number,
     denyUpdate: true,
-    autoValue: function() {
-      var sinav = this.field('sinav');
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const sinav = this.field('sinav');
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet && sinav.isSet) {
         return _.findWhere(M.C.Sinavlar.findOne({_id: sinav.value}).sorular, {soruId: soruId.value}).zorlukDerecesi;
       }
@@ -234,9 +234,9 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   'yanitlar.$.puan': {
     type: Number,
     denyUpdate: true,
-    autoValue: function() {
-      var sinav = this.field('sinav');
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const sinav = this.field('sinav');
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet && sinav.isSet) {
         return _.findWhere(M.C.Sinavlar.findOne({_id: sinav.value}).sorular, {soruId: soruId.value}).puan;
       }
@@ -245,8 +245,8 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
   'yanitlar.$.yonerge': {
     type: String,
     denyUpdate: true,
-    autoValue: function() {
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet) {
         return M.C.Sorular.findOne({_id: soruId.value}).soru.yonerge;
       }
@@ -256,10 +256,10 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     denyUpdate: true,
     optional: true,
-    autoValue: function() {
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet) {
-        var metin = M.C.Sorular.findOne({_id: soruId.value}).soru.metin;
+        const metin = M.C.Sorular.findOne({_id: soruId.value}).soru.metin;
         if (metin) {
           return metin;
         }
@@ -270,10 +270,10 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
     type: String,
     denyUpdate: true,
     optional: true,
-    autoValue: function() {
-      var soruId = this.siblingField('soruId');
+    autoValue() {
+      const soruId = this.siblingField('soruId');
       if (this.isInsert && soruId.isSet) {
-        var gorsel = M.C.Sorular.findOne({_id: soruId.value}).soru.gorsel;
+        const gorsel = M.C.Sorular.findOne({_id: soruId.value}).soru.gorsel;
         if (gorsel) {
           return gorsel;
         }

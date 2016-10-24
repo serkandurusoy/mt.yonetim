@@ -1,14 +1,17 @@
 Meteor.publishComposite(null, function() {
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'ogrenci')) {
-          var user = M.C.Users.findOne({_id: this.userId});
+          const {
+            kurum,
+            sinif,
+          } = M.C.Users.findOne({_id: this.userId});;
           return M.C.SinavKagitlari.find({
             iptal: false,
             ogrenci: this.userId,
-            kurum: user.kurum,
-            sinif: user.sinif,
+            kurum,
+            sinif,
             egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
           }, {
             fields: {
@@ -20,7 +23,7 @@ Meteor.publishComposite(null, function() {
     },
     children: [
       {
-        find: function(sinavKagidi) {
+        find(sinavKagidi) {
           return M.C.Sinavlar.find({_id: sinavKagidi.sinav});
         }
       }
@@ -31,13 +34,16 @@ Meteor.publishComposite(null, function() {
 Meteor.publishComposite('sinavKagidi', function(sinavKagidiId) {
   check(sinavKagidiId, String);
   return {
-    find: function() {
+    find() {
       if (this.userId) {
         if (M.L.userHasRole(this.userId, 'ogrenci')) {
-          var user = M.C.Users.findOne({_id: this.userId});
-          var sinavKagidi = M.C.SinavKagitlari.findOne({_id: sinavKagidiId, iptal: false, ogrenciSinavaGirdi: true});
+          const {
+            kurum,
+            sinif,
+          } = M.C.Users.findOne({_id: this.userId});
+          const sinavKagidi = M.C.SinavKagitlari.findOne({_id: sinavKagidiId, iptal: false, ogrenciSinavaGirdi: true});
           if (sinavKagidi) {
-            var fields = {
+            let fields = {
               'yanitlar.dogru': 0
             };
 
@@ -51,8 +57,8 @@ Meteor.publishComposite('sinavKagidi', function(sinavKagidiId) {
               _id: sinavKagidiId,
               iptal: false,
               ogrenci: this.userId,
-              kurum: user.kurum,
-              sinif: user.sinif,
+              kurum,
+              sinif,
               egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
             }, {
               fields: fields
@@ -63,7 +69,7 @@ Meteor.publishComposite('sinavKagidi', function(sinavKagidiId) {
     },
     children: [
       {
-        find: function(sinavKagidi) {
+        find(sinavKagidi) {
           return M.C.Sinavlar.find({_id: sinavKagidi.sinav});
         }
       }
