@@ -1,6 +1,6 @@
-M.L.TCKimlikDogrula = function(tckimlik, ad, soyad, dogumyili) {
-  var url = 'https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL';
-  var args = {
+M.L.TCKimlikDogrula = (tckimlik, ad, soyad, dogumyili) => {
+  const url = 'https://tckimlik.nvi.gov.tr/Service/KPSPublic.asmx?WSDL';
+  const args = {
     TCKimlikNo: tckimlik,
     Ad: ad.toLocaleUpperCase(),
     Soyad: soyad.toLocaleUpperCase(),
@@ -8,8 +8,8 @@ M.L.TCKimlikDogrula = function(tckimlik, ad, soyad, dogumyili) {
   };
 
   try {
-    var client = Soap.createClient(url);
-    var result = client.TCKimlikNoDogrula(args);
+    const client = Soap.createClient(url);
+    const result = client.TCKimlikNoDogrula(args);
     return result.TCKimlikNoDogrulaResult;
   } catch (err) {
     if(err.error === 'soap-creation') {
