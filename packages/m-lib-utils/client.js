@@ -1,27 +1,27 @@
 // TODO: Ugly hack to rename src from autoform materialize file due to it appending the token and using full url as src instead of file name
 if (Meteor.settings.public.APP === 'YONETIM') {
   Template.fileThumbIcon.helpers({
-    'src': function() {
+    'src'() {
       return this.src && this.src.split("/")[5] ? this.src.split("/")[5].split("?")[0] : this.src;
     }
   });
 }
 
-M.L.CleanMaterializeSelectCaret = function($this) {
+M.L.CleanMaterializeSelectCaret = $this => {
   $this.parent().find('span.caret').remove();
   $this.material_select();
 };
 
-M.L.clearSessionVariable = function(variable) {
+M.L.clearSessionVariable = variable => {
   check(variable, String);
   Session.set(variable, undefined);
   delete Session.keys[variable];
 };
 
-M.L.getDataUri = function (url, callback) {
-  var image = new Image();
-  image.onload = function () {
-    var canvas = document.createElement('canvas');
+M.L.getDataUri = (url, callback) => {
+  const image = new Image();
+  image.onload = () => {
+    let canvas = document.createElement('canvas');
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
     canvas.getContext('2d').drawImage(this, 0, 0);
@@ -30,8 +30,8 @@ M.L.getDataUri = function (url, callback) {
   image.src = url;
 };
 
-M.L.WriteRotatedText = function(text) {
-  var ctx, canvas = document.createElement('canvas');
+M.L.WriteRotatedText = text => {
+  let ctx, canvas = document.createElement('canvas');
   canvas.width = 36;
   canvas.height = 270;
   ctx = canvas.getContext('2d');
@@ -45,14 +45,14 @@ M.L.WriteRotatedText = function(text) {
   return canvas.toDataURL();
 };
 
-M.L.CizgiCiz = function (solId, sagId, wrapperElementId) {
-  var x1 = parseInt($('#sol-'+solId).position().left + parseInt($('#sol-'+solId).css('border-left-width').slice(0,-2)) + parseInt($('#sol-'+solId).css('margin-left').slice(0,-2)) + $('#sol-'+solId).width());
-  var y1 = parseInt($('#sol-'+solId).position().top + parseInt($('#sol-'+solId).css('border-top-width').slice(0,-2)) + parseInt($('#sol-'+solId).css('margin-top').slice(0,-2)) + $('#sol-'+solId).height()/2);
-  var x2 = parseInt($('#sag-'+sagId).position().left + parseInt($('#sag-'+sagId).css('border-left-width').slice(0,-2)) + parseInt($('#sag-'+sagId).css('margin-left').slice(0,-2)));
-  var y2 = parseInt($('#sag-'+sagId).position().top  + parseInt($('#sag-'+sagId).css('border-top-width').slice(0,-2)) + parseInt($('#sag-'+sagId).css('margin-top').slice(0,-2)) + $('#sag-'+sagId).height()/2);
+M.L.CizgiCiz = (solId, sagId, wrapperElementId) => {
+  let x1 = parseInt($('#sol-'+solId).position().left + parseInt($('#sol-'+solId).css('border-left-width').slice(0,-2)) + parseInt($('#sol-'+solId).css('margin-left').slice(0,-2)) + $('#sol-'+solId).width());
+  let y1 = parseInt($('#sol-'+solId).position().top + parseInt($('#sol-'+solId).css('border-top-width').slice(0,-2)) + parseInt($('#sol-'+solId).css('margin-top').slice(0,-2)) + $('#sol-'+solId).height()/2);
+  let x2 = parseInt($('#sag-'+sagId).position().left + parseInt($('#sag-'+sagId).css('border-left-width').slice(0,-2)) + parseInt($('#sag-'+sagId).css('margin-left').slice(0,-2)));
+  let y2 = parseInt($('#sag-'+sagId).position().top  + parseInt($('#sag-'+sagId).css('border-top-width').slice(0,-2)) + parseInt($('#sag-'+sagId).css('margin-top').slice(0,-2)) + $('#sag-'+sagId).height()/2);
 
   if(y1 < y2){
-    var pom = y1;
+    let pom = y1;
     y1 = y2;
     y2 = pom;
     pom = x1;
@@ -60,14 +60,14 @@ M.L.CizgiCiz = function (solId, sagId, wrapperElementId) {
     x2 = pom;
   }
 
-  var a = Math.abs(x1-x2);
-  var b = Math.abs(y1-y2);
-  var c;
-  var sx = (x1+x2)/2 ;
-  var sy = (y1+y2)/2 ;
-  var width = Math.sqrt(a*a + b*b ) ;
-  var x = sx - width/2;
-  var y = sy;
+  let a = Math.abs(x1-x2);
+  let b = Math.abs(y1-y2);
+  let c;
+  const sx = (x1+x2)/2 ;
+  const sy = (y1+y2)/2 ;
+  const width = Math.sqrt(a*a + b*b ) ;
+  const x = sx - width/2;
+  const y = sy;
 
   a = width / 2;
 
@@ -75,12 +75,12 @@ M.L.CizgiCiz = function (solId, sagId, wrapperElementId) {
 
   b = Math.sqrt(Math.abs(x1-x)*Math.abs(x1-x)+Math.abs(y1-y)*Math.abs(y1-y) );
 
-  var cosb = (b*b - a*a - c*c) / (2*a*c);
-  var rad = Math.acos(cosb);
-  var deg = (rad*180)/Math.PI;
+  const cosb = (b*b - a*a - c*c) / (2*a*c);
+  const rad = Math.acos(cosb);
+  const deg = (rad*180)/Math.PI;
 
-  var htmlns = "http://www.w3.org/1999/xhtml";
-  var div = document.createElementNS(htmlns, "div");
+  const htmlns = "http://www.w3.org/1999/xhtml";
+  let div = document.createElementNS(htmlns, "div");
   div.setAttribute('style','border:none;border-top:2px solid #57492B;width:'+width+'px;height:0px;transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');
   div.setAttribute('id','sol-'+solId+'-sag-'+sagId);
   div.setAttribute('class','cizgi');
@@ -88,55 +88,55 @@ M.L.CizgiCiz = function (solId, sagId, wrapperElementId) {
   document.getElementById(wrapperElementId).appendChild(div);
 };
 
-M.L.CizgiSil = function (solId, sagId, wrapperElementId) {
+M.L.CizgiSil = (solId, sagId, wrapperElementId) => {
   $('#'+wrapperElementId+' > #sol-'+solId+'-sag-'+sagId).remove();
 };
 
-Template.registerHelper('pathWithParam', function(pathName, paramName) {
-  var routeParams = {};
+Template.registerHelper('pathWithParam', (pathName, paramName) => {
+  let routeParams = {};
   routeParams[paramName] = FlowRouter.getParam(paramName);
   return FlowRouter.path(pathName, routeParams);
 });
 
-Template.registerHelper('foreignField', function(collection, id, field) {
-  var doc = M.C[collection].findOne({_id: id});
+Template.registerHelper('foreignField', (collection, id, field) => {
+  const doc = M.C[collection].findOne({_id: id});
   return doc && doc[field];
 });
 
-Template.registerHelper('tarihce', function(collection) {
-  var doc = M.C[collection].findOne({_id: FlowRouter.getParam('_id')});
+Template.registerHelper('tarihce', (collection) => {
+  const doc = M.C[collection].findOne({_id: FlowRouter.getParam('_id')});
   // TODO: we are using an undocumented hack. convert to nested helper when meteor 1.2 gets released
   return doc && Blaze._globalHelpers.$mapped(doc.versions());
 });
 
-Template.registerHelper('formatTel', function(tel) {
+Template.registerHelper('formatTel', (tel) => {
   return M.L.formatTel(tel);
 });
 
-Template.registerHelper('log', function(obj) {
+Template.registerHelper('log', (obj) => {
   console.log(obj);
 });
 
-Template.registerHelper('isOdd', function(num) {
+Template.registerHelper('isOdd', num => {
   return !!(num%2);
 });
 
-Template.registerHelper('parseInt', function(numTxt) {
+Template.registerHelper('parseInt', (numTxt) => {
   return parseInt(numTxt);
 });
 
-Template.registerHelper('join', function(/*arguments*/) {
-  var args = Array.prototype.slice.call(arguments);
+Template.registerHelper('join', (/*arguments*/) => {
+  let args = Array.prototype.slice.call(arguments);
   args.pop();
   return args.join("-");
 });
 
-Template.registerHelper('showFilters', function() {
+Template.registerHelper('showFilters', () => {
   return !!Session.get('filters');
 });
 
-Template.registerHelper('detayPath', function(collection,doc) {
-  var pathMap = {
+Template.registerHelper('detayPath', (collection,doc) => {
+  const pathMap = {
     Users: 'kullaniciDetay',
     Sinavlar: 'sinavDetay',
     Sorular: 'soruDetay',
@@ -150,33 +150,33 @@ Template.registerHelper('detayPath', function(collection,doc) {
   return FlowRouter.path(pathMap[collection], {_id: doc});
 });
 
-Template.registerHelper('aktifEgitimYili', function() {
-  var aktifEgitimYili = M.C.AktifEgitimYili.findOne({});
+Template.registerHelper('aktifEgitimYili', () => {
+  const aktifEgitimYili = M.C.AktifEgitimYili.findOne({});
   return aktifEgitimYili && M.L.enumLabel(aktifEgitimYili.egitimYili);
 });
 
-Template.registerHelper('ilAdi', function(ilce) {
+Template.registerHelper('ilAdi', ilce => {
   return M.C.Ilceler.findOne({_id: ilce}).il;
 });
 
-Template.registerHelper('ilceAdi', function(ilce) {
+Template.registerHelper('ilceAdi', ilce => {
   return M.C.Ilceler.findOne({_id: ilce}).ilce;
 });
 
-Template.registerHelper('userHasRole', function(role) {
+Template.registerHelper('userHasRole', role => {
   return M.L.userHasRole(Meteor.userId(),role);
 });
 
-Template.registerHelper('enumLabel', function(val) {
+Template.registerHelper('enumLabel', val => {
   return M.L.enumLabel(val);
 });
 
-Template.registerHelper( 'liveTime', function (dateA) {
-  var locale = mo.currentLocale.get();
-  var result;
+Template.registerHelper( 'liveTime', date => {
+  const locale = mo.currentLocale.get();
+  let result;
 
-  var dateA = mo._getMoment( dateA );
-  var dateB = mo.now.get();
+  const dateA = mo._getMoment( date );
+  const dateB = mo.now.get();
 
   if ( dateA && dateB ) {
     result = dateA.from( dateB );
@@ -185,34 +185,34 @@ Template.registerHelper( 'liveTime', function (dateA) {
   return result;
 });
 
-Template.registerHelper('userInKurum', function(kurumId) {
+Template.registerHelper('userInKurum', kurumId => {
   return M.L.userInKurum(Meteor.userId(),kurumId);
 });
 
-Template.registerHelper('userFullName', function(userId) {
+Template.registerHelper('userFullName', userId => {
   check(userId, String);
-  var user = M.C.Users.findOne({_id: userId});
+  const user = M.C.Users.findOne({_id: userId});
   if (!user) {
     return 'Sistem';
   }
   return user.name + ' ' + user.lastName;
 });
 
-Template.registerHelper('instance', function() {
+Template.registerHelper('instance', () => {
   return Template.instance();
 });
 
-Template.registerHelper('plusOne', function(num) {
+Template.registerHelper('plusOne', num => {
   return parseInt(num) + 1;
 });
 
-Template.registerHelper('yeniKayit', function(coll,docId) {
-  var doc = M.C[coll].findOne({_id: docId});
+Template.registerHelper('yeniKayit', (coll,docId) => {
+  const doc = M.C[coll].findOne({_id: docId});
   return doc.createdBy === Meteor.userId() && moment(TimeSync.serverTime(null, 5 * 60 * 1000)).isBefore(moment(new Date(doc.createdAt)).add(15,'seconds'))
 });
 
-Template.registerHelper('sinavYayinda', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavYayinda', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     $and: [
       {
         _id: sinavId,
@@ -241,8 +241,8 @@ Template.registerHelper('sinavYayinda', function(sinavId) {
   return !!sinav;
 });
 
-Template.registerHelper('sinavBaslamayiBekliyor', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavBaslamayiBekliyor', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
     taslak: false,
@@ -251,8 +251,8 @@ Template.registerHelper('sinavBaslamayiBekliyor', function(sinavId) {
   return !!sinav;
 });
 
-Template.registerHelper('sinavBaslamaTarihiGecmis', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavBaslamaTarihiGecmis', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
     taslak: false,
@@ -262,8 +262,8 @@ Template.registerHelper('sinavBaslamaTarihiGecmis', function(sinavId) {
   return !!sinav;
 });
 
-Template.registerHelper('sinavRaporlamayaUygun', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavRaporlamayaUygun', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
     taslak: false,
@@ -273,7 +273,7 @@ Template.registerHelper('sinavRaporlamayaUygun', function(sinavId) {
   return !!sinav;
 });
 
-Template.registerHelper('sinavKagidi', function(sinavId) {
+Template.registerHelper('sinavKagidi', sinavId => {
   return M.C.SinavKagitlari.findOne({
     ogrenci: Meteor.userId(),
     sinav: sinavId,
@@ -284,8 +284,8 @@ Template.registerHelper('sinavKagidi', function(sinavId) {
   });
 });
 
-Template.registerHelper('sinavKapanmis', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavKapanmis', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     $and: [
       {
         _id: sinavId
@@ -306,27 +306,27 @@ Template.registerHelper('sinavKapanmis', function(sinavId) {
   return !!sinav;
 });
 
-Template.registerHelper('sinavYanitlariAcilmis', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavYanitlariAcilmis', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     yanitlarAcilmaZamani: {$lt: moment(TimeSync.serverTime(null, 5 * 60 * 1000)).toDate()}
   });
   return !!sinav;
 });
 
-Template.registerHelper('sinavYanitlariAcilmamis', function(sinavId) {
-  var sinav = M.C.Sinavlar.findOne({
+Template.registerHelper('sinavYanitlariAcilmamis', sinavId => {
+  const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     yanitlarAcilmaZamani: {$gt: moment(TimeSync.serverTime(null, 5 * 60 * 1000)).toDate()}
   });
   return !!sinav;
 });
 
-Template.registerHelper('currentFieldValue', function (fieldName) {
+Template.registerHelper('currentFieldValue', fieldName => {
   return AutoForm.getFieldValue(fieldName);
 });
 
-Template.registerHelper('toHashCode', function(text) {
+Template.registerHelper('toHashCode', text => {
   if (_.isObject(text)) {
     text = JSON.stringify(text);
   }
