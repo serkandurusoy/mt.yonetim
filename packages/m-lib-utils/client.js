@@ -7,7 +7,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
   });
 }
 
-M.L.CleanMaterializeSelectCaret = $this => {
+M.L.CleanMaterializeSelectCaret = function($this) {
   $this.parent().find('span.caret').remove();
   $this.material_select();
 };
@@ -20,7 +20,7 @@ M.L.clearSessionVariable = variable => {
 
 M.L.getDataUri = (url, callback) => {
   const image = new Image();
-  image.onload = () => {
+  image.onload = function() {
     let canvas = document.createElement('canvas');
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;

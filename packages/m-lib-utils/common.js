@@ -200,7 +200,7 @@ M.L.cyclicIterator = (array, startAt) => {
   };
 };
 
-String.prototype.toLocaleUpperCase = () => {
+String.prototype.toLocaleUpperCase = function() {
   return this.replace(/ğ/g, 'Ğ')
     .replace(/ü/g, 'Ü')
     .replace(/ş/g, 'Ş')
@@ -211,7 +211,7 @@ String.prototype.toLocaleUpperCase = () => {
     .toUpperCase();
 };
 
-String.prototype.toLocaleLowerCase = () => {
+String.prototype.toLocaleLowerCase = function() {
   return this.replace(/Ğ/g, 'ğ')
     .replace(/Ü/g, 'ü')
     .replace(/Ş/g, 'ş')
@@ -222,17 +222,17 @@ String.prototype.toLocaleLowerCase = () => {
     .toLowerCase();
 };
 
-String.prototype.localeCapitalize = () => {
+String.prototype.localeCapitalize = function() {
   return this.charAt(0).toLocaleUpperCase() + this.slice(1).toLocaleLowerCase()
 };
 
-String.prototype.localeTitleize = () => {
+String.prototype.localeTitleize = function() {
   let a = this.split(' ');
   for(let i=0;i < a.length; i++) a[i] = a[i].localeCapitalize();
   return a.join(' ');
 };
 
-String.prototype.localeSentenceize = () => {
+String.prototype.localeSentenceize = function() {
   let capText = this.toLocaleLowerCase();
   capText = capText.replace(/\.\n/g,".[-<br>-]. ");
   capText = capText.replace(/\.\s\n/g,". [-<br>-]. ");
@@ -254,7 +254,7 @@ String.prototype.localeSentenceize = () => {
   return capText;
 };
 
-String.prototype.toHashCode = () => {
+String.prototype.toHashCode = function() {
   let hash = 0;
   if (this.length == 0) return hash;
   for (let i = 0; i < this.length; i++) {
