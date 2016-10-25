@@ -3,19 +3,19 @@ Template.sorucubugu.onCreated(function() {
 });
 
 Template.sorucubugu.events({
-  'click .sol': function(e,t) {
+  'click .sol'(e,t) {
     t.$('.soruCubugu').animate({
       scrollLeft: '-=64'
     }, 0);
   },
-  'click .sag': function(e,t) {
+  'click .sag'(e,t) {
     t.$('.soruCubugu').animate({
       scrollLeft: '+=64'
     }, 0);
   },
-  'dblclick [data-soruIndex]': function(e,t) {
-    var ix = e.currentTarget.getAttribute('data-soruIndex');
-    var isaretliSorular = t.isaretliSorular.array();
+  'dblclick [data-soruIndex]'(e,t) {
+    const ix = e.currentTarget.getAttribute('data-soruIndex');
+    const isaretliSorular = t.isaretliSorular.array();
     if (_.contains(isaretliSorular, ix)) {
       t.isaretliSorular.remove(ix);
     } else {
@@ -23,8 +23,8 @@ Template.sorucubugu.events({
     }
     t.$(e.currentTarget).toggleClass('isaretli');
   },
-  'click [data-soruIndex]': function(e,t) {
-    var ix = e.currentTarget.getAttribute('data-soruIndex');
+  'click [data-soruIndex]'(e,t) {
+    const ix = e.currentTarget.getAttribute('data-soruIndex');
     t.parent().renderComponent.set(false);
     Tracker.flush();
     t.parent().seciliSoruIndex.set(ix);
@@ -35,23 +35,23 @@ Template.sorucubugu.events({
   }
 });
 
-Template.registerHelper('cevapVerildi', function(sinavKagidiId, ix, cevapAnahtari) {
-  var sinavKagidi = M.C.SinavKagitlari.findOne({
+Template.registerHelper('cevapVerildi', (sinavKagidiId, ix, cevapAnahtari) => {
+  const sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });
   return !cevapAnahtari && sinavKagidi && sinavKagidi.yanitlar[ix].yanitlandi;
 });
 
-Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAnahtari) {
-  var sinavKagidi = M.C.SinavKagitlari.findOne({
+Template.registerHelper('cevapDogruYanlis', (sinavKagidiId, ix, cevapAnahtari) => {
+  const sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });
   if (cevapAnahtari === true) {
     if (!sinavKagidi) {
       return undefined;
     } else {
-      var sinav = M.C.Sinavlar.findOne({_id: sinavKagidi.sinav});
-      var yanit = _.findWhere(sinavKagidi.yanitlar, {soruId: sinav.sorular[ix].soruId});
+      const sinav = M.C.Sinavlar.findOne({_id: sinavKagidi.sinav});
+      const yanit = _.findWhere(sinavKagidi.yanitlar, {soruId: sinav.sorular[ix].soruId});
       if (yanit.yanitlandi > 0) {
         if (yanit.dogru === true) {
           return ' cevapDogru';
@@ -78,21 +78,22 @@ Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAna
   return undefined;
 });
 
-M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
-  var template=null,data=null;
+M.L.komponentSec = (seciliSoru,ogrenciYanitGoster) => {
+  let template = null,
+      data = null;
 
   if (seciliSoru) {
     if (ogrenciYanitGoster) {
 
-      var sinavKagidi = M.C.SinavKagitlari.findOne({
+      const sinavKagidi = M.C.SinavKagitlari.findOne({
         sinav: Session.get('sinavYanitGoster'),
         ogrenci: Meteor.userId(),
         ogrenciSinavaGirdi: true,
         egitimYili: M.C.AktifEgitimYili.findOne().egitimYili
       });
 
-      var ogrenciYaniti = _.findWhere(sinavKagidi.yanitlar, {soruId: seciliSoru._id}).yanit;
-      var ogrenciYanitiIndex = sinavKagidi.yanitlar.findIndex(function(yanit) {
+      const ogrenciYaniti = _.findWhere(sinavKagidi.yanitlar, {soruId: seciliSoru._id}).yanit;
+      const ogrenciYanitiIndex = sinavKagidi.yanitlar.findIndex(yanit => {
         return yanit.soruId === seciliSoru._id;
       });
 
@@ -141,7 +142,7 @@ M.L.komponentSec = function(seciliSoru,ogrenciYanitGoster) {
         case 'boslukDoldurma':
           template = 'soruboslukDoldurma';
           data = {
-            cevap: _.map(seciliSoru.yanit.boslukDoldurma.cevap.replace(/\[[^\]]*?\]/g, '||||').split('||||'), function(m,x){return (m)+(ogrenciYaniti.cevaplar[x]?('['+ogrenciYaniti.cevaplar[x]+']'):'')}).join('')
+            cevap: seciliSoru.yanit.boslukDoldurma.cevap.replace(/\[[^\]]*?\]/g, '||||').split('||||').map((m,x) => (m)+(ogrenciYaniti.cevaplar[x]?('['+ogrenciYaniti.cevaplar[x]+']'):'')).join('')
           };
           break;
         default:

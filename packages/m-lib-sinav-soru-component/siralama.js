@@ -1,43 +1,41 @@
 Template.sorusiralama.onCreated(function() {
-  var template = this;
-  template.seciliSoru = new ReactiveVar();
+  this.seciliSoru = new ReactiveVar();
 
-  template.sinav = new ReactiveVar();
-  template.sinavKagidiId = new ReactiveVar();
-  template.seciliSoruIndex = new ReactiveVar();
-  template.secenekler = new ReactiveVar();
+  this.sinav = new ReactiveVar();
+  this.sinavKagidiId = new ReactiveVar();
+  this.seciliSoruIndex = new ReactiveVar();
+  this.secenekler = new ReactiveVar();
 
-  template.autorun(function() {
-    template.sinav.set(Template.currentData().sinav);
-    template.sinavKagidiId.set(Template.currentData().sinavKagidiId);
-    template.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
-    template.secenekler.set(Template.currentData().secenekler);
+  this.autorun(() => {
+    this.sinav.set(Template.currentData().sinav);
+    this.sinavKagidiId.set(Template.currentData().sinavKagidiId);
+    this.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
+    this.secenekler.set(Template.currentData().secenekler);
 
-    template.seciliSoru.set(template.sinav.get() === true && M.C.SinavKagitlari.findOne({
-        _id: template.sinavKagidiId.get()
-      }).yanitlar[template.seciliSoruIndex.get()]);
+    this.seciliSoru.set(this.sinav.get() === true && M.C.SinavKagitlari.findOne({
+        _id: this.sinavKagidiId.get()
+      }).yanitlar[this.seciliSoruIndex.get()]);
   })
 });
 
 Template.sorusiralama.onRendered(function() {
-  var template = this;
-  template.autorun(function() {
-    Tracker.afterFlush(function() {
-      if (template.sinav.get() === true && template.seciliSoru.get().yanit.secenekler.length >=0) {
-        var el = document.getElementById('siralama-'+template.seciliSoru.get().soruId+'-'+template.seciliSoru.get().yanitlandi);
+  this.autorun(() => {
+    Tracker.afterFlush(() => {
+      if (this.sinav.get() === true && this.seciliSoru.get().yanit.secenekler.length >=0) {
+        const el = document.getElementById('siralama-'+this.seciliSoru.get().soruId+'-'+this.seciliSoru.get().yanitlandi);
         if (el) {
           if (typeof siralamaSortable !== 'undefined') {
             siralamaSortable.destroy()
           }
-          var siralamaSortable = new Sortable(el, {
+          const siralamaSortable = new Sortable(el, {
             forceFallback: true,
-            onEnd: function() {
+            onEnd() {
               $('#cozumAlani').animate({
                 scrollTop: '-=500'
               }, 0)
             }
           });
-          siralamaSortable.sort(_.map(template.seciliSoru.get().yanit.secenekler, function(secenek) {return JSON.stringify(secenek).toString().toHashCode();}));
+          siralamaSortable.sort(this.seciliSoru.get().yanit.secenekler.map(secenek => JSON.stringify(secenek).toString().toHashCode()));
         }
       }
     })
@@ -45,15 +43,15 @@ Template.sorusiralama.onRendered(function() {
 });
 
 Template.sorusiralama.helpers({
-  secenekler: function() {
+  secenekler() {
     if (Template.instance().sinav.get() === true) {
       return Template.instance().seciliSoru.get().yanit.secenekler;
     } else {
       return Template.instance().secenekler.get();
     }
   },
-  id: function() {
-    var id = 'siralama';
+  id() {
+    let id = 'siralama';
     if (Template.instance().sinav.get() === true) {
       id = id + '-' + Template.instance().seciliSoru.get().soruId + '-' + Template.instance().seciliSoru.get().yanitlandi;
     }

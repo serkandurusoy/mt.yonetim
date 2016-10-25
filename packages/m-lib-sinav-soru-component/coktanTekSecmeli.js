@@ -1,25 +1,24 @@
 Template.sorucoktanTekSecmeli.onCreated(function() {
-  var template = this;
-  template.yanit = new ReactiveVar();
-  template.sinav = new ReactiveVar();
-  template.sinavKagidiId = new ReactiveVar();
-  template.seciliSoruIndex = new ReactiveVar();
-  template.secenekler = new ReactiveVar();
-  
-  template.autorun(function() {
-    template.sinav.set(Template.currentData().sinav);
-    template.sinavKagidiId.set(Template.currentData().sinavKagidiId);
-    template.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
-    template.secenekler.set(Template.currentData().secenekler);
-    
-    template.yanit.set(template.sinav.get() === true && M.C.SinavKagitlari.findOne({
-        _id: template.sinavKagidiId.get()
-      }).yanitlar[template.seciliSoruIndex.get()].yanit);
+  this.yanit = new ReactiveVar();
+  this.sinav = new ReactiveVar();
+  this.sinavKagidiId = new ReactiveVar();
+  this.seciliSoruIndex = new ReactiveVar();
+  this.secenekler = new ReactiveVar();
+
+  this.autorun(() => {
+    this.sinav.set(Template.currentData().sinav);
+    this.sinavKagidiId.set(Template.currentData().sinavKagidiId);
+    this.seciliSoruIndex.set(Template.currentData().seciliSoruIndex);
+    this.secenekler.set(Template.currentData().secenekler);
+
+    this.yanit.set(this.sinav.get() === true && M.C.SinavKagitlari.findOne({
+        _id: this.sinavKagidiId.get()
+      }).yanitlar[this.seciliSoruIndex.get()].yanit);
   })
 });
 
 Template.sorucoktanTekSecmeli.helpers({
-  secenekler: function() {
+  secenekler() {
     if (Template.instance().sinav.get() === true) {
       return Template.instance().yanit.get().secenekler;
     } else {
