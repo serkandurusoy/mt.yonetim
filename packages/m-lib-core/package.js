@@ -10,9 +10,6 @@ Package.onUse(function(api) {
 
   var packages = [
     'meteor-base',
-    'ecmascript',
-    'ecmascript-runtime',
-    'es5-shim',
     'jquery',
     'underscore',
     'check',

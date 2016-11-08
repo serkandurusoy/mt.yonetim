@@ -467,18 +467,18 @@ Template.sinavOgrencilerModal.helpers({
   ogrenciler(sube) {
     const sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
     return sinav && M.C.Users.find({
-      aktif: true,
-      role: 'ogrenci',
-      kurum: sinav.kurum,
-      sinif: sinav.sinif,
-      sube: sube
-    }, {
-      sort: {
-        sube: 1,
-        nameCollate: 1,
-        lastNameCollate: 1
-      }
-    });
+        aktif: true,
+        role: 'ogrenci',
+        kurum: sinav.kurum,
+        sinif: sinav.sinif,
+        sube: sube
+      }, {
+        sort: {
+          sube: 1,
+          nameCollate: 1,
+          lastNameCollate: 1
+        }
+      });
   },
   sinavKagidi(ogrenci) {
     return M.C.SinavKagitlari.findOne({
