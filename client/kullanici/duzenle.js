@@ -39,6 +39,11 @@ AutoForm.hooks({
           AutoForm.validateField(form.formId, 'emails.0.address');
         }
 
+        if (error.error && error.error === 'tcKimlikHatali') {
+          form.addStickyValidationError('tcKimlik', 'tcKimlikHatali');
+          AutoForm.validateField(form.formId, 'tcKimlik');
+        }
+
         if (error.reason && error.reason === 'Geçerli bir TC kimlik numarası girilmeli') {
           form.addStickyValidationError('tcKimlik', 'tcKimlikHatali');
           AutoForm.validateField(form.formId, 'tcKimlik');

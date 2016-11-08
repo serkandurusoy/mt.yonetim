@@ -122,7 +122,7 @@ Template.ogrenciYukleme.events({
             });
             if (ogrenciler.length > 0) {
               t.ogrenciListesi.set(ogrenciler);
-              toastr.success('Dosya okundu. Aşağıdaki kayıtlar yükleme için denenecekler.');
+              toastr.success('Dosya okundu. Listelenen kayıtlar yükleme için denenecekler.');
             } else {
               t.ogrenciListesi.set(null);
               toastr.error('Dosyada yüklenmeye uygun kayıt bulunamadı.');

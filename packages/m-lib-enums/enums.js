@@ -88,7 +88,7 @@ M.E.SinifObjects = [
 ];
 M.E.Sinif = _.pluck(M.E.SinifObjects,'name');
 
-M.E.Sube = ['A','B','C','D','E','F','G','H','I','J'];
+M.E.Sube = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','R','S','T','U','V','Y','Z'];
 
 M.E.SoruTipiObjects = [
   {name: 'dogruYanlis', label: 'Doğru Yanlış'},

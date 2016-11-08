@@ -411,7 +411,7 @@ Template.sorularinTumunuCikarModal.events({
 Template.soruEkleModal.helpers({
   sorular: function(){
     var sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
-    var uygunSorular = ReactiveMethod.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
+    var uygunSorular = sinav && ReactiveMethod.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
     //TODO: diger benzer liste helper'larini da bunun gibi yap, reactive undefined sorunu kalmasin _.pluck yuzunden gelen
     var sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: Meteor.userId(), soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(function(sepet) {return sepet.soru;});
     //TODO: sort and group by konu
@@ -431,8 +431,7 @@ Template.soruEkleModal.events({
         toastr.success('Sepetinizdeki tüm uygun sorular teste eklendi.')
       }
     });
-  }
-});
+  }});
 
 Template.soruEkleKart.events({
   'click [data-trigger="ekle"]': function(e,t) {
@@ -445,7 +444,11 @@ Template.soruEkleKart.events({
         toastr.success('Soru teste eklendi.');
       }
     });
+  },
+  'click [data-trigger="detayGor"]': function(e,t) {
+    $('#soruEkleModal').closeModal();
   }
+
 });
 
 Template.sinavOgrencilerModal.onCreated(function() {
