@@ -76,7 +76,7 @@ M.C.Users.Schema = new SimpleSchema({
       const tckimlik = this.value.toString();
       const ad = this.field('name').value;
       const soyad = this.field('lastName').value;
-      const dogumyili = this.field('dogumTarihi').value && moment.tz(new Date(this.field('dogumTarihi').value),'Europe/Istanbul').toDate().getFullYear();
+      const dogumtarihi = this.field('dogumTarihi').value && moment.tz(new Date(this.field('dogumTarihi').value),'Europe/Istanbul').toDate().getFullYear();
 
       if (tckimlik.indexOf('000000000') === 0 && tckimlik.length === 11) {
         return true;
@@ -86,7 +86,7 @@ M.C.Users.Schema = new SimpleSchema({
         return 'tcKimlikHatali';
       }
       if (Meteor.isServer) {
-        return M.L.TCKimlikDogrula(tckimlik, ad, soyad, dogumyili) ? true : 'tcKimlikHatali';
+        return M.L.TCKimlikDogrula(tckimlik, ad, soyad, dogumtarihi) ? true : 'tcKimlikHatali';
       }
 
       return true;

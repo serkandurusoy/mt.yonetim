@@ -179,7 +179,7 @@
 <template name="soruEkleKart">
   <li class="collection-item {{#unless aktif}}pasif{{/unless}}">
     <div>
-      <a title="Detay gör" class="secondary-content" href="{{pathFor 'soruDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
+      <a data-trigger="detayGor" title="Detay gör" class="secondary-content" href="{{pathFor 'soruDetay' _id=_id}}"><i class="material-icons">chevron_right</i></a>
       <a data-trigger="ekle" title="Soruyu teste ekle" class="secondary-content margin-right-6px"><i class="green-text material-icons">local_library</i></a>
       {{foreignField 'Dersler' alan.ders 'isim'}}<br>
       {{alan.egitimYili}} / {{alan.konu}}<br>

@@ -211,7 +211,7 @@ Template.sinavDetayKart.events({
     sinavOnizlemeView = Blaze.render(Template.sinavOnizlemeModal, document.getElementsByTagName('main')[0]);
   },
   'click [data-trigger="ogrenciler"]'(e,t) {
-    const sinavOgrencilerView = Blaze.render(Template.sinavOgrencilerModal, document.getElementsByTagName('main')[0]);
+    sinavOgrencilerView = Blaze.render(Template.sinavOgrencilerModal, document.getElementsByTagName('main')[0]);
     $('#sinavOgrencilerModal').openModal({
       complete() {
         Blaze.remove(sinavOgrencilerView);
@@ -409,7 +409,7 @@ Template.sorularinTumunuCikarModal.events({
 Template.soruEkleModal.helpers({
   sorular(){
     const sinav = M.C.Sinavlar.findOne({_id: FlowRouter.getParam('_id')});
-    const uygunSorular = ReactiveMethod.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
+    const uygunSorular = sinav && ReactiveMethod.call('sinavaUygunSorular',sinav.kurum,sinav.egitimYili,sinav.ders,sinav.sinif);
     //TODO: diger benzer liste helper'larini da bunun gibi yap, reactive undefined sorunu kalmasin _.pluck yuzunden gelen
     const sepetSoruIdArray = uygunSorular && M.C.SoruSepetleri.find({createdBy: Meteor.userId(), soru: {$in: _.difference(uygunSorular, _.pluck(sinav.sorular, 'soruId'))}}, {sort: {createdAt: 1}}).map(sepet=> sepet.soru);
     //TODO: sort and group by konu
@@ -443,7 +443,10 @@ Template.soruEkleKart.events({
         toastr.success('Soru teste eklendi.');
       }
     });
-  }
+  },
+  'click [data-trigger="detayGor"]'(e,t) {
+    $('#soruEkleModal').closeModal();
+  },
 });
 
 Template.sinavOgrencilerModal.onCreated(function() {
