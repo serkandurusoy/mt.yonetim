@@ -1,3 +1,5 @@
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'YardimDokumanlari',
   collection: 'yardimdokumanlari',

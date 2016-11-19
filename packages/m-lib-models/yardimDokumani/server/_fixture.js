@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+
+import { FS } from 'meteor/cfs:collection';
+
+import { M } from 'meteor/m:lib-core';
+
 Meteor.startup(() => {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.YardimDokumanlari.find().count() === 0) {
     let yardimDokumaniId='';
