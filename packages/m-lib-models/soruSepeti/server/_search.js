@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 Meteor.methods({
   'search.soruSepeti'(keywords, filters) {
     check(keywords, Match.OneOf(undefined, null, String));

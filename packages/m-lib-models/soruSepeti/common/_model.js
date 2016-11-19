@@ -1,3 +1,7 @@
+import { Meteor } from 'meteor/meteor';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'SoruSepetleri',
   collection: 'sorusepetleri',
