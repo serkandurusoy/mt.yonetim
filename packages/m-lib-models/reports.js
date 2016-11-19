@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 const numericSort = array => {
   return array
     .slice()

@@ -1,0 +1,20 @@
+import './accounts/server';
+import './adresMaster/server';
+import './aktifEgitimYili/server';
+import './comment/server';
+import './ders/server';
+import './giris/server';
+import './gridfs/server';
+import './karakter/server';
+import './kurum/server';
+import './mufredat/server';
+import './muhur/server';
+import './notification/server';
+import './sinav/server';
+import './sinavKagidi/server';
+import './soru/server';
+import './soruFavori/server';
+import './soruSepeti/server';
+import './yardimDokumani/server';
+
+import './common';
