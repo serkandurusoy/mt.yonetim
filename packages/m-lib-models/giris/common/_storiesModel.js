@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Stories = new Mongo.Collection('stories');
 
 M.C.Stories.Schema = new SimpleSchema({

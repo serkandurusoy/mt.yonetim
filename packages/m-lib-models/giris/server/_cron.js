@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+
+import { SyncedCron } from 'meteor/percolate:synced-cron';
+
+import { M } from 'meteor/m:lib-core';
+
 if (Meteor.settings.public.APP === 'YONETIM') {
   SyncedCron.add({
     name: '1 aydan eski storiesi sil',
