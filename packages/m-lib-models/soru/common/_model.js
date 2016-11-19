@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'Sorular',
   collection: 'sorular',

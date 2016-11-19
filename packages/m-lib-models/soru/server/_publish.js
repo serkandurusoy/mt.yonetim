@@ -1,3 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+
+import { M } from 'meteor/m:lib-core'
+
 Meteor.publishComposite('sorular', function() {
   return {
     find() {

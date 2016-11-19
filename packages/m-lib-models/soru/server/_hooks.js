@@ -1,3 +1,8 @@
+import { M } from 'meteor/m:lib-core';
+
+import { _ } from 'meteor/underscore';
+
+
 M.C.Sorular.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
