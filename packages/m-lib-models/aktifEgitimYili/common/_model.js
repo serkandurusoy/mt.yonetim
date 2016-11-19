@@ -1,3 +1,7 @@
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 // TODO: bir onceki egitim yilina donus yapilamamali ve geciste onceki yil icin clean up ve kapanis olmali
 M.C.setUpCollection({
   object: 'AktifEgitimYili',
