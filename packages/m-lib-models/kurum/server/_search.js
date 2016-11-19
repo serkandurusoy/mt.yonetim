@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Kurumlar.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,

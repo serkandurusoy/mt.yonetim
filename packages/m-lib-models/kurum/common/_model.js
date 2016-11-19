@@ -1,3 +1,12 @@
+import { Meteor } from 'meteor/meteor';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { Collate } from 'meteor/m:lib-collate';
+import { M } from 'meteor/m:lib-core';
+
+
 M.C.setUpCollection({
   object: 'Kurumlar',
   collection: 'kurumlar',

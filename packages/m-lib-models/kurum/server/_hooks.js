@@ -1,3 +1,7 @@
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Kurumlar.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;
