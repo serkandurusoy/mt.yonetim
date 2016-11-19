@@ -1,3 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Iller = new Mongo.Collection('iller');
 M.C.Ilceler = new Mongo.Collection('ilceler');
 

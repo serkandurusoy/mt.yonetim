@@ -1,3 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+
+import { M } from 'meteor/m:lib-collection';
+
+
 Meteor.publishComposite(null, function() {
   return {
     find() {

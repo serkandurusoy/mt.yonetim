@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+
+import { M } from 'meteor/m:lib-core';
+import { Collate } from 'meteor/m:lib-collate';
+
+
 Meteor.startup(() => {
   if (Meteor.settings.public.APP === 'YONETIM' && (M.C.Iller.find().count() === 0 || M.C.Ilceler.find().count() === 0) ) {
     const ilArray = [
