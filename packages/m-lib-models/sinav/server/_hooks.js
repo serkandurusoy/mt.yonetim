@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
+import { _ } from 'meteor/underscore';
+
+import { moment } from 'meteor/momentjs:moment';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Sinavlar.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;

@@ -1,3 +1,12 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { Email } from 'meteor/email';
+import { _ } from 'meteor/underscore';
+
+import { SyncedCron } from 'meteor/percolate:synced-cron';
+
+import { M } from 'meteor/m:lib-core';
+
 if (Meteor.settings.public.APP === 'YONETIM') {
 
   SyncedCron.add({
@@ -603,7 +612,7 @@ if (Meteor.settings.public.APP === 'YONETIM') {
     },
 
     'sinavAcVeMuhurAta'() {
-      // TODO: there is some duplication of this code in comment/server/hooks.js
+      // TODO: there is some duplication of this code in comment/server/_hooks.js
       this.unblock();
 
       M.C.Kurumlar.find().forEach(kurum => {

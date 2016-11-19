@@ -1,3 +1,13 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { AutoForm } from 'meteor/aldeed:autoform';
+import { moment } from 'meteor/momenjs:moment';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'Sinavlar',
   collection: 'sinavlar',
