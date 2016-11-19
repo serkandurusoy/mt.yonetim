@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Comments = new Mongo.Collection('comments');
 
 M.C.Comments.Schema = new SimpleSchema({

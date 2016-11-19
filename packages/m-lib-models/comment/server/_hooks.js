@@ -1,5 +1,9 @@
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-collections';
+
 M.C.Comments.after.insert((userId, document) => {
-  // TODO: there is some duplication of this code in sinav/server/cron.js
+  // TODO: there is some duplication of this code in sinav/server/_cron.js
   let collaborators = [];
 
   // Tum commentlerin commentorlarini al
