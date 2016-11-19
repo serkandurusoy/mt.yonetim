@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { _ } from 'meteor/underscore';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.SinavKagitlari = new Mongo.Collection('sinavkagitlari');
 
 M.C.SinavKagitlari.Schema = new SimpleSchema({
