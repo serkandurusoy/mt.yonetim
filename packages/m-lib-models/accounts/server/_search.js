@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor'
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 // TODO: Schema attachment had to be done over at the model file for some god knows why reason!
 
 if (Meteor.isServer) {

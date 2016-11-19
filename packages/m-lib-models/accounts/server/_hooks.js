@@ -1,3 +1,5 @@
+import { M } from 'meteor/m:lib-core';
+
 M.C.Users.after.insert(function(userId,doc) {
   if (!userId) {
     userId = M.C.Users.findOne({'emails.address': 'admin@mitolojix.com'})._id;

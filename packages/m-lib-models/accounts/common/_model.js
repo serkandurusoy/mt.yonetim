@@ -1,3 +1,19 @@
+import { Meteor } from 'meteor/meteor';
+
+import { Accounts } from 'meteor/accounts-base';
+import { check } from 'meteor/check';
+import { Email } from 'meteor/email';
+import { _ } from 'meteor/underscore';
+
+import { moment } from 'meteor/momentjs:moment';
+import { Security } from 'meteor/ongoworks:security';
+import { Vermongo } from 'meteor/mickaelfm:vermongo';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Users = Meteor.users;
 
 M.C.Users.Schema = new SimpleSchema({
