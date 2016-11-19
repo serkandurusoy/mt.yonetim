@@ -1,3 +1,12 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Mufredat.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,

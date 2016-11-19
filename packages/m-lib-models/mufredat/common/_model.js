@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-collections';
+
 M.C.setUpCollection({
   object: 'Mufredat',
   collection: 'mufredat',
