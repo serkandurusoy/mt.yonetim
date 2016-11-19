@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
+import { _ } from 'meteor/underscore';
+
+import { SyncedCron } from 'meteor/percolate:synced-cron';
+
+import { M } from 'meteor/m:lib-core';
+
 if (Meteor.settings.public.APP === 'YONETIM') {
   SyncedCron.add({
     name: 'Online olmayan herkese bekleyen notificationsini hatırlat.',

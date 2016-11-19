@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+
+import { Security } from 'meteor/ongoworks:security';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Notifications = new Mongo.Collection('notifications');
 
 M.C.Notifications.Schema = new SimpleSchema({
