@@ -1,3 +1,8 @@
+import { Meteor } from 'meteor/meteor';
+
+import { Collate } from 'meteor/m:lib-collate';
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'Dersler',
   collection: 'dersler',
