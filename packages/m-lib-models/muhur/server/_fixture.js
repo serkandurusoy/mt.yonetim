@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
+import { FS } from 'meteor/cfs:collection';
+
+import { M } from 'meteor/m:lib-core';
+
+
 Meteor.startup(function () {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Dersler.find().count() === 0 && M.C.Muhurler.find().count() === 0 && M.C.Mufredat.find().count() === 0) {
     const dersler = [

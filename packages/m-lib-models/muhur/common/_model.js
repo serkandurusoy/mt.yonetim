@@ -1,3 +1,9 @@
+import { _ } from 'meteor/underscore';
+
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection({
   object: 'Muhurler',
   collection: 'muhurler',

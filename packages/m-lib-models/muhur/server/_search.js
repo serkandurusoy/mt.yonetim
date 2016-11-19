@@ -1,3 +1,11 @@
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.Muhurler.attachSchema(new SimpleSchema({
   'searchSource.language': {
     type: String,
