@@ -1,3 +1,7 @@
+import { Security } from 'meteor/ongoworks:security';
+
+import { M } from 'meteor/m:lib-core';
+
 Security.permit([ 'insert' ]).collections([ M.FS.KurumLogo ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
 Security.permit([ 'update' ]).collections([ M.FS.KurumLogo ]).ifLoggedIn().userHasRole('mitolojix').allowInClientCode();
 Security.permit([ 'remove' ]).collections([ M.FS.KurumLogo ]).never().allowInClientCode();

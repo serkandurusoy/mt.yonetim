@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
+import { FS } from 'meteor/cfs:collection';
+import { gm } from 'meteor/cfs:graphicsmagick';
+
+import { M } from 'meteor/m:lib-core';
+
 Meteor.startup(() => {
   if (Meteor.isServer) {
     if (!gm.isAvailable) {
