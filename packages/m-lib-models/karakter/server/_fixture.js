@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
+import { FS } from 'meteor/cfs:collection';
+
+import { M } from 'meteor/m:lib-core';
+
+
 Meteor.startup(function () {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Karakterler.find().count() === 0) {
     M.E.Cinsiyet.forEach(function(cinsiyet) {
