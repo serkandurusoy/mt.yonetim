@@ -9,7 +9,7 @@ Package.onUse(function(api) {
 
   api.use('m:lib-core@0.0.1');
 
-  api.addFiles('common.js');
-  api.addFiles('server.js','server');
+  api.mainModule('main-client.js','client');
+  api.mainModule('main-server.js','server');
 
 });

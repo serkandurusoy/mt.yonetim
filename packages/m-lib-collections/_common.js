@@ -1,3 +1,14 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
 M.C.setUpCollection = model => {
   check(model, {
     object: String,

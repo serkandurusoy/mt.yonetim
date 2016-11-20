@@ -1,3 +1,5 @@
+import { M } from 'meteor/m:lib-core';
+
 const userCursor = userId => {
   return M.C.Users.find({_id: userId}, {fields: {name: 1, lastName: 1}})
 };
