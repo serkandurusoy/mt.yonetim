@@ -1,3 +1,20 @@
+import { Meteor } from 'meteor/meteor';
+import { Blaze } from 'meteor/blaze';
+import { check } from 'meteor/check';
+import { Session } from 'meteor/session';
+import { Template } from 'meteor/templating';
+import { $ } from 'meteor/jquery';
+import { _ } from 'meteor/underscore';
+
+import { AutoForm } from 'meteor/aldeed:autoform';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { moment } from 'meteor/momentjs:moment';
+import { TimeSync } from 'meteor/mizzao:timesync';
+
+import { M } from 'meteor/m:lib-core';
+
+import '../0-fork--autoform-file-materialize/lib/client/autoform-file.html';
+
 // TODO: Ugly hack to rename src from autoform materialize file due to it appending the token and using full url as src instead of file name
 if (Meteor.settings.public.APP === 'YONETIM') {
   Template.fileThumbIcon.helpers({
