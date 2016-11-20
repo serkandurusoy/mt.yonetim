@@ -1,3 +1,8 @@
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { M } from 'meteor/m:lib-core';
+
 M.E.ZorlukDereceleri = [1,2,3,4,5];
 
 M.E.Levenshtein = [0,1,2,3,4,5];

@@ -10,6 +10,6 @@ Package.onUse(function(api) {
 
   api.use('m:lib-core@0.0.1');
 
-  api.addFiles('enums.js');
+  api.mainModule('main.js');
 
 });
