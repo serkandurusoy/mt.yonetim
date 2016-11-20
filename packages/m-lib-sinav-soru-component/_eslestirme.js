@@ -1,3 +1,12 @@
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { ReactiveVar } from 'meteor/reactive-var'
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
+import './_eslestirme.html';
+
 Template.sorueslestirme.onCreated(function() {
   this.seciliSoru = new ReactiveVar();
   this.yanit = new ReactiveVar();

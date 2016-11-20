@@ -1,3 +1,15 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { Session } from 'meteor/session';
+import { _ } from 'meteor/underscore';
+
+import { ReactiveArray } from 'meteor/manuel:reactivearray';
+
+import { M } from 'meteor/m:lib-core';
+
+import './_soruCubugu.html';
+
 Template.sorucubugu.onCreated(function() {
   this.isaretliSorular = new ReactiveArray([]);
 });

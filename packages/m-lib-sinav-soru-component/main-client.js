@@ -1,0 +1,15 @@
+import './_boslukDoldurma.html';
+import './_boslukDoldurma';
+import './_coktanCokSecmeli.html';
+import './_coktanCokSecmeli';
+import './_coktanTekSecmeli.html';
+import './_coktanTekSecmeli';
+import './_dogruYanlis.html';
+import './_dogruYanlis';
+import './_eslestirme.html';
+import './_eslestirme';
+import './_siralama.html';
+import './_siralama';
+import './_soruCubugu.html';
+import './_soruCubugu';
+import './_yonerge.html';

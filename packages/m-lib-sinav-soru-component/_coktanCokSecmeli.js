@@ -1,3 +1,10 @@
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var'
+
+import { M } from 'meteor/m:lib-core';
+
+import './_coktanCokSecmeli.html';
+
 Template.sorucoktanCokSecmeli.onCreated(function() {
   this.yanit = new ReactiveVar();
   this.sinav = new ReactiveVar();

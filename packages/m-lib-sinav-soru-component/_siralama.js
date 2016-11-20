@@ -1,3 +1,12 @@
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { ReactiveVar } from 'meteor/reactive-var'
+import { $ } from 'meteor/jquery';
+
+import { M } from 'meteor/m:lib-core';
+
+import './_siralama.html';
+
 Template.sorusiralama.onCreated(function() {
   this.seciliSoru = new ReactiveVar();
 

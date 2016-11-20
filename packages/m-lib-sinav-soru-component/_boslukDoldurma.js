@@ -1,3 +1,12 @@
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { ReactiveVar } from 'meteor/reactive-var'
+import { $ } from 'meteor/jquery';
+
+import { M } from 'meteor/m:lib-core';
+
+import './_boslukDoldurma.html';
+
 const event = 'oninput' in document.createElement('input') ? 'input' : 'keydown';
 
 $.fn.autoGrowInput = options => {
