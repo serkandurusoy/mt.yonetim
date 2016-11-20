@@ -1,3 +1,5 @@
+import { M } from 'meteor/m:lib-core';
+
 M.L.TCKimlikFormatCheck = tckimlikno =>{
   const value = tckimlikno;
   const isEleven = /^[0-9]{11}$/.test(value);

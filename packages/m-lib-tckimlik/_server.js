@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
+import { moment } from 'meteor/momentjs:moment';
+import { Soap } from 'meteor/zardak:soap';
+
+import { M } from 'meteor/m:lib-core';
+
 M.L.TCKimlikDogrula = (tckimlik, ad, soyad, dogumtarihi) => {
   let url;
   let args;
