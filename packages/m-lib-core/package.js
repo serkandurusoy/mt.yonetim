@@ -82,9 +82,8 @@ Package.onUse(function(api) {
   api.use('meteor-base');
   api.use('percolate:synced-cron@1.3.0');
 
-  api.addFiles('cron-setup.js','server');
-
-  api.addFiles('namespace.js');
+  api.mainModule('main-server.js','server');
+  api.mainModule('main-client.js','client');
 
   api.export('M');
 
