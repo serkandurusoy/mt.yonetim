@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { $ } from 'meteor/jquery';
+
+import { M } from 'meteor/m:lib-core';
+
 // - staleSessionHeartbeatInterval: interval (in ms) at which activity heartbeats are sent up to the server
 // - staleSessionActivityEvents: the jquery events which are considered indicator of activity e.g. in an on() call.
 //

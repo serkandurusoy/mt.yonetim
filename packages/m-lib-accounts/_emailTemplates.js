@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
+import { _ } from 'meteor/underscore';
+
+import { M } from 'meteor/m:lib-core';
+
 const getOyunUrl = url => {
   return Meteor.settings.public.URL.OYUN + "/#" + url.split('#')[1];
 };

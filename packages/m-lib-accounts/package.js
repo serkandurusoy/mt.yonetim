@@ -9,10 +9,7 @@ Package.onUse(function(api) {
 
   api.use('m:lib-core@0.0.1');
 
-  api.addFiles('server.js','server');
-  api.addFiles('emailTemplates.js','server');
-  api.addFiles('client.js','client');
-  api.addFiles('userStatusServer.js','server');
-  api.addFiles('userStatusClient.js','client');
+  api.mainModule('main-server.js','server');
+  api.mainModule('main-client.js','client');
 
 });
