@@ -1,3 +1,16 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { Session } from 'meteor/session';
+import { _ } from 'meteor/underscore';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
+import './liste.html';
+
 Template.mufredatListe.onCreated(function() {
   this.subscribe('mufredatlar');
   this.subscribe('fsdersicerik');

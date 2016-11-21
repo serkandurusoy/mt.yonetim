@@ -1,3 +1,13 @@
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import './tarihce.html';
+
 Template.mufredatTarihce.onCreated(function() {
   this.autorun(() => {
     this.subscribe('mufredat', FlowRouter.getParam('_id'));

@@ -1,3 +1,17 @@
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { PDFJS } from 'meteor/pascoual:pdfjs';
+
+import { M } from 'meteor/m:lib-core';
+
+import './detay.html';
+import './detayKart.html';
+
 Template.mufredatDetay.onCreated(function() {
   this.autorun(()=> {
     this.subscribe('mufredat', FlowRouter.getParam('_id'));
