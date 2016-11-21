@@ -1,3 +1,10 @@
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+
+import './tarihce.html';
+
 Template.dersTarihce.events({
   'click [data-trigger="revert"]'(e,t) {
     const {ref: _id} = this;
