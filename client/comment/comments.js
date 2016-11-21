@@ -1,3 +1,13 @@
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './comments.html';
+
 Template.comments.onCreated(function(){
   const routeName = FlowRouter.getRouteName();
   const doc = FlowRouter.getParam('_id');
