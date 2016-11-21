@@ -1,3 +1,16 @@
+import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { Accounts } from 'meteor/accounts-base';
+import { Session } from 'meteor/session';
+import { $ } from 'meteor/jquery';
+import { _ } from 'meteor/underscore';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './tarihce.html';
+
 Template.kullaniciTarihce.onCreated(function() {
   const template = this;
   template.autorun(() => {

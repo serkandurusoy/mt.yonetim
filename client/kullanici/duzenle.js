@@ -1,3 +1,13 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
+import './duzenle.html';
+
 Template.kullaniciDuzenle.onCreated(function() {
   const template = this;
   template.autorun(() => {

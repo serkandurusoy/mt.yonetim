@@ -1,3 +1,15 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './detay.html';
+import './detayKart.html';
+
 Template.kullaniciDetay.onCreated(function() {
   const template = this;
   template.autorun(() => {
