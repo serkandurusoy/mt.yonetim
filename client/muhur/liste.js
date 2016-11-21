@@ -1,3 +1,16 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { _ } from 'meteor/underscore';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { AutoForm } from 'meteor/aldeed:autoform';
+
+import { M } from 'meteor/m:lib-core';
+
+import './liste.html';
+
 Template.muhurListe.onCreated(function() {
   let template = this;
   template.searchResults = new ReactiveVar({});
