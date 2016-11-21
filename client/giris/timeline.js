@@ -1,3 +1,12 @@
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+
+import { Counts } from 'meteor/tmeasday:publish-counts';
+
+import { M } from 'meteor/m:lib-core';
+
+import './timeline.html';
+
 Template.timeline.onCreated(function() {
   const template = this;
   template.storyLimit = new ReactiveVar(10);
