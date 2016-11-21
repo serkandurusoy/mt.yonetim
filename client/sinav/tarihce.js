@@ -1,3 +1,13 @@
+import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { Session } from 'meteor/session';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import './tarihce.html';
+
 Template.sinavTarihce.onCreated(function() {
   this.autorun(() => {
     this.subscribe('sinav', FlowRouter.getParam('_id'));

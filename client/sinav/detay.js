@@ -1,3 +1,19 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+import { _ } from 'meteor/underscore';
+
+import { moment } from 'meteor/lbee:moment-helpers';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './detay.html';
+import './detayKart.html';
+
 let iptalView;
 let kilitleView;
 let taslakDegistirView;

@@ -1,3 +1,13 @@
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { Blaze } from 'meteor/blaze';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './onizleme.html';
+
 Template.sinavOnizlemeModal.onCreated(function() {
   this.renderComponent = new ReactiveVar(true);
   this.seciliSoruIndex = new ReactiveVar(0);
