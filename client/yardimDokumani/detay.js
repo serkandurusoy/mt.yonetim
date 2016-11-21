@@ -1,3 +1,15 @@
+import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { PDFJS } from 'meteor/pascoual:pdfjs';
+
+import { M } from 'meteor/m:lib-core';
+
+import './detay.html';
+import './detayKart.html';
+
 Template.yardimDokumaniDetay.helpers({
   yardimDokumani() {
     return M.C.YardimDokumanlari.findOne({_id: FlowRouter.getParam('_id')});
