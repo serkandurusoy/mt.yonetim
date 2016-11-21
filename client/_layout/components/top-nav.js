@@ -1,3 +1,16 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+
+import { PDFJS } from 'meteor/pascoual:pdfjs';
+
+import { M } from 'meteor/m:lib-core';
+
+import './top-nav.html';
+
 Template.topnav.onCreated(function() {
   this.searching = new ReactiveVar(false);
 });

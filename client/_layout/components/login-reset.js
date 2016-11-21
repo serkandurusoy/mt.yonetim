@@ -1,3 +1,16 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Accounts } from 'meteor/accounts-base';
+import { Session } from 'meteor/session';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './login-reset.html';
+
 Template.accountsTemplate.helpers({
   resetFlow() {
     return Session.get('resetToken');

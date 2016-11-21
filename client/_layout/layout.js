@@ -1,3 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+
+import { BlazeLayout } from 'meteor/kadira:blaze-layout';
+
+import './layout.html';
+
 BlazeLayout.setRoot('body');
 
 Reload.delay = 4000;

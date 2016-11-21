@@ -1,3 +1,12 @@
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { $ } from 'meteor/jquery';
+
+import { M } from 'meteor/m:lib-core';
+
+import './tarihceRevertModal.html';
+
 tarihceRevertModalView=null;
 
 Template.tarihceRevertModal.events({

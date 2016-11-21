@@ -1,3 +1,13 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { _ } from 'meteor/underscore';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './fab.html';
+
 Template.fab.helpers({
   canViewFab() {
     const route = FlowRouter.getRouteName();
