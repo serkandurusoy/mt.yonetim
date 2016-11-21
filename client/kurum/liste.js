@@ -1,3 +1,12 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { Session } from 'meteor/session';
+
+import { M } from 'meteor/m:lib-core';
+
+import './liste.html';
+
 Template.kurumListe.onCreated(function() {
   const template = this;
   template.searchResults = new ReactiveVar();
