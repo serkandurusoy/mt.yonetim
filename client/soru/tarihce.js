@@ -1,3 +1,13 @@
+import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import './tarihce.html';
+
 Template.soruTarihce.onCreated(function() {
   this.autorun(() => {
     this.subscribe('soru', FlowRouter.getParam('_id'));

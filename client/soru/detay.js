@@ -1,3 +1,17 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
+import { Session } from 'meteor/session';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
+
+import { FlowRouter }from 'meteor/kadira:flow-router';
+
+import { M } from 'meteor/m:lib-core';
+
+import './detay.html';
+import './detayKart.html';
+
 let kilitleView;
 let taslakDegistirView;
 
