@@ -1,3 +1,16 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { _ } from 'meteor/underscore';
+
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { XLSX } from 'meteor/huaming:js-xlsx';
+
+import { M } from 'meteor/m:lib-core';
+
+import './yukle.html';
+
 Template.ogrenciYukleme.onCreated(function() {
   this.disabled = new ReactiveVar("disabled");
   this.ogrenciListesi = new ReactiveVar(null);
