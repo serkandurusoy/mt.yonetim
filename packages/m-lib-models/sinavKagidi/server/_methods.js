@@ -3,7 +3,10 @@ import { check } from 'meteor/check';
 
 import { _ } from 'meteor/underscore';
 
+import { getSlug } from 'meteor/ongoworks:speakingurl';
+
 import { M } from 'meteor/m:lib-core';
+
 
 Meteor.methods({
   'sinavaBasla'(args) {

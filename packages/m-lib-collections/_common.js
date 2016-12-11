@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
 import { AutoForm } from 'meteor/aldeed:autoform';
 
 import { M } from 'meteor/m:lib-core';
@@ -61,7 +62,7 @@ M.C.setUpCollection = model => {
           }
         },
         autoform: {
-          class () {
+          class() {
             const formId = AutoForm.getFormId();
             const cf = AutoForm.getFieldValue('_clonedFrom', formId);
             $('.autoform-object-field:has([name^="_clonedFrom"])').hide();
@@ -70,10 +71,16 @@ M.C.setUpCollection = model => {
         }
       },
       '_clonedFrom._id': {
-        type: String
+        type: String,
+        autoform: {
+          type: 'hidden',
+        }
       },
       '_clonedFrom._version': {
-        type: Number
+        type: Number,
+        autoform: {
+          type: 'hidden',
+        }
       }
     }));
   }
@@ -96,12 +103,6 @@ M.C.setUpCollection = model => {
     })
   }
 };
-
-if (Meteor.settings.public.APP === 'OYUN') {
-  SimpleSchema.extendOptions({
-    autoform: Match.Optional(Object)
-  });
-}
 
 SimpleSchema.messages({
   required: '[label] boş bırakılamaz.',

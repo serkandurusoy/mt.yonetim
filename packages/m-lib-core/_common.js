@@ -1,1 +1,1 @@
-import './_namespace';
+export { M } from './_namespace';

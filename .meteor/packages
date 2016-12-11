@@ -1,4 +1,31 @@
 ###################################
+# meteor                          #
+###################################
+meteor-base
+mobile-experience
+jquery
+underscore
+check
+random
+mongo
+reactive-var
+reactive-dict
+tracker
+session
+blaze@=2.1.9 # 2.2.0 breaks autoform completely
+blaze-html-templates
+email
+ejson
+accounts-base
+accounts-password
+fastclick
+standard-minifier-css
+standard-minifier-js
+es5-shim
+ecmascript
+shell-server
+
+###################################
 # core                            #
 ###################################
 m:lib-core
@@ -10,9 +37,9 @@ pbastowski:require
 materialize:materialize@0.97.6_1
 fortawesome:fontawesome
 aldeed:autoform
-gildaspk:autoform-materialize     # TODO: we are using a local fork
-lwl1991:autoform-file-materialize # TODO: we are using a local fork
-chart:chart@=1.0.2                # TODO: check official chart:chart for the v2.0.0 production release
+gildaspk:autoform-materialize
+lwl1991:autoform-file-materialize
+chart:chart@=1.0.2
 nilsdannemann:pdfmake@=0.1.20
 huaming:js-xlsx
 
@@ -38,3 +65,4 @@ m:lib-toastr
 # browser-policy                  # TODO: https://dweldon.silvrback.com/browser-policy
 # meteorhacks:unblock             # TODO: maybe later for fine grained publication performance
 # meteorhacks:subs-manager        # TODO: maybe later for fine grained performance
+

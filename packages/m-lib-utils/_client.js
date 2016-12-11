@@ -13,17 +13,6 @@ import { TimeSync } from 'meteor/mizzao:timesync';
 
 import { M } from 'meteor/m:lib-core';
 
-import '../0-fork--autoform-file-materialize/lib/client/autoform-file.html';
-
-// TODO: Ugly hack to rename src from autoform materialize file due to it appending the token and using full url as src instead of file name
-if (Meteor.settings.public.APP === 'YONETIM') {
-  Template.fileThumbIcon.helpers({
-    'src'() {
-      return this.src && this.src.split("/")[5] ? this.src.split("/")[5].split("?")[0] : this.src;
-    }
-  });
-}
-
 M.L.CleanMaterializeSelectCaret = function($this) {
   $this.parent().find('span.caret').remove();
   $this.material_select();

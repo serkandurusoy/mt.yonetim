@@ -1,7 +1,5 @@
-import { Meteor } from 'meteor/meteor';
-
 //Mitolojix namespace
-M={};
+export const M={};
 
 //Mitolojix libraries
 M.L={};
@@ -14,11 +12,3 @@ M.FS={};
 
 //Mitolojix enumerations
 M.E={};
-
-Meteor.startup(function() {
-  if (Meteor.isServer) {
-    console.log("======================================");
-    console.log("Meteor instance for " + Meteor.settings.public.APP + " started.");
-    console.log("======================================");
-  }
-});

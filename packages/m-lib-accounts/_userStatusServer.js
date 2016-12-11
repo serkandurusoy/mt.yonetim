@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { _ } from 'meteor/underscore';
 
+import { UAParser } from 'meteor/faisalman:ua-parser-js';
+
 import { M } from 'meteor/m:lib-core';
 
 // serverId - unique per server per restart

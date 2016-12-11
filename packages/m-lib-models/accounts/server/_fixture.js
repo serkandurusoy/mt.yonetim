@@ -3,6 +3,8 @@ import { Accounts } from 'meteor/accounts-base';
 
 import { moment } from 'meteor/momentjs:moment';
 
+import { M } from 'meteor/m:lib-core';
+
 Meteor.startup(() => {
   if (Meteor.settings.public.APP === 'YONETIM' && M.C.Users.find().count() === 0) {
 

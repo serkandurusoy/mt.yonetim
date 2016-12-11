@@ -9,7 +9,7 @@ import './_boslukDoldurma.html';
 
 const event = 'oninput' in document.createElement('input') ? 'input' : 'keydown';
 
-$.fn.autoGrowInput = options => {
+$.fn.autoGrowInput = function(options) {
   const o = $.extend({ maxWidth: 500, minWidth: 20, comfortZone: 0 }, options);
 
   this.each(function(){
@@ -29,7 +29,7 @@ $.fn.autoGrowInput = options => {
         whiteSpace: 'nowrap',
         ariaHidden: true
       }).appendTo('body');
-      check = e => {
+      const check = function(e) {
         if (val === (val = input.val()) && e.type !== 'autogrow') return;
         if (!val) val = input.attr('placeholder') || '';
         span.html(val.replace(/&/g, '&amp;').replace(/\s/g, '&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));

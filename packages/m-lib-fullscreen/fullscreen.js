@@ -137,9 +137,5 @@
     }
   });
 
-  if (isCommonjs) {
-    module.exports = screenfull;
-  } else {
-    window.screenfull = screenfull;
-  }
+  window.screenfull = screenfull;
 })();

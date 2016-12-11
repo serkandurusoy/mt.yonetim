@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { M } from 'meteor/m:lib-collection';
+import { M } from 'meteor/m:lib-core';
 
 
 Meteor.publishComposite(null, function() {

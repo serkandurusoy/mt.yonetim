@@ -1,8 +1,8 @@
 import { _ } from 'meteor/underscore';
 
-import { pdfMake } from 'meteor/nilsdannemann:pdfmake';
-
 import { M } from 'meteor/m:lib-core';
+
+const pdfMake = window.pdfMake;
 
 M.L.PrintReport = (res, content, orientation, fileName, reportName) => {
   let report = {};

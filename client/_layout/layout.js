@@ -3,7 +3,11 @@ import { Template } from 'meteor/templating';
 
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
+import { M } from 'meteor/m:lib-core';
+
 import './layout.html';
+
+window.M = M;
 
 BlazeLayout.setRoot('body');
 

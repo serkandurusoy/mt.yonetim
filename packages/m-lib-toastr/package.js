@@ -13,6 +13,5 @@ Package.onUse(function(api) {
   api.addFiles('toastr.less', 'client');
   api.addFiles('overrides.less', 'client');
   api.addFiles('toastr.js', 'client');
-  api.addFiles('options.js', 'client');
 
 });

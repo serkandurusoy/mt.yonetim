@@ -4,7 +4,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import { AutoForm } from 'meteor/aldeed:autoform';
-import { moment } from 'meteor/momenjs:moment';
+import { moment } from 'meteor/momentjs:moment';
 
 import { M } from 'meteor/m:lib-core';
 

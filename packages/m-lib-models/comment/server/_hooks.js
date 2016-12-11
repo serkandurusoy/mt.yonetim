@@ -1,6 +1,6 @@
 import { _ } from 'meteor/underscore';
 
-import { M } from 'meteor/m:lib-collections';
+import { M } from 'meteor/m:lib-core';
 
 M.C.Comments.after.insert((userId, document) => {
   // TODO: there is some duplication of this code in sinav/server/_cron.js

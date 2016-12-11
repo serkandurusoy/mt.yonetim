@@ -1,1 +1,1 @@
-import './model';
+import './_model';

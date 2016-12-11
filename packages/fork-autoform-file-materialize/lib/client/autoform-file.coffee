@@ -98,6 +98,15 @@ Template.afFileUpload.events
 		@value = undefined
 		return
 
+Template.fileThumbIcon.helpers
+  src: ->
+		src = ''
+		if this.src && this.src.split("/")[5]
+			src = this.src.split("/")[5].split("?")[0]
+		else
+			src = this.src
+		this.src
+
 Template.afFileUpload.helpers
 	collection: ->
 		getCollection(@)

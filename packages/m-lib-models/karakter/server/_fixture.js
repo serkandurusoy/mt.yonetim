@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { FS } from 'meteor/cfs:collection';
+import { FS } from 'meteor/cfs:base-package';
 
 import { M } from 'meteor/m:lib-core';
 

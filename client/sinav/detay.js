@@ -6,7 +6,7 @@ import { Blaze } from 'meteor/blaze';
 import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 
-import { moment } from 'meteor/lbee:moment-helpers';
+import { moment } from 'meteor/momentjs:moment';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { M } from 'meteor/m:lib-core';

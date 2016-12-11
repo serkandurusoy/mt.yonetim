@@ -6,7 +6,7 @@ import { check } from 'meteor/check';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
-import { FS } from 'meteor/cfs:collection';
+import { FS } from 'meteor/cfs:base-package';
 
 import { M } from 'meteor/m:lib-core';
 

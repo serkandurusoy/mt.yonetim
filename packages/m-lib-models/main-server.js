@@ -16,5 +16,6 @@ import './soru/server';
 import './soruFavori/server';
 import './soruSepeti/server';
 import './yardimDokumani/server';
+import './reports';
 
 import './common';

@@ -1,3 +1,5 @@
+import { $ } from 'meteor/jquery';
+
 /*
  * Toastr
  * Copyright 2012-2015
@@ -164,14 +166,15 @@
           showEasing: 'swing', //swing and linear are built into jQuery
           onShown: undefined,
           hideMethod: 'fadeOut',
-          hideDuration: 1000,
-          hideEasing: 'swing',
+          hideDuration: 600,
+          hideEasing: 'linear',
           onHidden: undefined,
           closeMethod: false,
           closeDuration: false,
           closeEasing: false,
+          closeButton: false,
 
-          extendedTimeOut: 1000,
+          extendedTimeOut: 0,
           iconClasses: {
             error: 'toastr-error',
             info: 'toastr-info',
@@ -179,7 +182,7 @@
             warning: 'toastr-warning'
           },
           iconClass: 'toastr-info',
-          positionClass: 'toastr-top-right',
+          positionClass: 'toastr-bottom-full-width',
           timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
           titleClass: 'toastr-title',
           messageClass: 'toastr-message',
@@ -187,8 +190,9 @@
           target: 'body',
           closeHtml: '<button type="button">&times;</button>',
           newestOnTop: true,
-          preventDuplicates: false,
-          progressBar: false
+          preventDuplicates: true,
+          progressBar: false,
+          onclick: null
         };
       }
 
@@ -426,10 +430,6 @@
 
     })();
   });
-}(typeof define === 'function' && define.amd ? define : function (deps, factory) {
-  if (typeof module !== 'undefined' && module.exports) { //Node
-    module.exports = factory(require('jquery'));
-  } else {
-    window.toastr = factory(window.jQuery);
-  }
+}(function (deps, factory) {
+  window.toastr = factory(window.jQuery);
 }));

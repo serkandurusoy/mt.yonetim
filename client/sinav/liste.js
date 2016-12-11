@@ -7,7 +7,7 @@ import { _ } from 'meteor/underscore';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { AutoForm } from 'meteor/aldeed:autoform';
 
-import { M } from 'm:lib-core';
+import { M } from 'meteor/m:lib-core';
 
 import './liste.html';
 

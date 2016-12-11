@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { FS } from 'meteor/cfs:collection';
+import { FS } from 'meteor/cfs:base-package';
 import { gm } from 'meteor/cfs:graphicsmagick';
 
 import { M } from 'meteor/m:lib-core';
