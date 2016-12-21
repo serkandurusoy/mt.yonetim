@@ -8,6 +8,7 @@ Package.onUse(function(api) {
   api.versionsFrom('1.0');
 
   api.use([
+    'ecmascript',
     'cfs:base-package@0.0.30',
     'cfs:tempstore@0.1.4',
     'cfs:file@0.1.16',

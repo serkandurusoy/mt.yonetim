@@ -70,27 +70,34 @@ M.L.PrintReport = (res, content, orientation, fileName, reportName) => {
     }];
   };
 
-  M.L.getDataUri('/mitolojix-logo-rapor-bg.jpg', mitolojixLogo => {
+  M.L.getDataUri('/mitolojix-logo-rapor-bg.jpg', (mitolojixLogoError,mitolojixLogo) => {
     const marginTop = orientation === 'landscape' ? 100 : 220;
-    report.background = (currentPage, pageCount) => {
-      return [
-        { image: mitolojixLogo, fit: [400,400], alignment: 'center', margin: [0, marginTop, 0, 0] }
-      ];
-    };
+    if (!mitolojixLogoError) {
+      report.background = (currentPage, pageCount) => {
+        return [
+          { image: mitolojixLogo, fit: [400,400], alignment: 'center', margin: [0, marginTop, 0, 0] }
+        ];
+      };
+    }
 
-    M.L.getDataUri(res.meta.logo, kurumLogo => {
+    M.L.getDataUri(res.meta.logo, (kurumLogoError,kurumLogo) => {
       report.header = (currentPage, pageCount) => {
         return [{
           margin: [20,20,20,20],
           table: {
-            widths:['*','*'],
-            body: [
+            widths: !kurumLogoError ? ['*','*'] : ['*'],
+            body: !kurumLogoError ? [
               [
                 { image: kurumLogo, fit: [50,50] },
                 { text: [res.meta.kurum, '\nRapor Tarihi: ' + res.meta.raporTarihi], alignment: 'right', margin: [0,12,0,0]}
               ]
+            ] : [
+              [
+                { text: [res.meta.kurum, '\nRapor Tarihi: ' + res.meta.raporTarihi], alignment: 'right', margin: [0,12,0,0]}
+              ]
             ]
-          }, layout: {
+          },
+          layout: {
             hLineWidth(i,node) { return i === 1 ? 1 : 0},
             vLineWidth() {return 0},
             hLineColor() {return 'black'},

@@ -1,3 +1,5 @@
+import { HTTP } from 'meteor/http';
+
 /*
  * HTTP Upload Transfer Queue
  */

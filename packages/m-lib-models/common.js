@@ -1,3 +1,4 @@
+import './gridfs/common';
 import './accounts/common';
 import './adresMaster/common';
 import './aktifEgitimYili/common';

@@ -31,7 +31,10 @@ M.L.getDataUri = (url, callback) => {
     canvas.width = this.naturalWidth;
     canvas.height = this.naturalHeight;
     canvas.getContext('2d').drawImage(this, 0, 0);
-    callback(canvas.toDataURL());
+    callback(null, canvas.toDataURL());
+  };
+  image.onerror = function() {
+    callback('error loading image', null)
   };
   image.src = url;
 };

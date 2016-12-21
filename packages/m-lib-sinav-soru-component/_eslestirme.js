@@ -86,6 +86,11 @@ Template.sorueslestirme.helpers({
   },
   eslemeIcinSeciliKutu() {
     return Template.instance().eslestirme.get();
+  },
+  join() {
+    let args = Array.prototype.slice.call(arguments);
+    args.pop();
+    return args.join("-");
   }
 });
 
