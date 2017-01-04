@@ -47,14 +47,14 @@ Template.sorucubugu.events({
   }
 });
 
-Template.registerHelper('cevapVerildi', (sinavKagidiId, ix, cevapAnahtari) => {
+Template.registerHelper('cevapVerildi', function(sinavKagidiId, ix, cevapAnahtari) {
   const sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });
   return !cevapAnahtari && sinavKagidi && sinavKagidi.yanitlar[ix].yanitlandi;
 });
 
-Template.registerHelper('cevapDogruYanlis', (sinavKagidiId, ix, cevapAnahtari) => {
+Template.registerHelper('cevapDogruYanlis', function(sinavKagidiId, ix, cevapAnahtari) {
   const sinavKagidi = M.C.SinavKagitlari.findOne({
     _id: sinavKagidiId
   });

@@ -19,7 +19,10 @@ AutoForm.hooks({
     before: {
       insert(doc) {
         if (doc._clonedFrom) {
-          doc.sorular = AutoForm.getCurrentDataForForm('sinavYeniForm').doc.sorular;
+          const form = AutoForm.getCurrentDataForForm('sinavYeniForm');
+          if (form && form.doc && form.doc.sorular) {
+            doc.sorular = form.doc.sorular;
+          }
         }
         return doc;
       }

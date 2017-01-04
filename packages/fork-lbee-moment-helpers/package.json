@@ -1,0 +1,43 @@
+{
+  "name": "lb.ee-blaze-moment-helpers",
+  "version": "1.3.3",
+  "license": "MIT",
+  "repository": "https://github.com/lb-/moment-helpers",
+  "description": "Date format helpers for Blaze in Meteor from Moment.js",
+  "devDependencies": {
+    "eslint": "^2.8.0",
+    "eslint-config-airbnb": "^7.0.0",
+    "eslint-plugin-meteor": "^3.5.2"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "meteor"
+    ],
+    "extends": [
+      "airbnb/base",
+      "plugin:meteor/guide"
+    ],
+    "globals": {
+      "browser": false,
+      "expect": false,
+      "Meteor": false,
+      "server": false,
+      "Package": false,
+      "mo": false,
+      "moment": false,
+      "Tinytest": false,
+      "Blaze": false,
+      "Template": false
+
+    },
+    "rules": {}
+  },
+  "dependencies": {
+    "moment": "2.13.0"
+  }
+}

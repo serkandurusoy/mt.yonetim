@@ -151,7 +151,7 @@ Template.searchbox.events({
   }
 });
 
-Template.searchbox.onDestroyed(() => {
+Template.searchbox.onDestroyed(function() {
   M.L.clearSessionVariable('keywords');
   M.L.clearSessionVariable('filters');
 });

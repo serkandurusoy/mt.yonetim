@@ -44,7 +44,7 @@ Template.comment.onDestroyed(function(){
   this.$('[data-tooltip]').tooltip('remove');
 });
 
-Template.comments.onDestroyed(() => {
+Template.comments.onDestroyed(function() {
   $('.material-tooltip').remove();
 });
 

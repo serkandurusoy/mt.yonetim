@@ -101,50 +101,50 @@ M.L.CizgiSil = (solId, sagId, wrapperElementId) => {
   $('#'+wrapperElementId+' > #sol-'+solId+'-sag-'+sagId).remove();
 };
 
-Template.registerHelper('pathWithParam', (pathName, paramName) => {
+Template.registerHelper('pathWithParam', function(pathName, paramName) {
   let routeParams = {};
   routeParams[paramName] = FlowRouter.getParam(paramName);
   return FlowRouter.path(pathName, routeParams);
 });
 
-Template.registerHelper('foreignField', (collection, id, field) => {
+Template.registerHelper('foreignField', function(collection, id, field) {
   const doc = M.C[collection].findOne({_id: id});
   return doc && doc[field];
 });
 
-Template.registerHelper('tarihce', (collection) => {
+Template.registerHelper('tarihce', function(collection) {
   const doc = M.C[collection].findOne({_id: FlowRouter.getParam('_id')});
   // TODO: we are using an undocumented hack. convert to nested helper when meteor 1.2 gets released
   return doc && Blaze._globalHelpers.$mapped(doc.versions());
 });
 
-Template.registerHelper('formatTel', (tel) => {
+Template.registerHelper('formatTel', function(tel) {
   return M.L.formatTel(tel);
 });
 
-Template.registerHelper('log', (obj) => {
+Template.registerHelper('log', function(obj) {
   console.log(obj);
 });
 
-Template.registerHelper('isOdd', num => {
+Template.registerHelper('isOdd', function(num) {
   return !!(num%2);
 });
 
-Template.registerHelper('parseInt', (numTxt) => {
+Template.registerHelper('parseInt', function(numTxt) {
   return parseInt(numTxt);
 });
 
-Template.registerHelper('join', (/*arguments*/) => {
+Template.registerHelper('join', function(/*arguments*/) {
   let args = Array.prototype.slice.call(arguments);
   args.pop();
   return args.join("-");
 });
 
-Template.registerHelper('showFilters', () => {
+Template.registerHelper('showFilters', function() {
   return !!Session.get('filters');
 });
 
-Template.registerHelper('detayPath', (collection,doc) => {
+Template.registerHelper('detayPath', function(collection,doc) {
   const pathMap = {
     Users: 'kullaniciDetay',
     Sinavlar: 'sinavDetay',
@@ -159,28 +159,28 @@ Template.registerHelper('detayPath', (collection,doc) => {
   return FlowRouter.path(pathMap[collection], {_id: doc});
 });
 
-Template.registerHelper('aktifEgitimYili', () => {
+Template.registerHelper('aktifEgitimYili', function() {
   const aktifEgitimYili = M.C.AktifEgitimYili.findOne({});
   return aktifEgitimYili && M.L.enumLabel(aktifEgitimYili.egitimYili);
 });
 
-Template.registerHelper('ilAdi', ilce => {
+Template.registerHelper('ilAdi', function(ilce) {
   return M.C.Ilceler.findOne({_id: ilce}).il;
 });
 
-Template.registerHelper('ilceAdi', ilce => {
+Template.registerHelper('ilceAdi', function(ilce) {
   return M.C.Ilceler.findOne({_id: ilce}).ilce;
 });
 
-Template.registerHelper('userHasRole', role => {
+Template.registerHelper('userHasRole', function(role) {
   return M.L.userHasRole(Meteor.userId(),role);
 });
 
-Template.registerHelper('enumLabel', val => {
+Template.registerHelper('enumLabel', function(val) {
   return M.L.enumLabel(val);
 });
 
-Template.registerHelper( 'liveTime', date => {
+Template.registerHelper( 'liveTime', function(date) {
   const locale = mo.currentLocale.get();
   let result;
 
@@ -194,11 +194,11 @@ Template.registerHelper( 'liveTime', date => {
   return result;
 });
 
-Template.registerHelper('userInKurum', kurumId => {
+Template.registerHelper('userInKurum',  function(kurumId) {
   return M.L.userInKurum(Meteor.userId(),kurumId);
 });
 
-Template.registerHelper('userFullName', userId => {
+Template.registerHelper('userFullName',  function(userId) {
   check(userId, String);
   const user = M.C.Users.findOne({_id: userId});
   if (!user) {
@@ -207,20 +207,20 @@ Template.registerHelper('userFullName', userId => {
   return user.name + ' ' + user.lastName;
 });
 
-Template.registerHelper('instance', () => {
+Template.registerHelper('instance', function() {
   return Template.instance();
 });
 
-Template.registerHelper('plusOne', num => {
+Template.registerHelper('plusOne', function(num) {
   return parseInt(num) + 1;
 });
 
-Template.registerHelper('yeniKayit', (coll,docId) => {
+Template.registerHelper('yeniKayit', function(coll,docId) {
   const doc = M.C[coll].findOne({_id: docId});
   return doc.createdBy === Meteor.userId() && moment(TimeSync.serverTime(null, 5 * 60 * 1000)).isBefore(moment(new Date(doc.createdAt)).add(15,'seconds'))
 });
 
-Template.registerHelper('sinavYayinda', sinavId => {
+Template.registerHelper('sinavYayinda', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     $and: [
       {
@@ -250,7 +250,7 @@ Template.registerHelper('sinavYayinda', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavBaslamayiBekliyor', sinavId => {
+Template.registerHelper('sinavBaslamayiBekliyor', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
@@ -260,7 +260,7 @@ Template.registerHelper('sinavBaslamayiBekliyor', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavBaslamaTarihiGecmis', sinavId => {
+Template.registerHelper('sinavBaslamaTarihiGecmis', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
@@ -271,7 +271,7 @@ Template.registerHelper('sinavBaslamaTarihiGecmis', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavRaporlamayaUygun', sinavId => {
+Template.registerHelper('sinavRaporlamayaUygun', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     iptal: false,
@@ -282,7 +282,7 @@ Template.registerHelper('sinavRaporlamayaUygun', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavKagidi', sinavId => {
+Template.registerHelper('sinavKagidi', function(sinavId) {
   return M.C.SinavKagitlari.findOne({
     ogrenci: Meteor.userId(),
     sinav: sinavId,
@@ -293,7 +293,7 @@ Template.registerHelper('sinavKagidi', sinavId => {
   });
 });
 
-Template.registerHelper('sinavKapanmis', sinavId => {
+Template.registerHelper('sinavKapanmis', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     $and: [
       {
@@ -315,7 +315,7 @@ Template.registerHelper('sinavKapanmis', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavYanitlariAcilmis', sinavId => {
+Template.registerHelper('sinavYanitlariAcilmis', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     yanitlarAcilmaZamani: {$lt: moment(TimeSync.serverTime(null, 5 * 60 * 1000)).toDate()}
@@ -323,7 +323,7 @@ Template.registerHelper('sinavYanitlariAcilmis', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('sinavYanitlariAcilmamis', sinavId => {
+Template.registerHelper('sinavYanitlariAcilmamis', function(sinavId) {
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
     yanitlarAcilmaZamani: {$gt: moment(TimeSync.serverTime(null, 5 * 60 * 1000)).toDate()}
@@ -331,11 +331,11 @@ Template.registerHelper('sinavYanitlariAcilmamis', sinavId => {
   return !!sinav;
 });
 
-Template.registerHelper('currentFieldValue', fieldName => {
+Template.registerHelper('currentFieldValue', function(fieldName) {
   return AutoForm.getFieldValue(fieldName);
 });
 
-Template.registerHelper('toHashCode', text => {
+Template.registerHelper('toHashCode', function(text) {
   if (_.isObject(text)) {
     text = JSON.stringify(text);
   }

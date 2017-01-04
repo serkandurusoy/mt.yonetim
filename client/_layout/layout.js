@@ -18,7 +18,7 @@ Reload.beforeHook = () => {
   }
 };
 
-Template.mainLayout.onRendered(() => {
+Template.mainLayout.onRendered(function() {
   if (Reload.didHotReload) {
     if (Meteor.userId()) {
       toastr.success('Mitolojix uygulamasının güncel sürümüne başarıyla yükseltildiniz.', null, {onHidden() {Reload.didHotReload = false;}});
@@ -32,6 +32,6 @@ Template.mainLayout.helpers({
   }
 });
 
-Template.registerHelper('isHotReloading',() => {
+Template.registerHelper('isHotReloading', function() {
   return Reload.isHotReloading;
 });

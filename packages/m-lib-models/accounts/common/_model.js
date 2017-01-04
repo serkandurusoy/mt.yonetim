@@ -771,8 +771,8 @@ Meteor.methods({
         if (doc.role === 'ogrenci') {
           proposedUser.password = doc.tcKimlik.substr(doc.tcKimlik.length - 6)
         }
+        let accountCreationError = null;
         try {
-          let accountCreationError = null;
           const userId = Accounts.createUser(proposedUser);
           if (userId) {
             if (doc.role !== 'ogrenci') {
@@ -826,6 +826,10 @@ Meteor.methods({
         if (accountCreationError) {
           if (accountCreationError.errorType === 'Meteor.Error') {
             M.L.ThrowError(accountCreationError);
+          } else if (accountCreationError.errmsg.indexOf('duplicate key error') > -1 && accountCreationError.errmsg.indexOf('email') > -1) {
+            M.L.ThrowError({error: '403', reason: 'Email already exists.', details: 'Email already exists.'});
+          } else if (accountCreationError.errmsg.indexOf('duplicate key error') > -1 && accountCreationError.errmsg.indexOf('tcKimlik') > -1) {
+            M.L.ThrowError({error: '403', reason: 'TC Kimlik already exists.', details: 'TC Kimlik already exists.'});
           } else {
             M.L.ThrowError({error: 'accountCreationError', reason: accountCreationError.err, details: accountCreationError});
           }

@@ -47,6 +47,11 @@ AutoForm.hooks({
           AutoForm.validateField(form.formId, 'tcKimlik');
         }
 
+        if (error.reason && error.reason === 'TC Kimlik already exists.') {
+          form.addStickyValidationError('tcKimlik', 'notUnique');
+          AutoForm.validateField(form.formId, 'tcKimlik');
+        }
+
       }
     }
   }
