@@ -783,7 +783,7 @@ Meteor.methods({
                 Email.send({
                   to: doc.emails[0].address,
                   from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
-                  subject: 'Hesap etkinleştirme',
+                  subject: 'Giriş Bilgileri',
                   text: 'Sevgili ' + doc.name + ',\n\n'
                   + kurumAdi + ' senin için Mitolojix Test Uygulaması\'nda bir hesap oluşturdu. Bu konuda henüz bilgin yoksa, önce öğretmenlerine danışabilirsin.'
                   + '\n\n'

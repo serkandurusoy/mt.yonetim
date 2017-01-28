@@ -76,7 +76,7 @@ Accounts.emailTemplates.resetPassword.html = (user, url) => {
 };
 
 Accounts.emailTemplates.enrollAccount.subject = user => {
-  return 'Hesap etkinleştirme';
+  return 'Giriş Bilgileri';
 };
 Accounts.emailTemplates.enrollAccount.text = (user, url) => {
   let body = '';
