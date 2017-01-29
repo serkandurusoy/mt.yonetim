@@ -40,7 +40,8 @@
       {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
       {{#if iptal}}<i class="material-icons tiny cursorDefault" title="İptal">cancel</i> {{/if}}
       {{kod}} / {{#if userHasRole "mitolojix"}}{{foreignField 'Kurumlar' kurum 'isim'}} / {{/if}}{{foreignField 'Dersler' ders 'isim'}}<br>
-      {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}} / {{enumLabel tip}} ({{#if getLength sorular}}{{getLength sorular}} soru{{else}}soru eklenmemiş{{/if}})
+      {{enumLabel egitimYili}} / {{enumLabel sinif}} {{subeler}} / {{enumLabel tip}} ({{#if getLength sorular}}{{getLength sorular}} soru{{else}}soru eklenmemiş{{/if}})<br>
+      {{moFormat acilisZamani 'DD.MM.YYYY'}} {{acilisSaati}} ile {{moFormat kapanisTarihi 'DD.MM.YYYY'}} {{kapanisSaati}} arasında {{#if $eq tip 'canli'}}öğretmen insiyatifinde {{/if}}{{sure}} dakika.
       {{#if aciklama}}<br>{{aciklama}}{{/if}}
     </div>
   </li>
