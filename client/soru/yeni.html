@@ -46,15 +46,26 @@
     </div>
   </div>
 
-  {{#if $and (currentFieldValue "alan.ders") (currentFieldValue "alan.sinif") }}
+  {{#if $and (currentFieldValue "alan.ders") (currentFieldValue "alan.sinif")}}
     <div class="row">
       <div class="col s12">
         {{>afQuickField name="alan.konu"}}
       </div>
     </div>
+    {{#unless selectedSinifHasMufredatForDers}}
+      <div class="row">
+        <div class="col s12">
+          <div class="toastr toastr-error">
+            <div class="toastr-message">
+              <p>Bu ders/sınıf için henüz müfredat tanımlanmamış</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/unless}}
   {{/if}}
 
-  {{#if currentFieldValue "alan.konu"}}
+  {{#if $and (currentFieldValue "alan.konu") (selectedSinifHasMufredatForDers)}}
     <div class="row">
       <div class="col s12">
         {{>afQuickField name="alan.kazanimlar"}}

@@ -15,6 +15,19 @@ Template.soruYeni.onCreated(function() {
   M.L.clearSessionVariable('soruClone');
 });
 
+
+Template.soruFormFields.helpers({
+  selectedSinifHasMufredatForDers(){
+    const formId = AutoForm.getFormId();
+    const kurum = Meteor.user().role !== 'mitolojix' ? Meteor.user().kurum : AutoForm.getFieldValue('kurum', formId);
+    const ders = AutoForm.getFieldValue('alan.ders', formId);
+    const sinif = AutoForm.getFieldValue('alan.sinif', formId);
+    const mufredat = M.C.Mufredat.findOne({kurum, egitimYili: M.C.AktifEgitimYili.findOne().egitimYili, ders, sinif});
+
+    return !!mufredat;
+  }
+});
+
 AutoForm.hooks({
   soruYeniForm: {
     onSuccess(operation, result, template) {
