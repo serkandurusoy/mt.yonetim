@@ -10,6 +10,7 @@ import { AutoForm } from 'meteor/aldeed:autoform';
 import { M } from 'meteor/m:lib-core';
 
 import './liste.html';
+import './detay.html';
 
 Template.soruListe.onCreated(function() {
   this.subscribe('sorular');
@@ -74,6 +75,9 @@ Template.soruKart.events({
     } else {
       M.C.SoruFavorileri.insert({soru});
     }
+  },
+  'click [data-trigger="onizleme"]'(e,t) {
+    soruOnizlemeView = Blaze.renderWithData(Template.soruOnizlemeModal, {_id: t.data._id}, document.getElementsByTagName('main')[0]);
   }
 });
 

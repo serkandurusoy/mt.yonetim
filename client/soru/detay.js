@@ -128,7 +128,7 @@ Template.soruDetayKart.events({
     $("html, body").animate({ scrollTop: $(document).height() }, 1000);
   },
   'click [data-trigger="onizleme"]'(e,t) {
-    soruOnizlemeView = Blaze.render(Template.soruOnizlemeModal, document.getElementsByTagName('main')[0]);
+    soruOnizlemeView = Blaze.renderWithData(Template.soruOnizlemeModal,{_id:t.data._id}, document.getElementsByTagName('main')[0]);
   }
 });
 

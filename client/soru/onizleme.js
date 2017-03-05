@@ -9,10 +9,10 @@ import './liste.html';
 
 Template.soruOnizlemeModal.helpers({
   seciliSoru() {
-    return M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+    return M.C.Sorular.findOne(this._id);
   },
   soruKomponent() {
-    const seciliSoru = M.C.Sorular.findOne({_id: FlowRouter.getParam('_id')});
+    const seciliSoru = M.C.Sorular.findOne(this._id);
     return M.L.komponentSec(seciliSoru);
   }
 });

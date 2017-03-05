@@ -37,6 +37,7 @@
       {{#if aktif}}
         <a data-trigger="cart" title="{{#if inCart}}Soru sepetimden çıkar{{else}}Soru sepetime ekle{{/if}}" class="secondary-content"><i class="material-icons">{{#if inCart}}shopping_cart{{else}}add_shopping_cart{{/if}}</i></a>
         <a data-trigger="favorite" title="{{#if inFavori}}Favori sorularımdan çıkar{{else}}Favori sorularıma ekle{{/if}}" class="secondary-content margin-right-6px"><i class="material-icons">{{#if inFavori}}favorite{{else}}favorite_border{{/if}}</i></a>
+        <span data-trigger="onizleme" title="Önizleme" class="right margin-right-6px"><i class="secondary-content material-icons">search</i></span>
       {{/if}}
       {{#if taslak}}<i class="material-icons tiny cursorDefault" title="Taslak">edit</i> {{/if}}
       {{#if kilitli}}<i class="material-icons tiny cursorDefault" title="Kilitli">lock_outline</i> {{/if}}
