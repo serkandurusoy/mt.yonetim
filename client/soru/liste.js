@@ -43,7 +43,7 @@ Template.soruListe.onCreated(function() {
 Template.soruListe.helpers({
   sorular(){
     const selector = Template.instance().searchResults.get();
-    const sorularCursor = M.C.Sorular.find(selector,{sort:{kurum: 1, 'alan.ders': 1, 'alan.sinif': 1, 'alan.konu': 1, kod: 1}}); //TODO: sort by dersCollate
+    const sorularCursor = M.C.Sorular.find(selector,{sort:{kurum: 1, 'alan.ders': 1, kod: -1}}); //TODO: sort by dersCollate
     return sorularCursor.count() && {cursor: sorularCursor, count: sorularCursor.count()};
   }
 });

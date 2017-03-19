@@ -92,11 +92,11 @@ M.C.setUpCollection({
             let initials = 'MT';
 
             if (words && words.length === 1) {
-              initials = words[0].substring(0,2).toLocaleUpperCase()
+              initials = words[0].substring(0,2).toLocaleUpperCase() + 'T'
             }
 
             if (words && words.length === 2) {
-              initials = words[0].substring(0,1) + words[1].substring(0,1) + 'S'
+              initials = words[0].substring(0,1) + words[1].substring(0,1) + 'T'
             }
 
             let count = M.C.Sinavlar.find().count() + 1;
