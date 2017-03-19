@@ -1,4 +1,6 @@
 import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor'
+import { check } from 'meteor/check'
 import { _ } from 'meteor/underscore';
 
 import { M } from 'meteor/m:lib-core';
@@ -77,3 +79,32 @@ Accounts.validateLoginAttempt(attempt =>{
 
 });
 
+
+Meteor.methods({
+  'accountForgotPassword'(email){
+    check(email,String)
+
+    const user = Meteor.users.findOne({'emails.address': email})
+
+    if (user && user.aktif) {
+      if(user.role === 'ogrenci') {
+        if (Meteor.settings.public.APP === 'YONETIM') {
+          return 'ok'
+        } else {
+          Accounts.sendResetPasswordEmail(user._id, email)
+          return 'ok'
+        }
+      } else {
+        if (Meteor.settings.public.APP === 'OYUN') {
+          return 'ok'
+        }
+        else {
+          Accounts.sendResetPasswordEmail(user._id,email)
+          return 'ok'
+        }
+      }
+    } else {
+      return 'ok'
+    }
+  }
+})

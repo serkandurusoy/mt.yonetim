@@ -102,13 +102,11 @@ Template.loginForm.events({
         toastr.error('Geçerli bir eposta adresi girilmeli.');
       } else {
         Session.set('accountButtonsDisabled', 'disabled');
-        Accounts.forgotPassword(
-          {email: kullanici},
-          () => {
-            M.L.clearSessionVariable('accountButtonsDisabled');
-            toastr.success('Posta kutunuzu kontrol edin.');
-          }
-        )
+        Meteor.call('accountForgotPassword',kullanici,() => {
+          M.L.clearSessionVariable('accountButtonsDisabled');
+          toastr.success('Posta kutunuzu kontrol edin.');
+        })
+
       }
     }
 
