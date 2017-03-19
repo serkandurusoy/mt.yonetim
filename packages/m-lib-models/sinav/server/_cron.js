@@ -59,7 +59,141 @@ if (Meteor.settings.public.APP === 'YONETIM') {
     }
   });
 
+  SyncedCron.add({
+    name: 'Kapanışı yaklaşan sınavları henüz almayan öğrencileri öğretmenlere hatırlat.',
+    schedule(parser) {
+      return parser.recur().every(1).hour();
+    },
+    job() {
+      Meteor.call('sinaviHenuzAlmayanOgrencileriOgretmeneHatirlat');
+    }
+  });
+
   Meteor.methods({
+
+    'sinaviHenuzAlmayanOgrencileriOgretmeneHatirlat'() {
+      this.unblock()
+
+      M.C.Sinavlar.find({
+          taslak: false,
+          iptal: false,
+          kilitli: true,
+          aktif: true,
+          muhur: {$exists: true},
+          acilisZamani: {$lt: new Date()},
+          tip: {$in: ['alistirma','konuTarama','deneme']},
+          kapanisZamani: {
+            $lt: moment().add(25,'hours').toDate(),
+            $gte: moment().add(24,'hours').toDate()
+          },
+      },{sort: {acilisZamani: 1}}).fetch().forEach(sinav => {
+
+
+        const ogrenciListesi = []
+        M.C.Users.find({
+          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(sinavKagidi => sinavKagidi.ogrenci))},
+          aktif: true,
+          role: 'ogrenci',
+          kurum: sinav.kurum,
+          sinif: sinav.sinif,
+          sube: {$in: sinav.subeler}
+        }).forEach(user => {
+            ogrenciListesi.push({
+              isim: `${user.name} ${user.lastName}`,
+              sube: user.sube
+            })
+        })
+
+        const ogrenciListesiSubeGruplama = _.chain(ogrenciListesi).groupBy('sube')
+          .map(function(value, key) {
+            return {
+              sube: key,
+              isimListesi: _.pluck(value, 'isim')
+            }
+          }).value()
+
+        const subeyeGoreIstatistik = ogrenciListesiSubeGruplama.map(sube => {
+          return {
+            sube: `${parseInt(sinav.sinif)}${sube.sube}`,
+            sinaviAlmayanOgrenciSayisi: sube.isimListesi.length,
+            toplamOgrenciSayisi: M.C.Users.find({sinif: sinav.sinif, sube: sube.sube, role: 'ogrenci',}).count()
+          }}).sort(function(a, b) {
+          const sube1 = a.sube.toUpperCase();
+          const sube2 = b.sube.toUpperCase();
+          if (sube1 < sube2) {
+            return -1;
+          }
+          if (sube1 > sube2) {
+            return 1;
+          }
+
+          return 0;
+        });
+
+        let istatistikMesajiText = '';
+        let istatistikMesajiHTML = '';
+        subeyeGoreIstatistik.forEach(sube => {
+          istatistikMesajiText = istatistikMesajiText.concat(
+            sube.sube + ' / ' + sube.sinaviAlmayanOgrenciSayisi + ' / '  + sube.toplamOgrenciSayisi + '\n\n'
+          );
+          istatistikMesajiHTML = istatistikMesajiHTML.concat(
+            '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">',
+              sube.sube + ' / ' + sube.sinaviAlmayanOgrenciSayisi + ' / '  + sube.toplamOgrenciSayisi,
+            '</p>'
+          )
+        })
+
+        const ogretmen = M.C.Users.findOne(sinav.createdBy);
+
+        const sinavSubelerindeSinavaGirmeyeOgrenciSayisi = M.C.Users.find({
+          _id: {$nin: _.uniq(M.C.SinavKagitlari.find({sinav: sinav._id}, {fields: {ogrenci: 1}}).map(sinavKagidi => sinavKagidi.ogrenci))},
+          aktif: true,
+          role: 'ogrenci',
+          kurum: sinav.kurum,
+          sinif: sinav.sinif,
+          sube: {$in: sinav.subeler}
+        }).count()
+        const sinavSubelerindeToplamOgrenciSayisi = M.C.Users.find({
+          aktif: true,
+          role: 'ogrenci',
+          kurum: sinav.kurum,
+          sinif: sinav.sinif,
+          sube: {$in: sinav.subeler}
+        }).count()
+
+        try {
+          Email.send({
+            to: ogretmen.emails[0].address,
+            from: '"Mitolojix'+( Meteor.settings.public.ENV === 'PRODUCTION' ? '' : (' ' + Meteor.settings.public.ENV) )+'" <bilgi@mitolojix.com>',
+            subject:  `${sinav.kod}lu testi almayan ogrencilerin listesi`,
+            text: 'Sayin ' + ogretmen.name + ' ' + ogretmen.lastName + ',\n'
+            + `${sinav.kod}lu testin kapanmasına 24 saat kaldı.Test takip bilgilerinin özeti aşağıdaki gibidir.`
+            + `\n\n`
+            + `Detaylı rapora Mitolojix hesabınıza giriş yaparak buradan ${Meteor.settings.public.URL.YONETIM}  ulaşabilirsiniz`
+            + `\n\n`
+            + `Şube / Testi almayan öğrenci sayısı / Toplam öğrenci sayısı`
+            + `\n\n`
+            + istatistikMesajiText
+            + `Toplam: ${sinavSubelerindeSinavaGirmeyeOgrenciSayisi}/${sinavSubelerindeToplamOgrenciSayisi}`
+            + `\n\n`
+            + `Saygılarımızla,`
+            + `Mitolojix`,
+            html: '<html><head><!--[if !mso]><!-- --><link href=\'http://fonts.googleapis.com/css?family=Open+Sans\' rel=\'stylesheet\' type=\'text/css\'><!--<![endif]--></head><body>'
+            + '<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Sayin ' + ogretmen.name + ' ' + ogretmen.lastName + ',</p>'
+            + `<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">${parseInt(sinav.sinif)}. sınıflar için olan ${sinav.kod}lu testin kapanmasına 24 saat kaldı.Test takip bilgilerinin özeti aşağıdaki gibidir. Detaylı rapora Mitolojix hesabınıza giriş yaparak buradan ${Meteor.settings.public.URL.YONETIM}  ulaşabilirsiniz`
+            + `<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Şube / Testi alan öğrenci sayısı / Toplam öğrenci sayısı</p>`
+            + istatistikMesajiHTML
+            + `<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Toplam: ${sinavSubelerindeSinavaGirmeyeOgrenciSayisi}/${sinavSubelerindeToplamOgrenciSayisi}</p>`
+            + `<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Saygılarımızla/p>`
+            + `<p style="font-family: \'Open Sans\', Helvetica, Arial, Verdana, \'Trebuchet MS\', sans-serif; font-size: 16px; line-height: 22px; font-weight: normal; color: #333333">Mitolojix/p>`
+            + `</body></html>`
+          });
+
+        } catch(error) {
+          console.log(sinav._id + ' id\'li sinav kapanis hatirlatma bildirimi ' + ogretmen._id + ' id\'li ogretmene iletilirken bilinmeyen hata olustu:\n', error);
+        }
+      })
+    },
 
     'sinavKapanislariniHatirlat'() {
       this.unblock();
