@@ -57,6 +57,11 @@ M.C.Notifications.Schema = new SimpleSchema({
     type: Number,
     min: 1,
     defaultValue: 1
+  },
+  lastNotifiedCount: {
+    type: Number,
+    min: 0,
+    defaultValue: 0,
   }
 });
 

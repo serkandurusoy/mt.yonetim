@@ -42,8 +42,9 @@ if (Meteor.settings.public.APP === 'YONETIM') {
 
       M.C.Notifications.find().forEach(notification => {
         const online = M.C.Users.findOne({_id: notification.to, 'status.online': true});
-        if (!online) {
+        if (!online && notification.count > notification.lastNotifiedCount) {
           users = _.union(users, [notification.to])
+          M.C.Notifications.update({_id: notification._id}, {$set: {lastNotifiedCount: notification.count}})
         }
       });
 
