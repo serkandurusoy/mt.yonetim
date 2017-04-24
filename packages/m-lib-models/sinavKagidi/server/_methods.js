@@ -531,19 +531,15 @@ Meteor.methods({
       let yanitHash = yanit.cevaplar;
 
       if (dogruYanit.boslukDoldurma.toleransBuyukKucukHarf === true) {
-        console.log('buyukKucuk')
         dogruHash = dogruHash.map(cevap => {
-          console.log(cevap.toLocaleLowerCase())
           return cevap.toLocaleLowerCase();
         });
         yanitHash = yanitHash.map(cevap => {
-          console.log(cevap.toLocaleLowerCase())
           return cevap.toLocaleLowerCase();
         });
       }
 
       if (dogruYanit.boslukDoldurma.toleransTurkce === true) {
-        console.log('turkce')
         dogruHash = dogruHash.map(cevap => {
           //TODO: slug kullanma, doğrudan türkçe harf çevrimi yap
           return getSlug(cevap, {
