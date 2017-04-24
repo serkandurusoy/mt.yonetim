@@ -119,8 +119,13 @@ Meteor.methods({
         }
 
         if (soru.tip === 'siralama') {
-          yanit = {
-            secenekler: _.shuffle(soru.yanit.siralama.map(secenek => {
+          const hashOriginal = soru.yanit.siralama.map(secenek => secenek.metin).join('')
+
+          let shuffledArray = []
+          let hashShuffled = []
+
+          do{
+            shuffledArray = _.shuffle(soru.yanit.siralama.map(secenek => {
               const {
                 metin,
                 gorsel,
@@ -130,6 +135,23 @@ Meteor.methods({
                 gorsel,
               };
             }))
+            hashShuffled = shuffledArray.map(secenek => {
+              return secenek.metin
+            }).join('')
+          }
+          while(hashOriginal === hashShuffled)
+
+          yanit = {
+            secenekler: shuffledArray.map(secenek => {
+              const {
+                metin,
+                gorsel,
+              } = secenek;
+              return {
+                metin,
+                gorsel,
+              };
+            })
           }
         }
 
@@ -173,8 +195,8 @@ Meteor.methods({
           }
           let boslukIndex = 0;
           bosluklar = '<p>' + splitOnNewlines(soru.yanit.boslukDoldurma.cevap.replace(/\[(.+?)\]/g, () => {
-            return "<input type=\"text\" id=\""+ boslukIndex++ +"\" maxlength=\"40\" size=\"8\" class=\"boslukDoldurSecenek\"/>";
-          })).join('</p><p>') + '</p>';
+              return "<input type=\"text\" id=\""+ boslukIndex++ +"\" maxlength=\"40\" size=\"8\" class=\"boslukDoldurSecenek\"/>";
+            })).join('</p><p>') + '</p>';
           yanit = {
             bosluklar,
             cevaplar: boslukArray
@@ -270,19 +292,19 @@ Meteor.methods({
     let ortalamaPuan = M.C.SinavKagitlari.aggregate([
       {
         $match:
-        {
-          puanOrtalamayaGirdi: true,
-          ogrenci: userId,
-          egitimYili: aktifEgitimYili,
-          iptal: false
-        }
+          {
+            puanOrtalamayaGirdi: true,
+            ogrenci: userId,
+            egitimYili: aktifEgitimYili,
+            iptal: false
+          }
       },
       {
         $group:
-        {
-          _id: null,
-          ortalamaPuan: { $avg: "$puan" }
-        }
+          {
+            _id: null,
+            ortalamaPuan: { $avg: "$puan" }
+          }
       }
     ])[0];
     ortalamaPuan = !!ortalamaPuan ? math.chain(ortalamaPuan.ortalamaPuan).round().done() : 0;
@@ -509,15 +531,19 @@ Meteor.methods({
       let yanitHash = yanit.cevaplar;
 
       if (dogruYanit.boslukDoldurma.toleransBuyukKucukHarf === true) {
+        console.log('buyukKucuk')
         dogruHash = dogruHash.map(cevap => {
+          console.log(cevap.toLocaleLowerCase())
           return cevap.toLocaleLowerCase();
         });
         yanitHash = yanitHash.map(cevap => {
+          console.log(cevap.toLocaleLowerCase())
           return cevap.toLocaleLowerCase();
         });
       }
 
       if (dogruYanit.boslukDoldurma.toleransTurkce === true) {
+        console.log('turkce')
         dogruHash = dogruHash.map(cevap => {
           //TODO: slug kullanma, doğrudan türkçe harf çevrimi yap
           return getSlug(cevap, {
