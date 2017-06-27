@@ -1,12 +1,13 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import { _ } from 'meteor/underscore';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite('sinavlar', function(time) {
+publishComposite('sinavlar', function(time) {
   check(time, Match.Optional(Date));
   let currentTime = new Date();
   if (time) {
@@ -95,7 +96,7 @@ Meteor.publish('girilmemisSinavVar', function(time) {
   }
 });
 
-Meteor.publishComposite('sinav', function(sinavId, time) {
+publishComposite('sinav', function(sinavId, time) {
   check(sinavId, String);
   check(time, Match.Optional(Date));
   let currentTime = new Date();
@@ -197,7 +198,7 @@ const sinavAuditLog = [
   }
 ];
 
-Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
+publishComposite('sinavYanitlari', function(sinavId, time) {
   check(sinavId, String);
   check(time, Match.Optional(Date));
   let currentTime = new Date();
@@ -262,7 +263,7 @@ Meteor.publishComposite('sinavYanitlari', function(sinavId, time) {
   }
 });
 
-Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
+publishComposite('sinavinOgrencileri', function(sinavId) {
   check(sinavId, String);
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,
@@ -300,7 +301,7 @@ Meteor.publishComposite('sinavinOgrencileri', function(sinavId) {
   }
 });
 
-Meteor.publishComposite('sinavinKagitlari', function(sinavId) {
+publishComposite('sinavinKagitlari', function(sinavId) {
   check(sinavId, String);
   const sinav = M.C.Sinavlar.findOne({
     _id: sinavId,

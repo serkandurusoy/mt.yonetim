@@ -4,6 +4,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Session } from 'meteor/session';
 import { Blaze } from 'meteor/blaze';
 import { $ } from 'meteor/jquery';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 import { PDFJS } from 'meteor/pascoual:pdfjs';
 

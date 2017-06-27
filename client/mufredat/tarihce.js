@@ -4,7 +4,7 @@ import { Blaze } from 'meteor/blaze';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 import './tarihce.html';
 

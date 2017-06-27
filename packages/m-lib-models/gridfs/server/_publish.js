@@ -1,8 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -12,7 +11,7 @@ Meteor.publishComposite(null, function() {
   };
 });
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -24,7 +23,7 @@ Meteor.publishComposite(null, function() {
 
 // TODO: dersicerik requires metadata to optimize its publish so we need an (after) insert/update hook on mufredat to track all file instances to update them with metadata (kurum, ders, konu, mufredatId etc)
 // TODO: or we can use autoform metadata helper to get info but that info must be available or the file upload be disabled until that
-Meteor.publishComposite('fsdersicerik', function() {
+publishComposite('fsdersicerik', function() {
   return {
     find() {
       if (this.userId) {
@@ -36,7 +35,7 @@ Meteor.publishComposite('fsdersicerik', function() {
 
 // TODO: sorugorsel requires metadata to optimize its publish so we need an (after) insert/update hook on mufredat to track all file instances to update them with metadata (kurum, ders, soruId etc)
 // TODO: or we can use autoform metadata helper to get info but that info must be available or the file upload be disabled until that
-Meteor.publishComposite('fssorugorsel', function() {
+publishComposite('fssorugorsel', function() {
   return {
     find() {
       if (this.userId) {
@@ -46,7 +45,7 @@ Meteor.publishComposite('fssorugorsel', function() {
   };
 });
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId) {
@@ -56,7 +55,7 @@ Meteor.publishComposite(null, function() {
   };
 });
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId) {
@@ -66,7 +65,7 @@ Meteor.publishComposite(null, function() {
   };
 });
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId) {

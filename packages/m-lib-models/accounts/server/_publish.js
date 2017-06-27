@@ -1,8 +1,10 @@
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { check } from 'meteor/check';
 
 import { M } from 'meteor/m:lib-core';
+
+import { publishComposite } from 'meteor/reywood:publish-composite';
+
 
 const userCursor = userId => {
   return M.C.Users.find({_id: userId}, {fields: {name: 1, lastName: 1}})
@@ -49,7 +51,7 @@ const userAuditLog = [
   }
 ];
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId) {
@@ -84,7 +86,7 @@ Meteor.publishComposite(null, function() {
   };
 });
 
-Meteor.publishComposite('kullaniciById', function(userId) {
+publishComposite('kullaniciById', function(userId) {
   check(userId, String);
   return {
     find() {
@@ -133,7 +135,7 @@ Meteor.publishComposite('kullaniciById', function(userId) {
   };
 });
 
-Meteor.publishComposite('kullanicilar', function() {
+publishComposite('kullanicilar', function() {
   return {
     find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -189,7 +191,7 @@ Meteor.publishComposite('kullanicilar', function() {
   };
 });
 
-Meteor.publishComposite('sinifArkadaslarim', function() {
+publishComposite('sinifArkadaslarim', function() {
   return {
     find() {
       if (this.userId && M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -221,7 +223,7 @@ Meteor.publishComposite('sinifArkadaslarim', function() {
   };
 });
 
-Meteor.publishComposite('kullaniciGirisCikislari', function(userId) {
+publishComposite('kullaniciGirisCikislari', function(userId) {
   check(userId, String);
   return {
     find() {

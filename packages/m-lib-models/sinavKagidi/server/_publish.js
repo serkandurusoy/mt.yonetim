@@ -1,9 +1,9 @@
-import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   return {
     find() {
       if (this.userId) {
@@ -36,7 +36,7 @@ Meteor.publishComposite(null, function() {
   }
 });
 
-Meteor.publishComposite('sinavKagidi', function(sinavKagidiId) {
+publishComposite('sinavKagidi', function(sinavKagidiId) {
   check(sinavKagidiId, String);
   return {
     find() {

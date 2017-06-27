@@ -1,9 +1,9 @@
-import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { M } from 'meteor/m:lib-core'
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite('sorular', function() {
+publishComposite('sorular', function() {
   return {
     find() {
       if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -24,7 +24,7 @@ Meteor.publishComposite('sorular', function() {
   };
 });
 
-Meteor.publishComposite('soru', function(soruId) {
+publishComposite('soru', function(soruId) {
   check(soruId, String);
   return {
     find() {

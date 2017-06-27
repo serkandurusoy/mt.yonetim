@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 import { M } from 'meteor/m:lib-core';
 

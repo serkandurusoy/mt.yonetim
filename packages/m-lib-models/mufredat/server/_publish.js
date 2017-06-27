@@ -1,9 +1,9 @@
-import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite('mufredatlar', function() {
+publishComposite('mufredatlar', function() {
   return {
     find() {
       if (this.userId) {
@@ -27,7 +27,7 @@ Meteor.publishComposite('mufredatlar', function() {
   };
 });
 
-Meteor.publishComposite('mufredat', function(mufredatId) {
+publishComposite('mufredat', function(mufredatId) {
   check(mufredatId, String);
   return {
     find() {

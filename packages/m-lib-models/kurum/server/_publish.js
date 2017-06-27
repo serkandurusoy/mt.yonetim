@@ -1,8 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
-Meteor.publishComposite(null, function() {
+publishComposite(null, function() {
   // TODO: explore using this.unblock() and see if it helps with performance. watch out for gotchas!!!
   return {
     find() {

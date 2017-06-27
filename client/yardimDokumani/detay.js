@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 import { $ } from 'meteor/jquery';
 
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 import { PDFJS } from 'meteor/pascoual:pdfjs';
 
 import { M } from 'meteor/m:lib-core';

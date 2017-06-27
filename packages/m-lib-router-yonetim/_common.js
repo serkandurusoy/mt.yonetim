@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { $ } from 'meteor/jquery';
 
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
 
 import { M } from 'meteor/m:lib-core';
 

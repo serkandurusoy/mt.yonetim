@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
-
 import { Counts } from 'meteor/tmeasday:publish-counts';
-
 import { M } from 'meteor/m:lib-core';
+import { publishComposite } from 'meteor/reywood:publish-composite';
 
 Meteor.publish(null, function() {
   if (this.userId && !M.L.userHasRole(this.userId, 'ogrenci')) {
@@ -26,7 +25,7 @@ Meteor.publish(null, function() {
   }
 });
 
-Meteor.publishComposite('stories', function(limit) {
+publishComposite('stories', function(limit) {
   check(limit, Match.Optional(Match.Integer));
   if (limit < 10) {
     limit = 10;
