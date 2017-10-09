@@ -10,12 +10,12 @@ Package.onUse(function(api) {
 
   const packages = [
     'meteor-base@1.1.0',
-    'mobile-experience@1.0.4',
+    'mobile-experience@1.0.5',
     'jquery@1.11.10',
     'underscore@1.0.10',
     'check@1.2.5',
     'random@1.0.10',
-    'mongo@1.1.19',
+    'mongo@1.2.2',
     'reactive-var@1.0.11',
     'reactive-dict@1.1.9',
     'tracker@1.1.3',
@@ -23,14 +23,14 @@ Package.onUse(function(api) {
     'blaze@2.3.2',
     'blaze-html-templates@1.1.2',
     'email@1.2.3',
-    'ejson@1.0.13',
-    'accounts-base@1.3.1',
+    'ejson@1.0.14',
+    'accounts-base@1.3.4',
     'accounts-password@1.4.0',
-    'standard-minifier-css@1.3.4',
-    'standard-minifier-js@2.1.1',
+    'standard-minifier-css@1.3.5',
+    'standard-minifier-js@2.1.2',
     'es5-shim@4.6.15',
-    'ecmascript@0.8.2',
-    'ostrio:flow-router-extra@3.1.3',
+    'ecmascript@0.8.3',
+    'ostrio:flow-router-extra@3.3.3',
     'kadira:blaze-layout@2.3.0',
     'okgrow:router-autoscroll@0.1.8',
     'aldeed:template-extension@4.1.0',
@@ -70,7 +70,7 @@ Package.onUse(function(api) {
     'cfs:ui@0.1.3',
     'faisalman:ua-parser-js@0.7.13',
     'pascoual:pdfjs@1.1.114',
-    'manuel:reactivearray@1.0.5',
+    'manuel:reactivearray@1.0.6',
     'rubaxa:sortable@1.3.0',
     'flemay:less-autoprefixer@1.2.0'
   ];
@@ -78,7 +78,7 @@ Package.onUse(function(api) {
   api.imply(packages);
 
   api.use('es5-shim@4.6.15');
-  api.use('ecmascript@0.8.2');
+  api.use('ecmascript@0.8.3');
   api.use('meteor-base@1.1.0');
   api.use('percolate:synced-cron@1.3.2');
 
