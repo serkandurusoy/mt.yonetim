@@ -90,7 +90,7 @@ M.L.CizgiCiz = (solId, sagId, wrapperElementId) => {
 
   const htmlns = "http://www.w3.org/1999/xhtml";
   let div = document.createElementNS(htmlns, "div");
-  div.setAttribute('style','border:none;border-top:2px solid #57492B;width:'+width+'px;height:0px;transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');
+  div.setAttribute('style','border:none;border-top:2px solid #57492B;width:'+width+'px;height:0px;transform:rotate('+deg+'deg);-webkit-transform:rotate('+deg+'deg);position:absolute;top:'+y+'px;left:'+x+'px;');
   div.setAttribute('id','sol-'+solId+'-sag-'+sagId);
   div.setAttribute('class','cizgi');
 
