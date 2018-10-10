@@ -99,7 +99,7 @@ Template.afFileUpload.events
 		return
 
 Template.fileThumbIcon.helpers
-  src: ->
+	src: ->
 		src = ''
 		if this.src && this.src.split("/")[5]
 			src = this.src.split("/")[5].split("?")[0]

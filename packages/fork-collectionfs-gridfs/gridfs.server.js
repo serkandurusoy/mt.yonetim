@@ -105,7 +105,9 @@ FS.Store.GridFS = function(name, options) {
         // options
         aliases: options.aliases || [],
         metadata: options.metadata || null,
-        content_type: options.contentType || 'application/octet-stream'
+        content_type: options.contentType || 'application/octet-stream',
+        readPreference: 'primaryPreferred',
+        w: 1
       };
 
       if (fileKey._id) {
@@ -163,12 +165,8 @@ FS.Store.GridFS = function(name, options) {
     init: function(callback) {
       mongodb.MongoClient.connect(options.mongoUrl, mongoOptions, function (err, db) {
         if (err) { return callback(err); }
+        // db.db().collection(gridfsName).createIndex({ "files_id": 1, "n": 1});
         self.db = db;
-
-        // ensure that indexes are added as otherwise CollectionFS fails for Mongo >= 3.0
-        var collection = new Mongo.Collection(gridfsName);
-        collection.rawCollection().createIndex({ "files_id": 1, "n": 1});
-
         callback(null);
       });
     }
