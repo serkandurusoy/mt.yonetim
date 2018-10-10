@@ -1,7 +1,7 @@
 Package.describe({
   git: 'https://github.com/CollectionFS/Meteor-cfs-worker.git',
   name: 'cfs:worker',
-  version: '0.1.4_1',
+  version: '0.1.5_1',
   summary: 'CollectionFS, file worker - handles file copies/versions'
 });
 
