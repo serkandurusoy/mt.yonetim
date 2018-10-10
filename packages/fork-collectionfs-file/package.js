@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Npm.depends({
-  temp: "0.7.0" // for tests only
+  temp: "0.8.3" // for tests only
 });
 
 Package.onUse(function(api) {

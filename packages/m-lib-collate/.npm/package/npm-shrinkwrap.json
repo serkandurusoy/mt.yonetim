@@ -1,9 +1,10 @@
 {
+  "lockfileVersion": 1,
   "dependencies": {
     "ilib": {
       "version": "11.0.6",
-      "resolved": "https://registry.npmjs.org/ilib/-/ilib-11.0.6.tgz",
-      "from": "https://registry.npmjs.org/ilib/-/ilib-11.0.6.tgz"
+      "resolved": "http://registry.npmjs.org/ilib/-/ilib-11.0.6.tgz",
+      "integrity": "sha1-LlpM7XtDBZykUbQ/iztar8+imfk="
     }
   }
 }

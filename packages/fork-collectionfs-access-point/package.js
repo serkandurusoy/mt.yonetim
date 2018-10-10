@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Npm.depends({
-  "content-disposition": "0.5.0"
+  "content-disposition": "0.5.2"
 });
 
 Package.onUse(function(api) {
