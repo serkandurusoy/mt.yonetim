@@ -99,7 +99,7 @@ M.C.setUpCollection = model => {
     }
 
     _.each(model.indexes, function (ix) {
-      M.C[model.object]._ensureIndex(ix.ix, ix.opt)
+      M.C[model.object].rawCollection().createIndex(ix.ix, ix.opt)
     })
   }
 };

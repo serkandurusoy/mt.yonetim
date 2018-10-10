@@ -51,7 +51,7 @@ M.C.Mufredat.attachSchema(new SimpleSchema({
 }));
 
 if (Meteor.isServer) {
-  M.C.Mufredat._ensureIndex({
+  M.C.Mufredat.rawCollection().createIndex({
     'searchSource.kurum': 'text',
     'searchSource.egitimYili': 'text',
     'searchSource.ders': 'text',

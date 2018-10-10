@@ -34,7 +34,7 @@ M.C.Muhurler.attachSchema(new SimpleSchema({
 }));
 
 if (Meteor.isServer) {
-  M.C.Muhurler._ensureIndex({
+  M.C.Muhurler.rawCollection().createIndex({
     'searchSource.isim': 'text',
     'searchSource.ders': 'text'
   }, {

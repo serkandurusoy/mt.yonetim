@@ -607,7 +607,7 @@ M.C.Users.attachSchema(M.C.Users.Schema);
 M.C.Users.attachSchema(M.C.Users.SchemaDecorators);
 
 if (Meteor.isServer) {
-  M.C.Users._ensureIndex({kurum: 1, tcKimlik: 1}, { unique: true });
+  M.C.Users.rawCollection().createIndex({kurum: 1, tcKimlik: 1}, { unique: true });
 }
 
 if (Meteor.isServer) {

@@ -74,7 +74,7 @@ M.C.Kurumlar.attachSchema(new SimpleSchema({
 }));
 
 if (Meteor.isServer) {
-  M.C.Kurumlar._ensureIndex({
+  M.C.Kurumlar.rawCollection().createIndex({
     'searchSource.isim': 'text',
     'searchSource.yetkili.isim': 'text',
     'searchSource.yetkili.unvan': 'text',

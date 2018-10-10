@@ -305,5 +305,5 @@ M.C.SinavKagitlari.Schema = new SimpleSchema({
 M.C.SinavKagitlari.attachSchema(M.C.SinavKagitlari.Schema);
 
 if (Meteor.isServer) {
-  M.C.SinavKagitlari._ensureIndex({ogrenci: 1, sinav: 1}, { unique: true });
+  M.C.SinavKagitlari.rawCollection().createIndex({ogrenci: 1, sinav: 1}, { unique: true });
 }

@@ -11,17 +11,17 @@ M.E.serverId = Random.id();
 
 // user connection log
 M.C.UserConnectionLog = new Mongo.Collection('userconnectionlog');
-M.C.UserConnectionLog._ensureIndex({userId: 1, createdAt: -1});
+M.C.UserConnectionLog.rawCollection().createIndex({userId: 1, createdAt: -1});
 
 // user connections
 M.C.UserPresenceSessions = new Mongo.Collection('userpresencesessions');
-M.C.UserPresenceSessions._ensureIndex({userId: 1});
+M.C.UserPresenceSessions.rawCollection().createIndex({userId: 1});
 
 
 // list of servers
 M.C.UserPresenceServers = new Mongo.Collection('userpresenceservers');
-M.C.UserPresenceServers._ensureIndex({ping: 1});
-M.C.UserPresenceServers._ensureIndex({serverId: 1});
+M.C.UserPresenceServers.rawCollection().createIndex({ping: 1});
+M.C.UserPresenceServers.rawCollection().createIndex({serverId: 1});
 
 
 // keep track of which servers are online

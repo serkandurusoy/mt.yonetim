@@ -8,11 +8,11 @@ M.C.Ilceler = new Mongo.Collection('ilceler');
 
 if (Meteor.isServer) {
   Meteor.startup(() => {
-    M.C.Iller._ensureIndex({il: 1});
-    M.C.Iller._ensureIndex({ilCollate: 1});
-    M.C.Ilceler._ensureIndex({il: 1});
-    M.C.Ilceler._ensureIndex({ilCollate: 1});
-    M.C.Ilceler._ensureIndex({ilce: 1});
-    M.C.Ilceler._ensureIndex({ilceCollate: 1});
+    M.C.Iller.rawCollection().createIndex({il: 1});
+    M.C.Iller.rawCollection().createIndex({ilCollate: 1});
+    M.C.Ilceler.rawCollection().createIndex({il: 1});
+    M.C.Ilceler.rawCollection().createIndex({ilCollate: 1});
+    M.C.Ilceler.rawCollection().createIndex({ilce: 1});
+    M.C.Ilceler.rawCollection().createIndex({ilceCollate: 1});
   });
 }

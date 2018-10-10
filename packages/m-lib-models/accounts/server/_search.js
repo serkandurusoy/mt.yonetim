@@ -7,7 +7,7 @@ import { M } from 'meteor/m:lib-core';
 // TODO: Schema attachment had to be done over at the model file for some god knows why reason!
 
 if (Meteor.isServer) {
-  M.C.Users._ensureIndex({
+  M.C.Users.rawCollection().createIndex({
     'searchSource.name': 'text',
     'searchSource.lastName': 'text',
     'searchSource.kurum': 'text',

@@ -82,7 +82,7 @@ M.C.Sorular.attachSchema(new SimpleSchema({
 }));
 
 if (Meteor.isServer) {
-  M.C.Sorular._ensureIndex({
+  M.C.Sorular.rawCollection().createIndex({
     'searchSource.kurum': 'text',
     'searchSource.kod': 'text',
     'searchSource.aciklama': 'text',

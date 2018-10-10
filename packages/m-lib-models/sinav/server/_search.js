@@ -82,7 +82,7 @@ M.C.Sinavlar.attachSchema(new SimpleSchema({
 }));
 
 if (Meteor.isServer) {
-  M.C.Sinavlar._ensureIndex({
+  M.C.Sinavlar.rawCollection().createIndex({
     'searchSource.kurum': 'text',
     'searchSource.kod': 'text',
     'searchSource.egitimYili': 'text',
