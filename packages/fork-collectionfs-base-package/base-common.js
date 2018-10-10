@@ -263,7 +263,7 @@ FS.Utility._btoa = function _fsUtility_btoa(str) {
   if (str instanceof Buffer) {
     buffer = str;
   } else {
-    buffer = new Buffer(str.toString(), 'binary');
+    buffer = Buffer.from(str.toString(), 'binary');
   }
 
   return buffer.toString('base64');
@@ -282,7 +282,7 @@ FS.Utility.btoa = function fsUtility_btoa(str) {
 };
 
 FS.Utility._atob = function _fsUtility_atob(str) {
-  return new Buffer(str, 'base64').toString('binary');
+  return Buffer.from(str, 'base64').toString('binary');
 };
 
 FS.Utility.atob = function fsUtility_atob(str) {

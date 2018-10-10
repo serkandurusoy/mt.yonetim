@@ -8,7 +8,7 @@
  */
 FS.Utility.binaryToBuffer = function(data) {
   var len = data.length;
-  var buffer = new Buffer(len);
+  var buffer = Buffer.alloc(len);
   for (var i = 0; i < len; i++) {
     buffer[i] = data[i];
   }

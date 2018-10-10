@@ -52,12 +52,12 @@ if (Meteor.isServer) {
 	// Set up HTTP method URL used by client tests
 	var conf = {
 	    get: function () {
-	      var buf = new Buffer('Hello World');
+	      var buf = Buffer.from('Hello World');
 	      this.setContentType('text/plain');
 	      return buf;
 	    },
 	    head: function () {
-	      var buf = new Buffer('Hello World');
+	      var buf = Buffer.from('Hello World');
 	      this.setContentType('text/plain');
 	      this.addHeader('Content-Length', buf.length);
 	      buf = null;
@@ -172,11 +172,11 @@ function doAttachDataAsyncTest(data, opts, name, test, next) {
  */
 if (Meteor.isServer) {
 	Tinytest.add('cfs-file - attachData sync - Buffer', function(test) {
-		doAttachDataSyncTest(new Buffer('Hello World'), {type: "text/plain"}, null, test);
+		doAttachDataSyncTest(Buffer.from('Hello World'), {type: "text/plain"}, null, test);
 	});
 
 	Tinytest.addAsync('cfs-file - attachData async - Buffer', function(test, next) {
-	    doAttachDataAsyncTest(new Buffer('Hello World'), {type: "text/plain"}, null, test, next);
+	    doAttachDataAsyncTest(Buffer.from('Hello World'), {type: "text/plain"}, null, test, next);
 	});
 }
 
