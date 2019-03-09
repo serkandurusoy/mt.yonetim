@@ -173,5 +173,5 @@
     }
   });
 
-  window.screenfull = false;
+  window.screenfull = screenfull;
 })();
