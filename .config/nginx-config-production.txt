@@ -68,7 +68,7 @@ server {
     passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
     passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
     passenger_env_var ROOT_URL https://yonetim.mitolojix.com;
-    passenger_env_var MAIL_URL smtp://bilgi%40mitolojix.com:M!t0lojixBilgi@smtp-relay.gmail.com:587;
+    passenger_env_var MAIL_URL smtp://xxxxx:xxxxx@smtp-relay.gmail.com:587;
     passenger_env_var METEOR_SETTINGS '{ "public": { "ENV": "PRODUCTION", "APP": "YONETIM", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
     passenger_env_var HTTP_FORWARDED_COUNT 1;
     passenger_app_type node;
@@ -109,7 +109,7 @@ server {
     passenger_env_var MONGO_URL mongodb://localhost:27017/mitolojix;
     passenger_env_var MONGO_OPLOG_URL mongodb://localhost:27017/local;
     passenger_env_var ROOT_URL https://oyun.mitolojix.com;
-    passenger_env_var MAIL_URL smtp://bilgi%40mitolojix.com:M!t0lojixBilgi@smtp-relay.gmail.com:587;
+    passenger_env_var MAIL_URL smtp://xxxxx:xxxxx@smtp-relay.gmail.com:587;
     passenger_env_var METEOR_SETTINGS '{ "public": { "ENV": "PRODUCTION", "APP": "OYUN", "URL": { "OYUN": "https://oyun.mitolojix.com", "YONETIM": "https://yonetim.mitolojix.com" } } }';
     passenger_env_var HTTP_FORWARDED_COUNT 1;
     passenger_app_type node;
